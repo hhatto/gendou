@@ -16,9 +16,11 @@
 	},
 	"dependencies": {
 		"@azure/functions": "1.2.3",
+		"@devprotocol/util-ts": "^2.2.1",
 		"bent": "7.3.12",
-		"ramda": "0.27.1",
-		"ethereum-waffle": "3.3.0"
+		"ethereum-waffle": "3.3.0",
+		"ethers": "^5.0.32",
+		"ramda": "0.27.1"
 	},
 	"devDependencies": {
 		"@ava/typescript": "1.1.1",
