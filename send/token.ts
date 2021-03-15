@@ -1,14 +1,16 @@
+import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
 import {
 	whenDefined,
 	whenDefinedAll,
 	ethGasStationFetcher,
+	UndefinedOr,
 } from '@devprotocol/util-ts'
 
 export const sendToken = async function (
 	toAddress: string,
-	reward: number
-): Promise<boolean | Error> {
+	reward: BigNumber
+): Promise<UndefinedOr<boolean>> {
 	const provider = whenDefinedAll(
 		[process.env.INFURA_ID, process.env.NETWORK],
 		([infura, network]) =>

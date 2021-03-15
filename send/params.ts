@@ -1,16 +1,20 @@
 import { HttpRequest } from '@azure/functions'
+import { UndefinedOr } from '@devprotocol/util-ts'
 
-export const getParams = function (req: HttpRequest): ParamsOfSendApi | Error {
+export const getParams = function (
+	req: HttpRequest
+): UndefinedOr<ParamsOfSendApi> {
 	const isMessageUndefined = typeof req.params.github_id === 'undefined'
 	const isSignatureUndefined = typeof req.params.signature === 'undefined'
 	const isAddressUndefined = typeof req.params.address === 'undefined'
-	const result =
+	const isParamsUndefined =
 		isMessageUndefined || isSignatureUndefined || isAddressUndefined
-			? new Error('param is not set')
-			: ({
-					message: req.params.github_id,
-					signature: req.params.signature,
-					address: req.params.address,
-			  } as ParamsOfSendApi)
-	return result
+	const params = isParamsUndefined
+		? undefined
+		: ({
+				message: req.params.github_id,
+				signature: req.params.signature,
+				address: req.params.address,
+		  } as ParamsOfSendApi)
+	return params
 }
