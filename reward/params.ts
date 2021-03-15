@@ -1,11 +1,12 @@
 import { HttpRequest } from '@azure/functions'
+import { UndefinedOr } from '@devprotocol/util-ts'
 
 export const getParams = function (
 	req: HttpRequest
-): ParamsOfRewardApi | Error {
+): UndefinedOr<ParamsOfRewardApi> {
 	const isMessageUndefined = typeof req.params.github_id === 'undefined'
 	const result = isMessageUndefined
-		? new Error('param is not set')
+		? undefined
 		: ({
 				message: req.params.github_id,
 		  } as ParamsOfRewardApi)

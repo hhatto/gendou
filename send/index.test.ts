@@ -1,11 +1,52 @@
-import test from 'ava'
-import func from './index'
-import { Context } from '@azure/functions'
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/prefer-readonly-type */
 
-test('Returns `Hello {query.name}` with 200', async (t) => {
-	const res = await func((undefined as unknown) as Context, {
-		query: { name: 'Alice' },
-	})
-	t.is(res.body, 'Hello Alice')
+import test from 'ava'
+import sinon from 'sinon'
+import func from './index'
+import { Context, HttpRequest } from '@azure/functions'
+import * as main from './main'
+import { UndefinedOr } from '@devprotocol/util-ts'
+import { generateHttpRequest } from '../common/test-utils'
+
+let mainFunc: sinon.SinonStub<[req: HttpRequest], Promise<UndefinedOr<boolean>>>
+test.before(() => {
+	mainFunc = sinon.stub(main, 'main')
+	mainFunc.withArgs(generateHttpRequest({ github_id: '0' })).resolves(true)
+	mainFunc.withArgs(generateHttpRequest({ github_id: '1' })).resolves(undefined)
+	mainFunc.withArgs(generateHttpRequest({ github_id: '2' })).resolves(false)
+})
+
+test('The process ends normally.', async (t) => {
+	const res = await func(
+		(undefined as unknown) as Context,
+		generateHttpRequest({ github_id: '0' })
+	)
+	t.is(res.body.message, 'success')
 	t.is(res.status, 200)
+	t.is(res.headers['Cache-Control'], 'no-store')
+})
+
+test('The process terminates abnormally.', async (t) => {
+	const res = await func(
+		(undefined as unknown) as Context,
+		generateHttpRequest({ github_id: '1' })
+	)
+	t.is(res.body.message, 'error')
+	t.is(res.status, 400)
+	t.is(res.headers['Cache-Control'], 'no-store')
+})
+
+test('The process does not terminate normally.', async (t) => {
+	const res = await func(
+		(undefined as unknown) as Context,
+		generateHttpRequest({ github_id: '2' })
+	)
+	t.is(res.body.message, 'error')
+	t.is(res.status, 400)
+	t.is(res.headers['Cache-Control'], 'no-store')
+})
+
+test.after(() => {
+	mainFunc.restore()
 })

@@ -11,10 +11,9 @@ export const send = async function (
 		async (p) => await getReward(p.message)
 	)
 
-	const isSend = await whenDefinedAll(
-		[params, reward],
-		async ([p, r]) => await sendToken(p.address, r)
-	)
+	const isSend = await whenDefinedAll([params, reward], async ([p, r]) => {
+		return r.toString() === '0' ? undefined : await sendToken(p.address, r)
+	})
 
 	const isSaved =
 		isSend === true
