@@ -1,17 +1,16 @@
 import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
 import { ethers } from 'ethers'
+import { send_info } from '@prisma/client'
 import { checkSameAddress } from './address'
 import { checkIncludingUrl } from './twitter'
-import { checkAlreadySendReword } from './db'
 
 export const validate = async function (
-	params: ParamsOfSendApi
+	params: ParamsOfSendApi,
+	sendInfo: send_info
 ): Promise<UndefinedOr<boolean>> {
-	const isAlreadySendReword = await checkAlreadySendReword(params.message)
-
 	// TODO ethers.utils.verifyMessageがうまくいかなかった時の動作も確認する
 	const verifiedAddresss =
-		isAlreadySendReword === false
+		sendInfo.is_already_send === false
 			? whenDefined(params, (p) =>
 					ethers.utils.verifyMessage(p.message, p.signature)
 			  )

@@ -1,26 +1,23 @@
-import { whenDefined, whenDefinedAll, UndefinedOr } from '@devprotocol/util-ts'
-import { getReward } from '../common/reward'
-import { saveReword } from './db'
+import BigNumber from 'bignumber.js'
+import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
+import { send_info } from '@prisma/client'
+import { updateAlreadySend, updateTxHash } from './db'
 import { sendToken } from './token'
 
 export const send = async function (
-	params: ParamsOfSendApi
+	params: ParamsOfSendApi,
+	sendInfo: send_info
 ): Promise<UndefinedOr<boolean>> {
-	const reward = await whenDefined(
-		params,
-		async (p) => await getReward(p.message)
-	)
+	const isUpdate = await updateAlreadySend(sendInfo.id)
 
-	const isSend = await whenDefinedAll([params, reward], async ([p, r]) => {
-		return r.toString() === '0' ? undefined : await sendToken(p.address, r)
+	const txHash = await whenDefined(isUpdate, async (u) => {
+		return sendInfo.reward === '0' || u === false
+			? undefined
+			: await sendToken(params.address, new BigNumber(sendInfo.reward))
 	})
-
-	const isSaved =
-		isSend === true
-			? await whenDefinedAll(
-					[params, reward],
-					async ([p, r]) => await saveReword(p.message, r)
-			  )
-			: undefined
+	const isSaved = await whenDefined(
+		txHash,
+		async (hash) => await updateTxHash(sendInfo.id, hash)
+	)
 	return isSaved
 }

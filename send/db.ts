@@ -1,17 +1,25 @@
-import BigNumber from 'bignumber.js'
+import { getDbClient } from './../common/db'
 import { UndefinedOr } from '@devprotocol/util-ts'
 
-export const checkAlreadySendReword = async function (
-	githubId: string
+export const updateAlreadySend = async function (
+	sendInfoId: number
 ): Promise<UndefinedOr<boolean>> {
-	// TODO DBに何を使うか決まったら修正する
-	return false
+	const client = getDbClient()
+	const afterData = await client.send_info.update({
+		where: { id: sendInfoId },
+		data: { is_already_send: true },
+	})
+	return afterData.is_already_send
 }
 
-export const saveReword = async function (
-	githubId: string,
-	reward: BigNumber
+export const updateTxHash = async function (
+	sendInfoId: number,
+	txHash: string
 ): Promise<UndefinedOr<boolean>> {
-	// TODO DBに何を使うか決まったら修正する
-	return true
+	const client = getDbClient()
+	const afterData = await client.send_info.update({
+		where: { id: sendInfoId },
+		data: { tx_hash: txHash, send_at: new Date() },
+	})
+	return afterData.is_already_send
 }

@@ -4,17 +4,11 @@ import { UndefinedOr } from '@devprotocol/util-ts'
 export const getParams = function (
 	req: HttpRequest
 ): UndefinedOr<ParamsOfSendApi> {
-	const isMessageUndefined = typeof req.params.github_id === 'undefined'
-	const isSignatureUndefined = typeof req.params.signature === 'undefined'
-	const isAddressUndefined = typeof req.params.address === 'undefined'
-	const isTweetStatusUndefined =
-		typeof req.params.twitter_status === 'undefined'
-
 	const isParamsUndefined =
-		isMessageUndefined ||
-		isSignatureUndefined ||
-		isAddressUndefined ||
-		isTweetStatusUndefined
+		typeof req.params.github_id === 'undefined' ||
+		typeof req.params.signature === 'undefined' ||
+		typeof req.params.address === 'undefined' ||
+		typeof req.params.twitter_status === 'undefined'
 	const params = isParamsUndefined
 		? undefined
 		: ({

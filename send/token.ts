@@ -10,7 +10,7 @@ import {
 export const sendToken = async function (
 	toAddress: string,
 	reward: BigNumber
-): Promise<UndefinedOr<boolean>> {
+): Promise<UndefinedOr<string>> {
 	const provider = whenDefinedAll(
 		[process.env.INFURA_ID, process.env.NETWORK],
 		([infura, network]) =>
@@ -46,5 +46,5 @@ export const sendToken = async function (
 		async (dev) => await dev.transfer(toAddress, reward, overrides)
 	)) as ethers.Transaction
 
-	return Boolean(tx)
+	return tx.hash
 }

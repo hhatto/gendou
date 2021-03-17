@@ -1,5 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
-import { getReward } from '../common/reward'
+import { getSendInfoRecord } from '../common/send-info'
 import { getParams } from './params'
 import { whenDefined } from '@devprotocol/util-ts'
 
@@ -8,13 +8,13 @@ const httpTrigger: AzureFunction = async (
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
 	const params = getParams(req)
-	const reward = await whenDefined(
+	const record = await whenDefined(
 		params,
-		async (p) => await getReward(p.message)
+		async (p) => await getSendInfoRecord(p.message)
 	)
-	const status = typeof reward === 'undefined' ? 400 : 200
+	const status = typeof record === 'undefined' ? 400 : 200
 	const value =
-		status === 200 ? await whenDefined(reward, (r) => r.toString()) : '-1'
+		status === 200 ? await whenDefined(record, (r) => r.reward) : '-1'
 
 	return {
 		status: status,

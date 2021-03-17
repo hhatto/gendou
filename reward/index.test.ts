@@ -4,21 +4,35 @@
 import test from 'ava'
 import sinon from 'sinon'
 import func from './index'
-import BigNumber from 'bignumber.js'
 import { Context } from '@azure/functions'
-import * as reward from './../common/reward'
+import * as record from '../common/send-info'
 import { UndefinedOr } from '@devprotocol/util-ts'
 import { generateHttpRequest } from '../common/test-utils'
+import { send_info } from '@prisma/client'
 
-let getReward: sinon.SinonStub<
+let getSendInfoRecord: sinon.SinonStub<
 	[githubId: string],
-	Promise<UndefinedOr<BigNumber>>
+	Promise<UndefinedOr<send_info>>
 >
 test.before(() => {
-	getReward = sinon.stub(reward, 'getReward')
-	getReward.withArgs('test1').resolves(new BigNumber(10))
-	getReward.withArgs('test2').resolves(new BigNumber(0))
-	getReward.withArgs('test3').resolves(undefined)
+	getSendInfoRecord = sinon.stub(record, 'getSendInfoRecord')
+	getSendInfoRecord.withArgs('test1').resolves({
+		id: 0,
+		github_id: 'test1',
+		reward: '10',
+		is_already_send: false,
+		tx_hash: null,
+		send_at: null,
+	})
+	getSendInfoRecord.withArgs('test2').resolves({
+		id: 0,
+		github_id: 'test2',
+		reward: '0',
+		is_already_send: false,
+		tx_hash: null,
+		send_at: null,
+	})
+	getSendInfoRecord.withArgs('test3').resolves(undefined)
 })
 
 test('There is a reward.', async (t) => {
@@ -62,5 +76,5 @@ test('Illegal parameter.', async (t) => {
 })
 
 test.after(() => {
-	getReward.restore()
+	getSendInfoRecord.restore()
 })
