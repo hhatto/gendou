@@ -1,6 +1,3 @@
-/* eslint-disable functional/no-let */
-/* eslint-disable functional/prefer-readonly-type */
-
 import test from 'ava'
 import { MockProvider } from 'ethereum-waffle'
 import { checkSameAddress } from './address'

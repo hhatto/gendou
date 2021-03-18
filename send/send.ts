@@ -10,11 +10,11 @@ export const send = async function (
 ): Promise<UndefinedOr<boolean>> {
 	const isUpdate = await updateAlreadySend(sendInfo.id)
 
-	const txHash = await whenDefined(isUpdate, async (u) => {
-		return sendInfo.reward === '0' || u === false
+	const txHash =
+		sendInfo.reward === '0' || isUpdate === false
 			? undefined
 			: await sendToken(params.address, new BigNumber(sendInfo.reward))
-	})
+
 	const isSaved = await whenDefined(
 		txHash,
 		async (hash) => await updateTxHash(sendInfo.id, hash)

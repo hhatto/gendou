@@ -13,12 +13,10 @@ export const main = async function (
 		params,
 		async (p) => await getSendInfoRecord(p.message)
 	)
-
 	const isValidateOk = await whenDefinedAll(
 		[params, record],
 		async ([p, r]) => await validate(p, r)
 	)
-
 	const isSend =
 		isValidateOk === true
 			? await whenDefinedAll(
@@ -26,6 +24,5 @@ export const main = async function (
 					async ([p, r]) => await send(p, r)
 			  )
 			: undefined
-
 	return isSend
 }

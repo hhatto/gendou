@@ -12,13 +12,7 @@ export const getSendInfoRecord = async function (
 			github_id: githubId,
 		},
 	})
-	console.log(tmp)
 	const result = await close(client)
-	console.log(result)
-	console.log(tmp)
 	const sendInfo = tmp === null || result === false ? undefined : tmp
-	console.log(result)
-	console.log(tmp)
-	console.log(sendInfo)
 	return sendInfo
 }

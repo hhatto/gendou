@@ -27,11 +27,20 @@ export const setEnv = (): void => {
 export const generateTestData = async (): Promise<void> => {
 	const prisma = new PrismaClient()
 	await prisma.send_info.deleteMany()
-	prisma.send_info.create({
+	await prisma.send_info.create({
 		data: {
 			github_id: 'github-id1',
 			reward: '100000000000000000000',
 			is_already_send: false,
+		},
+	})
+	await prisma.send_info.create({
+		data: {
+			github_id: 'github-id2',
+			reward: '200000000000000000000',
+			is_already_send: true,
+			send_at: new Date(),
+			tx_hash: '0xhogehoge',
 		},
 	})
 	await prisma.$disconnect()
