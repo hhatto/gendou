@@ -1,10 +1,8 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import test from 'ava'
-import { MockProvider } from 'ethereum-waffle'
 import { setEnv, generateTestData } from './../common/test-utils'
 import { getSendInfoRecord } from './../common/send-info'
-import { checkSameAddress } from './address'
 import { updateAlreadySend, updateTxHash } from './db'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 

@@ -100,5 +100,4 @@ https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-types
 npx prisma migrate dev --name init
 で SQL 作成さレテ適用される
 
-
-readme直して、git actionsどうにかする
+readme 直して、git actions どうにかする
