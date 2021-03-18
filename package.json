@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"test": "ava",
+		"test": "ava --serial",
 		"build": "tsc",
 		"watch": "tsc -w",
 		"start": "func start",

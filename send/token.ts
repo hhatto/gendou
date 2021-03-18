@@ -12,12 +12,11 @@ export const sendToken = async function (
 	reward: BigNumber
 ): Promise<UndefinedOr<string>> {
 	const provider = whenDefinedAll(
-		[process.env.INFURA_ID, process.env.NETWORK],
-		([infura, network]) =>
-			new ethers.providers.InfuraProvider(
-				network === 'mainnet' ? 'homestead' : network,
-				infura
-			)
+		[process.env.NETWORK, process.env.ALCHEMY_ID],
+		([network, apikey]) =>
+			ethers.getDefaultProvider(network === 'mainnet' ? 'homestead' : network, {
+				alchemy: apikey,
+			})
 	)
 	const wallet = whenDefinedAll(
 		[provider, process.env.MNEMONIC],
