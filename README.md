@@ -101,7 +101,6 @@ npx prisma migrate dev --name init
 で SQL 作成さレテ適用される
 
 readme 直して、git actions どうにかする
-lint走るようにする
+lint 走るようにする
 
-
-V1とか入れる
+V1 とか入れる
