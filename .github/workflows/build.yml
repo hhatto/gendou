@@ -23,5 +23,11 @@ jobs:
       - name: lint
         run: yarn lint
 
+      - name: create db
+        run: |
+          cd docker
+          docker-compose up -d
+          cd ..
+
       - name: test
         run: yarn test
