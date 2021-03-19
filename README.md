@@ -102,7 +102,5 @@ npx prisma migrate dev --name init
 
 readme 直して、git actions どうにかする
 
-
 V1 とか入れる
 URL 直接打ち込んでいけるか確認する
-
