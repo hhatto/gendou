@@ -12,7 +12,8 @@
 		"prestart": "yarn build",
 		"lint": "yarn lint:eslint && yarn lint:format",
 		"lint:eslint": "eslint . --ext .ts,.js --fix",
-		"lint:format": "prettier --write '**/*.{js,json,md,yml}'"
+		"lint:format": "prettier --write '**/*.{js,json,md,yml}'",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@azure/functions": "1.2.3",
@@ -58,11 +59,6 @@
 			"rewritePaths": {
 				"/": "dist/"
 			}
-		}
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "yarn lint"
 		}
 	}
 }
