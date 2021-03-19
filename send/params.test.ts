@@ -7,41 +7,47 @@ import { getParams } from './params'
 import { generateHttpRequest } from '../common/test-utils'
 
 test('The parameter does not exist.', async (t) => {
-	const res = await getParams(generateHttpRequest({}))
+	const res = await getParams(generateHttpRequest({}, {}))
 	t.is(res, undefined)
 })
 
 test('Only the github_id parameter is present.', async (t) => {
-	const res = await getParams(generateHttpRequest({ github_id: 'hoge' }))
+	const res = await getParams(generateHttpRequest({}, { github_id: 'hoge' }))
 	t.is(res, undefined)
 })
 
 test('There are only github_id and signature parameters.', async (t) => {
 	const res = await getParams(
-		generateHttpRequest({ github_id: 'hoge', signature: 'huga' })
+		generateHttpRequest({}, { github_id: 'hoge', signature: 'huga' })
 	)
 	t.is(res, undefined)
 })
 
 test('The twitter_status parameter does not exist.', async (t) => {
 	const res = await getParams(
-		generateHttpRequest({
-			github_id: 'hoge',
-			signature: 'huga',
-			address: 'hoho',
-		})
+		generateHttpRequest(
+			{},
+			{
+				github_id: 'hoge',
+				signature: 'huga',
+				address: 'hoho',
+			}
+		)
 	)
 	t.is(res, undefined)
 })
 
 test('All parameters are present.', async (t) => {
 	const res = await getParams(
-		generateHttpRequest({
-			github_id: 'hoge',
-			signature: 'huga',
-			address: 'hoho',
-			twitter_status: 'gege',
-		})
+		generateHttpRequest(
+			{},
+			{
+				github_id: 'hoge',
+				signature: 'huga',
+				address: 'hoho',
+				twitter_status: 'gege',
+			}
+		)
 	)
 	t.is(
 		equal(res, {

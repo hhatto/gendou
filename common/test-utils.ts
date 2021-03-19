@@ -6,7 +6,8 @@ import { HttpRequest } from '@azure/functions'
 import { PrismaClient } from '@prisma/client'
 
 export const generateHttpRequest = (
-	params: Record<string, string>
+	params: Record<string, string>,
+	body: Record<string, string>
 ): HttpRequest => {
 	return {
 		method: 'POST',
@@ -14,7 +15,7 @@ export const generateHttpRequest = (
 		headers: {},
 		query: {},
 		params: params,
-		body: '',
+		body: body,
 		rawBody: '',
 	} as HttpRequest
 }

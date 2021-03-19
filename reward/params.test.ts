@@ -7,15 +7,18 @@ import { getParams } from './params'
 import { generateHttpRequest } from './../common/test-utils'
 
 test('The parameter does not exist.', async (t) => {
-	const res = await getParams(generateHttpRequest({}))
+	const res = await getParams(generateHttpRequest({}, {}))
 	t.is(res, undefined)
 })
 
 test('All parameters are present.', async (t) => {
 	const res = await getParams(
-		generateHttpRequest({
-			github_id: 'hoge',
-		})
+		generateHttpRequest(
+			{
+				github_id: 'hoge',
+			},
+			{}
+		)
 	)
 	t.is(
 		equal(res, {

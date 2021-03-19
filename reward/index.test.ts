@@ -38,7 +38,7 @@ test.before(() => {
 test('There is a reward.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: 'test1' })
+		generateHttpRequest({ github_id: 'test1' }, {})
 	)
 	t.is(res.body.reward, '10')
 	t.is(res.status, 200)
@@ -48,7 +48,7 @@ test('There is a reward.', async (t) => {
 test('Zero reward.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: 'test2' })
+		generateHttpRequest({ github_id: 'test2' }, {})
 	)
 	t.is(res.body.reward, '0')
 	t.is(res.status, 200)
@@ -58,7 +58,7 @@ test('Zero reward.', async (t) => {
 test('Error when getting reward.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: 'test3' })
+		generateHttpRequest({ github_id: 'test3' }, {})
 	)
 	t.is(res.body.reward, '-1')
 	t.is(res.status, 400)
@@ -68,7 +68,7 @@ test('Error when getting reward.', async (t) => {
 test('Illegal parameter.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({})
+		generateHttpRequest({}, {})
 	)
 	t.is(res.body.reward, '-1')
 	t.is(res.status, 400)

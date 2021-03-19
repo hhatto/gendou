@@ -12,15 +12,17 @@ import { generateHttpRequest } from '../common/test-utils'
 let mainFunc: sinon.SinonStub<[req: HttpRequest], Promise<UndefinedOr<boolean>>>
 test.before(() => {
 	mainFunc = sinon.stub(main, 'main')
-	mainFunc.withArgs(generateHttpRequest({ github_id: '0' })).resolves(true)
-	mainFunc.withArgs(generateHttpRequest({ github_id: '1' })).resolves(undefined)
-	mainFunc.withArgs(generateHttpRequest({ github_id: '2' })).resolves(false)
+	mainFunc.withArgs(generateHttpRequest({}, { github_id: '0' })).resolves(true)
+	mainFunc
+		.withArgs(generateHttpRequest({}, { github_id: '1' }))
+		.resolves(undefined)
+	mainFunc.withArgs(generateHttpRequest({}, { github_id: '2' })).resolves(false)
 })
 
 test('The process ends normally.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: '0' })
+		generateHttpRequest({}, { github_id: '0' })
 	)
 	t.is(res.body.message, 'success')
 	t.is(res.status, 200)
@@ -30,7 +32,7 @@ test('The process ends normally.', async (t) => {
 test('The process terminates abnormally.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: '1' })
+		generateHttpRequest({}, { github_id: '1' })
 	)
 	t.is(res.body.message, 'error')
 	t.is(res.status, 400)
@@ -40,7 +42,7 @@ test('The process terminates abnormally.', async (t) => {
 test('The process does not terminate normally.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
-		generateHttpRequest({ github_id: '2' })
+		generateHttpRequest({}, { github_id: '2' })
 	)
 	t.is(res.body.message, 'error')
 	t.is(res.status, 400)

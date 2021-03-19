@@ -4,10 +4,11 @@ export const checkIncludingUrl = async function (
 	twitterId: string
 ): Promise<UndefinedOr<boolean>> {
 	const [status, urls] = await getTextUrls(twitterId)
+	const realUrls = urls.filter((url) => typeof url !== 'undefined')
 	const targetUrls =
 		status === true
 			? whenDefined(process.env.CHECK_URL, (checkUrl) =>
-					urls.filter((url) => url.indexOf(checkUrl) !== -1)
+					realUrls.filter((url) => url.indexOf(checkUrl) !== -1)
 			  )
 			: undefined
 
