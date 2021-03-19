@@ -1,49 +1,27 @@
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
-import {
-	whenDefined,
-	whenDefinedAll,
-	ethGasStationFetcher,
-	UndefinedOr,
-} from '@devprotocol/util-ts'
+import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
+import { getGasSetting } from './gas-setting'
+import { getDevContract } from './contract'
 
 export const sendToken = async function (
 	toAddress: string,
 	reward: BigNumber
 ): Promise<UndefinedOr<string>> {
-	const provider = whenDefinedAll(
-		[process.env.NETWORK, process.env.ALCHEMY_ID],
-		([network, apikey]) =>
-			ethers.getDefaultProvider(network === 'mainnet' ? 'homestead' : network, {
-				alchemy: apikey,
-			})
+	const devToken = getDevContract(
+		process.env.NETWORK,
+		process.env.ALCHEMY_ID,
+		process.env.MNEMONIC,
+		process.env.TOKEN_ADDRESS
 	)
-	const wallet = whenDefinedAll(
-		[provider, process.env.MNEMONIC],
-		([prov, mnemonic]) => ethers.Wallet.fromMnemonic(mnemonic).connect(prov)
-	)
-	const devToken = whenDefinedAll(
-		[process.env.TOKEN_ADDRESS, wallet],
-		([address, w]) =>
-			new ethers.Contract(
-				address,
-				['function transfer(address to, uint amount) returns (boolean)'],
-				w
-			)
-	)
-	const gasPrice = await whenDefined(
+	const overrides = await getGasSetting(
 		process.env.EGS_TOKEN,
-		async (egsToken) => await ethGasStationFetcher(egsToken)
+		process.env.GAS_LIMIT
 	)
-	const gas = Number(process.env.GAS_LIMIT || 1000000)
-	const overrides = {
-		gasLimit: gas,
-		gasPrice: gasPrice,
-	}
 	const tx = (await whenDefined(
 		devToken,
-		async (dev) => await dev.transfer(toAddress, reward, overrides)
-	)) as ethers.Transaction
-
-	return tx.hash
+		async (dev) => await dev.transfer(toAddress, reward.toString(), overrides)
+	)) as UndefinedOr<ethers.Transaction>
+	const hash = await whenDefined(tx, (tx) => tx.hash)
+	return hash
 }

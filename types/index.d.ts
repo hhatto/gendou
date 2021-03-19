@@ -12,6 +12,12 @@ type ParamsOfSendApi = {
 	readonly address: string
 	readonly tweetStatus: string
 }
+
 type ParamsOfRewardApi = {
 	readonly message: string
+}
+
+type GasOption = {
+	readonly gasLimit: string
+	readonly gasPrice?: string
 }
