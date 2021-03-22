@@ -5,7 +5,8 @@
 			"type": "httpTrigger",
 			"direction": "in",
 			"name": "req",
-			"methods": ["get", "post"]
+			"methods": ["get"],
+			"route": "v1/reward/{github_id}"
 		},
 		{
 			"type": "http",
@@ -13,5 +14,5 @@
 			"name": "$return"
 		}
 	],
-	"scriptFile": "../dist/example/index.js"
+	"scriptFile": "../dist/reward/index.js"
 }

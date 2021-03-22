@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model send_info {
+  id      				Int      @default(autoincrement()) @id
+  github_id   		String   @unique
+  reward    			String
+	is_already_send Boolean @default(false)
+	tx_hash 				String?
+  send_at 				DateTime?
+}

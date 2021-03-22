@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"test": "ava",
+		"test": "ava --serial",
 		"build": "tsc",
 		"watch": "tsc -w",
 		"start": "func start",
@@ -12,13 +12,20 @@
 		"prestart": "yarn build",
 		"lint": "yarn lint:eslint && yarn lint:format",
 		"lint:eslint": "eslint . --ext .ts,.js --fix",
-		"lint:format": "prettier --write '**/*.{js,json,md,yml}'"
+		"lint:format": "prettier --write '**/*.{js,json,md,yml}'",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@azure/functions": "1.2.3",
+		"@devprotocol/util-ts": "^2.2.1",
+		"@prisma/client": "^2.19.0",
+		"@types/bignumber.js": "^5.0.0",
 		"bent": "7.3.12",
-		"ramda": "0.27.1",
-		"ethereum-waffle": "3.3.0"
+		"bignumber.js": "^9.0.1",
+		"ethereum-waffle": "3.3.0",
+		"ethers": "^5.0.32",
+		"prisma": "2.19.0",
+		"ramda": "0.27.1"
 	},
 	"devDependencies": {
 		"@ava/typescript": "1.1.1",
@@ -27,6 +34,7 @@
 		"@types/node": "14.14.35",
 		"@types/ramda": "0.27.39",
 		"@types/sinon": "9.0.11",
+		"@types/deep-equal": "^1.0.1",
 		"@typescript-eslint/eslint-plugin": "4.18.0",
 		"@typescript-eslint/parser": "4.18.0",
 		"ava": "3.15.0",
@@ -39,6 +47,8 @@
 		"prettier": "2.2.1",
 		"rimraf": "3.0.2",
 		"sinon": "9.2.4",
+		"deep-equal": "^2.0.5",
+		"ts-node": "^9.1.1",
 		"typescript": "4.2.3"
 	},
 	"ava": {
@@ -49,11 +59,6 @@
 			"rewritePaths": {
 				"/": "dist/"
 			}
-		}
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "yarn lint"
 		}
 	}
 }
