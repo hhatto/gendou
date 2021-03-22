@@ -5,9 +5,9 @@ const httpTrigger: AzureFunction = async (
 	context: Context,
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
-	const isSend = await main(req)
+	const [isSend, errorMessage] = await main(req)
 	const status = typeof isSend === 'undefined' || isSend === false ? 400 : 200
-	const message = status === 200 ? 'success' : 'error'
+	const message = status === 200 ? 'success' : errorMessage
 
 	return {
 		status: status,

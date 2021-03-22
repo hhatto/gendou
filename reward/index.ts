@@ -13,12 +13,23 @@ const httpTrigger: AzureFunction = async (
 		async (p) => await getSendInfoRecord(p.message)
 	)
 	const status = typeof record === 'undefined' ? 400 : 200
+	const errorMessage =
+		typeof params === 'undefined'
+			? 'parameters error'
+			: typeof record === 'undefined'
+			? 'not found'
+			: undefined
 	const value =
 		status === 200 ? await whenDefined(record, (r) => r.reward) : '-1'
 
+	const body =
+		status === 200
+			? { reward: value }
+			: { message: errorMessage, reward: value }
+
 	return {
 		status: status,
-		body: { reward: value },
+		body: body,
 		headers: {
 			'Cache-Control': 'no-store',
 		},

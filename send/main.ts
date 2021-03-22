@@ -7,7 +7,7 @@ import { send } from './send'
 
 export const main = async function (
 	req: HttpRequest
-): Promise<UndefinedOr<boolean>> {
+): Promise<readonly [UndefinedOr<boolean>, UndefinedOr<string>]> {
 	const params = getParams(req)
 	const record = await whenDefined(
 		params,
@@ -24,5 +24,19 @@ export const main = async function (
 					async ([p, r]) => await send(p, r)
 			  )
 			: undefined
-	return isSend
+	const errorMessage =
+		typeof params === 'undefined'
+			? 'parameters error'
+			: typeof record === 'undefined'
+			? 'not found'
+			: typeof isValidateOk === 'undefined'
+			? 'validate error'
+			: isValidateOk === false
+			? 'not included url'
+			: typeof isSend === 'undefined'
+			? 'send token error'
+			: isSend === false
+			? 'not update tx hash'
+			: undefined
+	return [isSend, errorMessage]
 }

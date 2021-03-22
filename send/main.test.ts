@@ -62,9 +62,19 @@ const request5 = generateHttpRequest(
 		twitter_status: 'status5',
 	}
 )
+const request6 = generateHttpRequest(
+	{},
+	{
+		github_id: 'git-id6',
+		signature: 'signature6',
+		address: 'address6',
+		twitter_status: 'status6',
+	}
+)
 const param1 = getParams(request1)
 const param4 = getParams(request4)
 const param5 = getParams(request5)
+const param6 = getParams(request6)
 const record1 = {
 	id: 1,
 	github_id: 'git-id1',
@@ -89,6 +99,14 @@ const record5 = {
 	tx_hash: null,
 	send_at: null,
 } as send_info
+const record6 = {
+	id: 6,
+	github_id: 'git-id6',
+	reward: '60000000000000000000',
+	is_already_send: false,
+	tx_hash: null,
+	send_at: null,
+} as send_info
 test.before(() => {
 	getSendInfoRecord = sinon.stub(send_info_modules, 'getSendInfoRecord')
 	validate = sinon.stub(validate_modules, 'validate')
@@ -106,32 +124,45 @@ test.before(() => {
 	getSendInfoRecord.withArgs(request5.body.github_id!).resolves(record5)
 	validate.withArgs(param5!, record5).resolves(true)
 	send.withArgs(param5!, record5).resolves(undefined)
+
+	getSendInfoRecord.withArgs(request6.body.github_id!).resolves(record6)
+	validate.withArgs(param6!, record6).resolves(true)
+	send.withArgs(param6!, record6).resolves(false)
 })
 
 test('successful processing.', async (t) => {
-	const res = await main(request1)
+	const [res, message] = await main(request1)
 	t.is(res, true)
+	t.is(typeof message, 'undefined')
 })
 
 test('Request is invalid.', async (t) => {
-	const res = await main(request2)
-	t.true(typeof res === 'undefined')
+	const [res, message] = await main(request2)
+	t.is(typeof res, 'undefined')
+	t.is(message, 'parameters error')
 })
 
-test('The record does not exist..', async (t) => {
-	const res = await main(request3)
-	t.true(typeof res === 'undefined')
+test('The record does not exist.', async (t) => {
+	const [res, message] = await main(request3)
+	t.is(typeof res, 'undefined')
+	t.is(message, 'not found')
 })
 
 test('validate failed.', async (t) => {
-	const res = await main(request4)
-	t.true(typeof res === 'undefined')
+	const [res, message] = await main(request4)
+	t.is(typeof res, 'undefined')
+	t.is(message, 'not included url')
 })
 test('Failed to send token.', async (t) => {
-	const res = await main(request5)
-	t.true(typeof res === 'undefined')
+	const [res, message] = await main(request5)
+	t.is(typeof res, 'undefined')
+	t.is(message, 'send token error')
 })
-
+test('Failed to update transaction hash.', async (t) => {
+	const [res, message] = await main(request6)
+	t.is(res, false)
+	t.is(message, 'not update tx hash')
+})
 test.after(() => {
 	getSendInfoRecord.restore()
 	validate.restore()
