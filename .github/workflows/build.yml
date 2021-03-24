@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: air-drop-functions-ropsten2
+  AZURE_FUNCTIONAPP_NAME: air-drop-functions-ropsten3
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '12.x'
 
