@@ -1,6 +1,6 @@
 # gendou(temporary name)
 
-Template repository for using TypeScript
+send functions
 
 # Stack
 
