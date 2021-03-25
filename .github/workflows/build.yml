@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: air-drop-functions-ropsten5
+  AZURE_FUNCTIONAPP_NAME: send-reward-ropsten
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '12.x'
 
@@ -69,4 +69,3 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          # publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
