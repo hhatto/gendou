@@ -6,7 +6,7 @@
 			"direction": "in",
 			"name": "req",
 			"methods": ["get"],
-			"route": "v1/reward/{github_id}"
+			"route": "v1/info/{github_id}"
 		},
 		{
 			"type": "http",
@@ -14,5 +14,5 @@
 			"name": "$return"
 		}
 	],
-	"scriptFile": "../dist/reward/index.js"
+	"scriptFile": "../dist/info/index.js"
 }
