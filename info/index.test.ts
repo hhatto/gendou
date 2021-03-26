@@ -71,7 +71,6 @@ test('Error when getting reward.', async (t) => {
 		(undefined as unknown) as Context,
 		generateHttpRequest({ github_id: 'test3' }, {})
 	)
-	t.is(res.body.reward, '-1')
 	t.is(res.body.message, 'not found')
 	t.is(res.status, 400)
 	t.is(res.headers['Cache-Control'], 'no-store')
@@ -82,7 +81,6 @@ test('Illegal parameter.', async (t) => {
 		(undefined as unknown) as Context,
 		generateHttpRequest({}, {})
 	)
-	t.is(res.body.reward, '-1')
 	t.is(res.body.message, 'parameters error')
 	t.is(res.status, 400)
 	t.is(res.headers['Cache-Control'], 'no-store')

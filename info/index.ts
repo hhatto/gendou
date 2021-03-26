@@ -31,7 +31,7 @@ const httpTrigger: AzureFunction = async (
 		status === 200 ? await whenDefined(record, (r) => r.send_at) : undefined
 	const body =
 		status !== 200
-			? { message: errorMessage, reward: value }
+			? { message: errorMessage }
 			: is_already_send === false
 			? { is_already_send: is_already_send, reward: value }
 			: {
