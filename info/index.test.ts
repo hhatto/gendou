@@ -27,30 +27,41 @@ test.before(() => {
 	getSendInfoRecord.withArgs('test2').resolves({
 		id: 0,
 		github_id: 'test2',
-		reward: '0',
-		is_already_send: false,
-		tx_hash: null,
-		send_at: null,
+		reward: '20',
+		is_already_send: true,
+		tx_hash: 'dummy-tx',
+		send_at: new Date(2020, 8, 21, 17, 10, 5),
 	})
 	getSendInfoRecord.withArgs('test3').resolves(undefined)
 })
 
-test('There is a reward.', async (t) => {
+test('get info before send reward.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
 		generateHttpRequest({ github_id: 'test1' }, {})
 	)
 	t.is(res.body.reward, '10')
+	t.is(res.body.is_already_send, false)
+	t.is(typeof res.body.tx_hash, 'undefined')
+	t.is(typeof res.body.send_at, 'undefined')
 	t.is(res.status, 200)
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
 
-test('Zero reward.', async (t) => {
+test('get info after send reward.', async (t) => {
 	const res = await func(
 		(undefined as unknown) as Context,
 		generateHttpRequest({ github_id: 'test2' }, {})
 	)
-	t.is(res.body.reward, '0')
+	t.is(res.body.reward, '20')
+	t.is(res.body.is_already_send, true)
+	t.is(res.body.tx_hash, 'dummy-tx')
+	t.is(res.body.send_at.getFullYear(), 2020)
+	t.is(res.body.send_at.getMonth(), 8)
+	t.is(res.body.send_at.getDate(), 21)
+	t.is(res.body.send_at.getHours(), 17)
+	t.is(res.body.send_at.getMinutes(), 10)
+	t.is(res.body.send_at.getSeconds(), 5)
 	t.is(res.status, 200)
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
