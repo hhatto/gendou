@@ -6,7 +6,7 @@
 			"direction": "in",
 			"name": "req",
 			"methods": ["post"],
-			"route": "v1/send"
+			"route": "v1/findClaimUrl"
 		},
 		{
 			"type": "http",
@@ -14,5 +14,5 @@
 			"name": "$return"
 		}
 	],
-	"scriptFile": "../dist/send/index.js"
+	"scriptFile": "../dist/findClaimUrl/index.js"
 }

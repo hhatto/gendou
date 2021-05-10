@@ -1,8 +1,8 @@
 /* eslint-disable functional/no-try-statement */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import test from 'ava'
-import { setEnv, generateTestData } from './../common/test-utils'
-import { getSendInfoRecord } from './../common/send-info'
+import { setEnv, generateTestData } from '../common/test-utils'
+import { getSendInfoRecord } from '../common/send-info'
 import { updateAlreadySend, updateTxHash } from './db'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 

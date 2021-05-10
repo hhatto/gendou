@@ -28,7 +28,7 @@ test.before(() => {
 
 test('The process ends normally.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({}, { github_id: '0' })
 	)
 	t.is(res.body.message, 'success')
@@ -38,7 +38,7 @@ test('The process ends normally.', async (t) => {
 
 test('The process terminates abnormally.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({}, { github_id: '1' })
 	)
 	t.is(res.body.message, 'error message1')
@@ -48,7 +48,7 @@ test('The process terminates abnormally.', async (t) => {
 
 test('The process does not terminate normally.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({}, { github_id: '2' })
 	)
 	t.is(res.body.message, 'error message2')
