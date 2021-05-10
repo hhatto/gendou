@@ -37,7 +37,7 @@ test.before(() => {
 
 test('get info before send reward.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test1' }, {})
 	)
 	t.is(res.body.reward, '10')
@@ -50,7 +50,7 @@ test('get info before send reward.', async (t) => {
 
 test('get info after send reward.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test2' }, {})
 	)
 	t.is(res.body.reward, '20')
@@ -68,7 +68,7 @@ test('get info after send reward.', async (t) => {
 
 test('Error when getting reward.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test3' }, {})
 	)
 	t.is(res.body.message, 'not found')
@@ -78,7 +78,7 @@ test('Error when getting reward.', async (t) => {
 
 test('Illegal parameter.', async (t) => {
 	const res = await func(
-		(undefined as unknown) as Context,
+		undefined as unknown as Context,
 		generateHttpRequest({}, {})
 	)
 	t.is(res.body.message, 'parameters error')
