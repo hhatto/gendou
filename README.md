@@ -41,13 +41,6 @@ psql postgresql://testuser@localhost:5432/testdb
 
 ```
 DATABASE_URL: DBのURL
-NETWORK： mainnet(homestead)かropstenと記述
-ALCHEMY_ID：利用するalchemyのid
-MNEMONIC：内部で利用するウォレットのニーモニック
-TOKEN_ADDRESS：DEVトークンのアドレス
-EGS_TOKEN：eth gas stationのapiトークン
-GAS_LIMIT：gas limit
-CHECK_URL：ツィートのテキストでチェックするURL
 ```
 
 ## Azure Functions 起動

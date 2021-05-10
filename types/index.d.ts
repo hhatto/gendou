@@ -10,7 +10,6 @@ type ParamsOfSendApi = {
 	readonly message: string
 	readonly signature: string
 	readonly address: string
-	readonly tweetStatus: string
 }
 
 type ParamsOfRewardApi = {

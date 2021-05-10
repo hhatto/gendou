@@ -14,7 +14,7 @@ model send_info {
   id      				Int      @default(autoincrement()) @id
   github_id   		String   @unique
   reward    			String
-	is_already_send Boolean @default(false)
-	tx_hash 				String?
-  send_at 				DateTime?
+  uuid    				String   @unique
+  claim_url 	   	String
+  find_at 				DateTime?
 }
