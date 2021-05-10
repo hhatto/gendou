@@ -7,11 +7,13 @@ const httpTrigger: AzureFunction = async (
 ): Promise<ReturnTypeOfAzureFunctions> => {
 	const [sendInfo, errorMessage] = await main(req)
 	const status = typeof errorMessage === 'undefined' ? 200 : 400
+	const reward = typeof sendInfo === 'undefined' ? 0 : sendInfo.reward
+	const claimUrl = typeof sendInfo === 'undefined' ? '' : sendInfo.claim_url
 	const body =
 		status === 200
 			? {
-					reward: sendInfo.reward,
-					claim_url: sendInfo.claim_url,
+					reward: reward,
+					claim_url: claimUrl,
 			  }
 			: {
 					message: errorMessage,

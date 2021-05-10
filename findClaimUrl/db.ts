@@ -8,5 +8,5 @@ export const updateAt = async function (sendInfoId: number): Promise<boolean> {
 		data: { find_at: new Date() },
 	})
 	const result = await close(client)
-	return result === false ? false : afterData.send_at !== null
+	return result === false ? false : afterData.find_at !== null
 }

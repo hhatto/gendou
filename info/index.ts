@@ -21,14 +21,14 @@ const httpTrigger: AzureFunction = async (
 			: undefined
 	const value =
 		status === 200 ? await whenDefined(record, (r) => r.reward) : '-1'
-	const return_at =
-		status === 200 ? await whenDefined(record, (r) => r.return_at) : undefined
+	const find_at =
+		status === 200 ? await whenDefined(record, (r) => r.find_at) : undefined
 	const body =
 		status !== 200
 			? { message: errorMessage }
 			: {
 					reward: value,
-					return_at: return_at,
+					find_at: find_at,
 			  }
 
 	return {

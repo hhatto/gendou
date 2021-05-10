@@ -32,16 +32,17 @@ export const generateTestData = async (): Promise<void> => {
 		data: {
 			github_id: 'github-id1',
 			reward: '100000000000000000000',
-			is_already_send: false,
+			uuid: 'xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+			claim_url: 'http://hogehoge/hurahura',
 		},
 	})
 	await prisma.send_info.create({
 		data: {
 			github_id: 'github-id2',
 			reward: '200000000000000000000',
-			is_already_send: true,
-			send_at: new Date(),
-			tx_hash: '0xhogehoge',
+			uuid: 'yyyyyyyyy-yyyy-Myyy-Nyyy-yyyyyyyyyyy',
+			claim_url: 'http://ahaahaaha/hurehure',
+			find_at: new Date(),
 		},
 	})
 	await prisma.$disconnect()

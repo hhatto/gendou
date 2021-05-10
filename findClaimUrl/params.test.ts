@@ -23,20 +23,6 @@ test('There are only github_id and signature parameters.', async (t) => {
 	t.is(res, undefined)
 })
 
-test('The twitter_status parameter does not exist.', async (t) => {
-	const res = await getParams(
-		generateHttpRequest(
-			{},
-			{
-				github_id: 'hoge',
-				signature: 'huga',
-				address: 'hoho',
-			}
-		)
-	)
-	t.is(res, undefined)
-})
-
 test('All parameters are present.', async (t) => {
 	const res = await getParams(
 		generateHttpRequest(
@@ -45,7 +31,6 @@ test('All parameters are present.', async (t) => {
 				github_id: 'hoge',
 				signature: 'huga',
 				address: 'hoho',
-				twitter_status: 'gege',
 			}
 		)
 	)
@@ -54,7 +39,6 @@ test('All parameters are present.', async (t) => {
 			message: 'hoge',
 			signature: 'huga',
 			address: 'hoho',
-			tweetStatus: 'gege',
 		}),
 		true
 	)
