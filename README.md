@@ -65,24 +65,27 @@ GitHub Actions で利用するので、docker/db/init 　以下に移動させ�
 https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-typescript-postgres
 
 # api interface
+
 ## info
-パラメータに指定したgithub idに該当する報酬情報を取得します。
+
+パラメータに指定した github id に該当する報酬情報を取得します。
 
 URL：https://{domain}/v1/info/{github_id}<br>
 method：get<br>
 例）curl http://localhost:7071/v1/info/github-id1<br>
 
 レスポンス<br>
-reward：報酬額、整数のため、実際に付与される報酬額に10*18をかけた数字が帰ってくる<br>
-find_at：claim urlを初めて返却した時の日時、未返却の場合はnullが入っている
+reward：報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+find_at：claim url を初めて返却した時の日時、未返却の場合は null が入っている
 
 ## findClaimUrl
-パラメータに設定したgithub idに該当するクレーム用URLを返却します。
+
+パラメータに設定した github id に該当するクレーム用 URL を返却します。
 
 URL：http://{domain}/v1/findClaimUrl<br>
 method:post<br>
 例）curl -X POST -d '{"github_id":"git-id1", "signature":"0x4224782729b91ce60933779327701beed6f5a60f5b3ef38bcfc4698aa693af4a5899fc1e6fc6b4066f90b155a9926b08c0b78498bfe61020e018a7d071a1d1e81c", "address":"0x3CbDbAfE2585F4991CEf5A5D2870F68D661b3943"}' http://localhost:7071/v1/findClaimUrl<br>
 
 レスポンス<br>
-reward：報酬額、整数のため、実際に付与される報酬額に10*18をかけた数字が帰ってくる<br>
-claim_url：発行されたclaim url
+reward：報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+claim_url：発行された claim url
