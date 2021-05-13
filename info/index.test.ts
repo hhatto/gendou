@@ -17,6 +17,9 @@ let getSendInfoRecord: sinon.SinonStub<
 >
 test.before(() => {
 	getSendInfoRecord = sinon.stub(record, 'getSendInfoRecord')
+})
+
+test('get info before send reward.', async (t) => {
 	getSendInfoRecord.withArgs('test1').resolves({
 		id: 0,
 		github_id: 'test1',
@@ -25,18 +28,6 @@ test.before(() => {
 		claim_url: 'http://hogehoge1',
 		find_at: null,
 	})
-	getSendInfoRecord.withArgs('test2').resolves({
-		id: 0,
-		github_id: 'test2',
-		reward: '20',
-		uuid: '2xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
-		claim_url: 'http://hogehoge2',
-		find_at: new Date(2020, 8, 21, 17, 10, 5),
-	})
-	getSendInfoRecord.withArgs('test3').resolves(undefined)
-})
-
-test('get info before send reward.', async (t) => {
 	const res = await func(
 		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test1' }, {})
@@ -48,6 +39,14 @@ test('get info before send reward.', async (t) => {
 })
 
 test.only('get info after send reward.', async (t) => {
+	getSendInfoRecord.withArgs('test2').resolves({
+		id: 0,
+		github_id: 'test2',
+		reward: '20',
+		uuid: '2xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+		claim_url: 'http://hogehoge2',
+		find_at: new Date(2020, 8, 21, 17, 10, 5),
+	})
 	const res = await func(
 		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test2' }, {})
@@ -65,12 +64,13 @@ test.only('get info after send reward.', async (t) => {
 })
 
 test('Error when getting reward.', async (t) => {
+	getSendInfoRecord.withArgs('test3').resolves(undefined)
 	const res = await func(
 		undefined as unknown as Context,
 		generateHttpRequest({ github_id: 'test3' }, {})
 	)
 	t.is(res.body.message, 'not found')
-	t.is(res.status, 400)
+	t.is(res.status, 200)
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
 

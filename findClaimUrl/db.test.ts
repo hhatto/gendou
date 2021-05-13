@@ -11,7 +11,7 @@ test.beforeEach(async () => {
 	await generateTestData()
 })
 
-test.serial('Transaction hashes and dates can be updated.', async (t) => {
+test.serial('find_at can be updated.', async (t) => {
 	const before = await getSendInfoRecord('github-id1')
 	t.is(before?.github_id, 'github-id1')
 	t.is(before?.reward, '100000000000000000000')
