@@ -6,7 +6,7 @@ export const getClaimUrlRecordByGithubId = async function (
 	githubId: string
 ): Promise<UndefinedOr<claim_url>> {
 	const client = getDbClient()
-	const tmp = await client.findClaimUrl.findFirst({
+	const tmp = await client.claim_url.findFirst({
 		where: {
 			github_id: githubId,
 		},
@@ -20,7 +20,7 @@ export const getClaimUrlRecordByRewardId = async function (
 	rewardId: number
 ): Promise<UndefinedOr<claim_url>> {
 	const client = getDbClient()
-	const tmp = await client.findClaimUrl.findFirst({
+	const tmp = await client.claim_url.findFirst({
 		where: {
 			AND: [
 				{

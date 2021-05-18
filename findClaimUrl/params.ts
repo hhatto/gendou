@@ -3,7 +3,7 @@ import { UndefinedOr } from '@devprotocol/util-ts'
 
 export const getParams = function (
 	req: HttpRequest
-): UndefinedOr<ParamsOfSendApi> {
+): UndefinedOr<ParamsOfFindClaimUrlApi> {
 	const isParamsUndefined =
 		typeof req.body.github_id === 'undefined' ||
 		typeof req.body.signature === 'undefined' ||
@@ -14,6 +14,6 @@ export const getParams = function (
 				message: req.body.github_id,
 				signature: req.body.signature,
 				address: req.body.address,
-		  } as ParamsOfSendApi)
+		  } as ParamsOfFindClaimUrlApi)
 	return params
 }

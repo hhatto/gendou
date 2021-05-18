@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import { checkSameAddress } from './address'
 
 export const validate = async function (
-	params: ParamsOfSendApi
+	params: ParamsOfFindClaimUrlApi
 ): Promise<boolean> {
 	const verifiedAddresss = ethers.utils.verifyMessage(
 		params.message,

@@ -9,23 +9,23 @@ import { Context, HttpRequest } from '@azure/functions'
 import * as main from './main'
 import { UndefinedOr } from '@devprotocol/util-ts'
 import { generateHttpRequest } from '../common/test-utils'
-import { send_info } from '@prisma/client'
+//import { send_info } from '@prisma/client'
 
-let mainFunc: sinon.SinonStub<
-	[req: HttpRequest],
-	Promise<readonly [UndefinedOr<send_info>, UndefinedOr<string>]>
->
+// let mainFunc: sinon.SinonStub<
+// 	[req: HttpRequest],
+// 	Promise<readonly [UndefinedOr<send_info>, UndefinedOr<string>]>
+// >
 test.before(() => {
-	mainFunc = sinon.stub(main, 'main')
-	mainFunc
-		.withArgs(generateHttpRequest({}, { github_id: '0' }))
-		.resolves([{
-			reward: '100000000000000000',
-			claim_url: 'http://hogehoge',
-		} as any, undefined])
-	mainFunc
-		.withArgs(generateHttpRequest({}, { github_id: '1' }))
-		.resolves([undefined, 'error message1'])
+	// mainFunc = sinon.stub(main, 'main')
+	// mainFunc
+	// 	.withArgs(generateHttpRequest({}, { github_id: '0' }))
+	// 	.resolves([{
+	// 		reward: '100000000000000000',
+	// 		claim_url: 'http://hogehoge',
+	// 	} as any, undefined])
+	// mainFunc
+	// 	.withArgs(generateHttpRequest({}, { github_id: '1' }))
+	// 	.resolves([undefined, 'error message1'])
 })
 
 test('The process ends normally.', async (t) => {
@@ -51,5 +51,5 @@ test('The process terminates abnormally.', async (t) => {
 
 
 test.after(() => {
-	mainFunc.restore()
+	//mainFunc.restore()
 })

@@ -11,11 +11,11 @@ type ApiResponce = {
 	readonly body: string | Record<string, unknown>
 }
 
-// type ParamsOfSendApi = {
-// 	readonly message: string
-// 	readonly signature: string
-// 	readonly address: string
-// }
+type ParamsOfFindClaimUrlApi = {
+	readonly message: string
+	readonly signature: string
+	readonly address: string
+}
 
 type ParamsOfInfoApi = {
 	readonly message: string
