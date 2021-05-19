@@ -10,15 +10,25 @@ export const getFindClaimUrlResponce = async function (
 	const commitCount = await getCommitCount(params.message)
 
 	const rewardRecord = await getRewordRecordByCommitCount(commitCount)
-	const claimUrlInfo = await whenDefined(rewardRecord, (r) => getClaimUrlInfo(r))
-	const isUpdated = await whenDefined(claimUrlInfo?.claimUrl, (u) => updateGitHubIdAndFindAt(u.id, params.message))
+	const claimUrlInfo =
+		typeof rewardRecord === 'undefined'
+			? undefined
+			: await getClaimUrlInfo(rewardRecord)
+
+	const isUpdated = await whenDefined(claimUrlInfo?.claimUrl, (u) =>
+		updateGitHubIdAndFindAt(u.id, params.message)
+	)
 
 	const errorMessage =
-		typeof rewardRecord === 'undefined' ? 'not applicable'
-		: typeof claimUrlInfo === 'undefined' ? 'server side error'
-		: typeof claimUrlInfo.claimUrl === 'undefined' ? 'there are no more rewards to distribute'
-		: isUpdated === false ? 'not updated'
-		: undefined
+		typeof rewardRecord === 'undefined'
+			? 'not applicable'
+			: typeof claimUrlInfo === 'undefined'
+			? 'server side error'
+			: typeof claimUrlInfo.claimUrl === 'undefined'
+			? 'there are no more rewards to distribute'
+			: isUpdated === false
+			? 'not updated'
+			: undefined
 
 	const result =
 		typeof errorMessage !== 'undefined'
