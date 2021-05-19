@@ -1,6 +1,6 @@
 type ReturnTypeOfAzureFunctions = {
 	readonly status: number
-	readonly body: string | Record<string, unknown>
+	readonly body: Record<string, unknown>
 	readonly headers?: {
 		readonly [key: string]: string
 	}
@@ -8,7 +8,7 @@ type ReturnTypeOfAzureFunctions = {
 
 type ApiResponce = {
 	readonly status: number
-	readonly body: string | Record<string, unknown>
+	readonly body: Record<string, unknown>
 }
 
 type ParamsOfFindClaimUrlApi = {

@@ -1,5 +1,7 @@
 import moment from 'moment'
 import { graphql } from '@octokit/graphql'
+import { getTargetDate } from './utils'
+
 const graphqlWithAuth = graphql.defaults({
 	headers: {
 		authorization: `token ${process.env.GITHUB_API_TOKEN}`,
@@ -18,7 +20,7 @@ const QUERY = `
 }
 `
 
-export const getCommitCountFromGraphQL = async function (
+const getCommitCountFromGraphQL = async function (
 	githubId: string,
 	from: Date,
 	to: Date
@@ -35,4 +37,17 @@ export const getCommitCountFromGraphQL = async function (
 		result.data.user.contributionsCollection.contributionCalendar
 			.totalContributions
 	)
+}
+
+export const getCommitCount = async function (
+	githubId: string
+): Promise<number> {
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const searchDate = getTargetDate(process.env.BASE_DATE!)
+	const commitCount = await getCommitCountFromGraphQL(
+		githubId,
+		searchDate.from,
+		searchDate.to
+	)
+	return commitCount
 }

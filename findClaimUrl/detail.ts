@@ -1,6 +1,7 @@
 import { whenDefined } from '@devprotocol/util-ts'
 import { generateErrorApiResponce } from '../common/utils'
-import { getCommitCount, getClaimUrlInfo } from '../common/utils'
+import { getClaimUrlInfo } from '../common/db'
+import { getCommitCount } from '../common/github-graphql'
 import { getRewordRecordByCommitCount } from '../common/db/reward'
 import { updateGitHubIdAndFindAt } from '../common/db/claim-url'
 

@@ -1,6 +1,9 @@
-import { getCommitCount, generateErrorApiResponce } from '../common/utils'
-import { getClaimUrlRecordByGithubId } from '../common/db/claim-url'
-import { getRewordRecordByCommitCount } from '../common/db/reward'
+import { generateErrorApiResponce } from '../common/utils'
+import {
+	getClaimUrlRecordByGithubId,
+	getRewordRecordByCommitCount,
+} from '../common/db'
+import { getCommitCount } from '../common/github-graphql'
 import { getAlreadyClaimRewardInfo, getRewardInfo } from './detail'
 
 export const main = async function (githubId: string): Promise<ApiResponce> {
@@ -10,6 +13,6 @@ export const main = async function (githubId: string): Promise<ApiResponce> {
 	return typeof rewardRecord === 'undefined'
 		? generateErrorApiResponce('not applicable')
 		: typeof claimUrlRecord === 'undefined'
-		? getRewardInfo(rewardRecord)
-		: getAlreadyClaimRewardInfo(rewardRecord, claimUrlRecord)
+		? await getRewardInfo(rewardRecord)
+		: await getAlreadyClaimRewardInfo(rewardRecord, claimUrlRecord)
 }

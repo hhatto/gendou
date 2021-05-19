@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { checkSameAddress } from './address'
-import { getClaimUrlRecordByGithubId } from '../common/db/claim-url'
+import { getClaimUrlRecordByGithubId } from '../common/db'
 
 export const validate = async function (
 	params: ParamsOfFindClaimUrlApi

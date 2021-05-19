@@ -1,5 +1,5 @@
-import { getRewordRecordById } from '../common/db/reward'
-import { generateErrorApiResponce, getClaimUrlInfo } from '../common/utils'
+import { getRewordRecordById, getClaimUrlInfo } from '../common/db'
+import { generateErrorApiResponce } from '../common/utils'
 import { claim_url, reward } from '@prisma/client'
 
 export const getRewardInfo = async function (

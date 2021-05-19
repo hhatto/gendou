@@ -9,9 +9,3 @@ CREATE TABLE "reward" (
 CREATE UNIQUE INDEX "reward.commit_lower_limit_unique" ON "reward"("commit_lower_limit");
 CREATE UNIQUE INDEX "reward.commit_upper_limit_unique" ON "reward"("commit_upper_limit");
 CREATE UNIQUE INDEX "reward.rank_unique" ON "reward"("rank");
-
-DMAIL
-MDIAL
-AMILD
-LMaid
-
