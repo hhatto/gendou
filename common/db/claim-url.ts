@@ -34,3 +34,17 @@ export const getClaimUrlRecordByRewardId = async function (
 	const record = tmp === null || result === false ? undefined : tmp
 	return record
 }
+
+export const updateGitHubIdAndFindAt = async function (
+	claimUrlId: number,
+	githubId: string
+): Promise<boolean> {
+	const client = getDbClient()
+	const afterData = await client.claim_url.update({
+		where: { id: claimUrlId },
+		data: { find_at: new Date(), github_id: githubId },
+	})
+	const result = await close(client)
+	const isUpdated = afterData.find_at !== null && afterData.github_id !== null
+	return result === false ? false : isUpdated
+}

@@ -18,7 +18,7 @@ const QUERY = `
 }
 `
 
-export const getCommitCount = async function (
+export const getCommitCountFromGraphQL = async function (
 	githubId: string,
 	from: Date,
 	to: Date

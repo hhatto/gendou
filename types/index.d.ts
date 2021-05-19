@@ -21,11 +21,6 @@ type ParamsOfInfoApi = {
 	readonly message: string
 }
 
-// type GasOption = {
-// 	readonly gasLimit: string
-// 	readonly gasPrice?: string
-// }
-
 type TargetDate = {
 	readonly from: Date
 	readonly to: Date

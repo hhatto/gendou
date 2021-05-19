@@ -3,7 +3,7 @@
 import test from 'ava'
 import { setEnv, generateTestData } from '../common/test-utils'
 //import { getSendInfoRecord } from '../common/send-info'
-import { updateAt } from './db'
+//import { updateAt } from './db'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 
 test.beforeEach(async () => {
@@ -28,11 +28,11 @@ test.serial('find_at can be updated.', async (t) => {
 	// t.true(after?.find_at !== null)
 })
 
-test.serial(
-	'If the record does not exist, an error occurs. Of course it wont be updated.',
-	async (t) => {
-		await t.throwsAsync(updateAt(-1), {
-			instanceOf: PrismaClientKnownRequestError,
-		})
-	}
-)
+// test.serial(
+// 	'If the record does not exist, an error occurs. Of course it wont be updated.',
+// 	async (t) => {
+// 		await t.throwsAsync(updateAt(-1), {
+// 			instanceOf: PrismaClientKnownRequestError,
+// 		})
+// 	}
+// )

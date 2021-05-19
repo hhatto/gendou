@@ -1,29 +1,20 @@
 import { getRewordRecordById } from '../common/db/reward'
-import {
-	generateErrorApiResponce,
-	getUnassignedClaimUrl,
-} from '../common/utils'
+import { generateErrorApiResponce, getClaimUrlInfo } from '../common/utils'
 import { claim_url, reward } from '@prisma/client'
 
 export const getRewardInfo = async function (
 	rewardRecord: reward
 ): Promise<ApiResponce> {
-	const claimUrl = await getUnassignedClaimUrl(rewardRecord)
-	const claimUrlRewardId =
-		typeof claimUrl === 'undefined' ? -1 : claimUrl.reward_id
-	const isReduction = rewardRecord.id === claimUrlRewardId
-	const claimUrlReward = await getRewordRecordById(claimUrlRewardId)
-	const reward =
-		typeof claimUrlReward === 'undefined' ? '-1' : claimUrlReward.reward
+	const claimUrlInfo = await getClaimUrlInfo(rewardRecord)
 	const result =
-		typeof claimUrl === 'undefined'
+		typeof claimUrlInfo.claimUrl === 'undefined'
 			? generateErrorApiResponce('there are no more rewards to distribute')
 			: {
 					status: 200,
 					body: {
-						reward: reward,
-						is_reduction: isReduction,
-						find_at: null,
+						reward: claimUrlInfo.reward,
+						is_reduction: claimUrlInfo.isReduction,
+						find_at: claimUrlInfo.claimUrl.find_at,
 					},
 			  }
 	return result
@@ -36,10 +27,12 @@ export const getAlreadyClaimRewardInfo = async function (
 	const rewardRecordById = await getRewordRecordById(
 		findClaimUrlRecord.reward_id
 	)
-	const rewardById: string =
-		typeof rewardRecordById === 'undefined' ? '-1' : rewardRecordById.reward
-	const isReduction = rewardRecord.id === findClaimUrlRecord.reward_id
-	const reward = isReduction ? rewardRecord.reward : rewardById
+	const isReduction = rewardRecord.id !== findClaimUrlRecord.reward_id
+	const reward = isReduction
+		? typeof rewardRecordById === 'undefined'
+			? '-1'
+			: rewardRecordById.reward
+		: rewardRecord.reward
 	const result =
 		typeof rewardRecordById === 'undefined'
 			? generateErrorApiResponce('illegal reward id')

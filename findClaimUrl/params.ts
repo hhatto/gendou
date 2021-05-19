@@ -13,7 +13,7 @@ export const getParams = function (
 		: ({
 				message: req.body.github_id,
 				signature: req.body.signature,
-				address: req.body.address,
+				address: req.body.addres,
 		  } as ParamsOfFindClaimUrlApi)
 	return params
 }

@@ -11,7 +11,7 @@ import { generateHttpRequest } from '../common/test-utils'
 //import * as send_info_modules from '../common/send-info'
 import * as validate_modules from './validate'
 import { getParams } from './params'
-import * as db_modules from './db'
+//import * as db_modules from './db'
 
 // let getSendInfoRecord: sinon.SinonStub<
 // 	[githubId: string],
@@ -23,7 +23,7 @@ let updateAt: sinon.SinonStub<[sendInfoId: number], Promise<boolean>>
 test.before(() => {
 	// getSendInfoRecord = sinon.stub(send_info_modules, 'getSendInfoRecord')
 	// validate = sinon.stub(validate_modules, 'validate')
-	updateAt = sinon.stub(db_modules, 'updateAt')
+	//updateAt = sinon.stub(db_modules, 'updateAt')
 })
 
 test('successful processing.', async (t) => {
