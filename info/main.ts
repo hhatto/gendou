@@ -3,7 +3,7 @@ import {
 	getClaimUrlRecordByGithubId,
 	getRewordRecordByCommitCount,
 } from '../common/db'
-import { getCommitCount } from '../common/github-graphql'
+import { getCommitCount } from '../common/github'
 import { getAlreadyClaimRewardInfo, getRewardInfo } from './detail'
 
 export const main = async function (githubId: string): Promise<ApiResponce> {

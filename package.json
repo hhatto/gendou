@@ -21,7 +21,7 @@
 		"@octokit/graphql": "^4.6.2",
 		"@prisma/client": "2.22.1",
 		"@types/bignumber.js": "5.0.0",
-		"bent": "7.3.12",
+		"bent": "^7.3.12",
 		"bignumber.js": "9.0.1",
 		"ethereum-waffle": "3.3.0",
 		"moment": "^2.29.1",

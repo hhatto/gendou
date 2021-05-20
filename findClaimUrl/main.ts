@@ -1,12 +1,13 @@
 import { generateErrorApiResponce } from '../common/utils'
-import { getCommitCountAndId } from '../common/github-graphql'
+import { getCommitCountAndId, getApiTokenFromCode } from '../common/github'
 import { getRewordRecordByCommitCount } from '../common/db/reward'
 import { claimUrl } from './detail'
 
 export const main = async function (
 	params: ParamsOfFindClaimUrlApi
 ): Promise<ApiResponce> {
-	const githubInfo = await getCommitCountAndId(params.code)
+	const token = await getApiTokenFromCode(params.code)
+	const githubInfo = await getCommitCountAndId(token)
 
 	const rewardRecord = await getRewordRecordByCommitCount(
 		githubInfo.commitCount

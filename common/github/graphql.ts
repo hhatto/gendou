@@ -1,5 +1,5 @@
 import { graphql } from '@octokit/graphql'
-import { getSearchDate } from './utils'
+import { getSearchDate } from '../utils'
 
 const COMMIT_COUNT_QUERY = `
 {
@@ -62,13 +62,13 @@ const COMMIT_COUNT_AND_ID_QUERY = `
 `
 
 const getCommitCountAndIdFromGraphQL = async function (
-	code: string,
+	token: string,
 	fromStr: string,
 	toStr: string
 ): Promise<GithubIdAndCommitCount> {
 	const graphqlWithAuth = graphql.defaults({
 		headers: {
-			authorization: `token ${code}`,
+			authorization: `token ${token}`,
 		},
 	})
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -85,12 +85,12 @@ const getCommitCountAndIdFromGraphQL = async function (
 }
 
 export const getCommitCountAndId = async function (
-	code: string
+	token: string
 ): Promise<GithubIdAndCommitCount> {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const searchDate = getSearchDate(process.env.BASE_DATE!)
 	const result = await getCommitCountAndIdFromGraphQL(
-		code,
+		token,
 		searchDate.from,
 		searchDate.to
 	)
