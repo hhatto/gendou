@@ -26,6 +26,7 @@ export const getClaimUrlRecordByRewardId = async function (
 				{
 					reward_id: rewardId,
 					github_id: null,
+					find_at: null,
 				},
 			],
 		},
