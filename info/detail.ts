@@ -13,7 +13,7 @@ export const getRewardInfo = async function (
 					status: 200,
 					body: {
 						reward: claimUrlInfo.reward,
-						is_reduction: claimUrlInfo.isReduction,
+						is_rank_down: claimUrlInfo.isRankDown,
 						find_at: claimUrlInfo.claimUrl.find_at,
 					},
 			  }
@@ -27,22 +27,31 @@ export const getAlreadyClaimRewardInfo = async function (
 	const rewardRecordById = await getRewordRecordById(
 		findClaimUrlRecord.reward_id
 	)
-	const isReduction = rewardRecord.id !== findClaimUrlRecord.reward_id
-	const reward = isReduction
-		? typeof rewardRecordById === 'undefined'
-			? '-1'
-			: rewardRecordById.reward
-		: rewardRecord.reward
 	const result =
 		typeof rewardRecordById === 'undefined'
 			? generateErrorApiResponce('illegal reward id')
-			: {
-					status: 200,
-					body: {
-						reward: reward,
-						is_reduction: isReduction,
-						find_at: findClaimUrlRecord.find_at,
-					},
-			  }
+			: await getAlreadyClaimRewardInfoInner(
+					rewardRecord,
+					findClaimUrlRecord,
+					rewardRecordById
+			  )
+	return result
+}
+
+const getAlreadyClaimRewardInfoInner = async function (
+	rewardRecord: reward,
+	findClaimUrlRecord: claim_url,
+	rewardRecordById: reward
+): Promise<ApiResponce> {
+	const isRankDown = rewardRecord.id !== findClaimUrlRecord.reward_id
+	const reward = isRankDown ? rewardRecordById.reward : rewardRecord.reward
+	const result = {
+		status: 200,
+		body: {
+			reward: reward,
+			is_rank_down: isRankDown,
+			find_at: findClaimUrlRecord.find_at,
+		},
+	}
 	return result
 }

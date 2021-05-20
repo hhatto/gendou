@@ -38,7 +38,7 @@ export const getFindClaimUrlResponce = async function (
 					status: 200,
 					body: {
 						reward: whenDefined(claimUrlInfo, (c) => c.reward),
-						is_reduction: whenDefined(claimUrlInfo, (c) => c.isReduction),
+						is_rank_down: whenDefined(claimUrlInfo, (c) => c.isRankDown),
 						claim_url: whenDefined(claimUrlInfo?.claimUrl, (u) => u.claim_url),
 					},
 			  }

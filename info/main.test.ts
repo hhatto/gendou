@@ -28,7 +28,7 @@ test.before(() => {
 	getAlreadyClaimRewardInfo = sinon.stub(detail_modules, 'getAlreadyClaimRewardInfo')
 })
 
-test.only('すでにurlが送信されている.', async (t) => {
+test.only('The url is already assigned..', async (t) => {
 	const dummyRewward = {
 		id: 0,
 		commit_lower_limit: 10,
@@ -55,10 +55,11 @@ test.only('すでにurlが送信されている.', async (t) => {
 	})
 	const res = await main('github-1')
 	t.is(res.body.dummy_key, 'dummy_value')
+
 	t.is(res.status, 200)
 })
 
-test.only('配布情報を取得できる.', async (t) => {
+test.only('Distribution information can be obtained..', async (t) => {
 	const dummyRewward = {
 		id: 1,
 		commit_lower_limit: 10,
@@ -79,7 +80,7 @@ test.only('配布情報を取得できる.', async (t) => {
 	t.is(res.status, 200)
 })
 
-test.only('リワードが不正', async (t) => {
+test.only('Incorrect reward information.', async (t) => {
 	getCommitCount.withArgs('github-3').resolves(300)
 	const res = await main('github-3')
 	t.is(res.body.message, 'not applicable')

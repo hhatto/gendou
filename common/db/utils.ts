@@ -34,19 +34,19 @@ export const getClaimUrlInfo = async function (
 	const claimUrl = await getUnassignedClaimUrl(rewardRecord)
 	const claimUrlRewardId =
 		typeof claimUrl === 'undefined' ? -1 : claimUrl.reward_id
-	const isReduction = rewardRecord.id !== claimUrlRewardId
+	const isRankDown = rewardRecord.id !== claimUrlRewardId
 	const claimUrlReward = await getRewordRecordById(claimUrlRewardId)
 	const reward =
 		typeof claimUrlReward === 'undefined' ? '-1' : claimUrlReward.reward
 	return {
 		reward,
-		isReduction,
+		isRankDown,
 		claimUrl,
 	}
 }
 
 type ClaimUrlInfo = {
 	readonly reward: string
-	readonly isReduction: boolean
+	readonly isRankDown: boolean
 	readonly claimUrl: UndefinedOr<claim_url>
 }
