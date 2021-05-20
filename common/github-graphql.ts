@@ -1,14 +1,7 @@
-import moment from 'moment'
 import { graphql } from '@octokit/graphql'
-import { getTargetDate } from './utils'
+import { getSearchDate } from './utils'
 
-const graphqlWithAuth = graphql.defaults({
-	headers: {
-		authorization: `token ${process.env.GITHUB_API_TOKEN}`,
-	},
-})
-
-const QUERY = `
+const COMMIT_COUNT_QUERY = `
 {
   user(login: $githubid) {
     login contributionsCollection(from: $from, to: $to) {
@@ -22,13 +15,16 @@ const QUERY = `
 
 const getCommitCountFromGraphQL = async function (
 	githubId: string,
-	from: Date,
-	to: Date
+	fromStr: string,
+	toStr: string
 ): Promise<number> {
-	const fromStr = moment(from.toString(), 'YYYY-MM-DDThh:mm:ss')
-	const toStr = moment(to.toString(), 'YYYY-MM-DDThh:mm:ss')
+	const graphqlWithAuth = graphql.defaults({
+		headers: {
+			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+		},
+	})
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const result: any = await graphqlWithAuth(QUERY, {
+	const result: any = await graphqlWithAuth(COMMIT_COUNT_QUERY, {
 		githubid: githubId,
 		from: fromStr,
 		to: toStr,
@@ -43,11 +39,60 @@ export const getCommitCount = async function (
 	githubId: string
 ): Promise<number> {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const searchDate = getTargetDate(process.env.BASE_DATE!)
+	const searchDate = getSearchDate(process.env.BASE_DATE!)
 	const commitCount = await getCommitCountFromGraphQL(
 		githubId,
 		searchDate.from,
 		searchDate.to
 	)
 	return commitCount
+}
+
+const COMMIT_COUNT_AND_ID_QUERY = `
+{
+	viewer {
+    login
+	contributionsCollection(from: $from, to: $to) {
+	  contributionCalendar {
+	    totalContributions
+	  }
+	}
+  }
+}
+`
+
+const getCommitCountAndIdFromGraphQL = async function (
+	code: string,
+	fromStr: string,
+	toStr: string
+): Promise<GithubIdAndCommitCount> {
+	const graphqlWithAuth = graphql.defaults({
+		headers: {
+			authorization: `token ${code}`,
+		},
+	})
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const result: any = await graphqlWithAuth(COMMIT_COUNT_AND_ID_QUERY, {
+		from: fromStr,
+		to: toStr,
+	})
+	return {
+		githubId: result.data.viewer.login,
+		commitCount:
+			result.data.viewer.contributionsCollection.contributionCalendar
+				.totalContributions,
+	}
+}
+
+export const getCommitCountAndId = async function (
+	code: string
+): Promise<GithubIdAndCommitCount> {
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const searchDate = getSearchDate(process.env.BASE_DATE!)
+	const result = await getCommitCountAndIdFromGraphQL(
+		code,
+		searchDate.from,
+		searchDate.to
+	)
+	return result
 }

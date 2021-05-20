@@ -12,9 +12,7 @@ type ApiResponce = {
 }
 
 type ParamsOfFindClaimUrlApi = {
-	readonly message: string
-	readonly signature: string
-	readonly address: string
+	readonly code: string
 }
 
 type ParamsOfInfoApi = {
@@ -24,4 +22,14 @@ type ParamsOfInfoApi = {
 type TargetDate = {
 	readonly from: Date
 	readonly to: Date
+}
+
+type TargetDateStr = {
+	readonly from: string
+	readonly to: string
+}
+
+type GithubIdAndCommitCount = {
+	readonly githubId: string
+	readonly commitCount: number
 }
