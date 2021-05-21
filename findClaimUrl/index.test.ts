@@ -5,36 +5,27 @@
 import test from 'ava'
 import sinon from 'sinon'
 import func from './index'
-import { Context, HttpRequest } from '@azure/functions'
-import * as main from './main'
-import { UndefinedOr } from '@devprotocol/util-ts'
+import { Context } from '@azure/functions'
+import * as main_modules from './main'
 import { generateHttpRequest } from '../common/test-utils'
-//import { send_info } from '@prisma/client'
 
-// let mainFunc: sinon.SinonStub<
-// 	[req: HttpRequest],
-// 	Promise<readonly [UndefinedOr<send_info>, UndefinedOr<string>]>
-// >
+let main: sinon.SinonStub<[code: string], Promise<ApiResponce>>
 test.before(() => {
-	// mainFunc = sinon.stub(main, 'main')
-	// mainFunc
-	// 	.withArgs(generateHttpRequest({}, { github_id: '0' }))
-	// 	.resolves([{
-	// 		reward: '100000000000000000',
-	// 		claim_url: 'http://hogehoge',
-	// 	} as any, undefined])
-	// mainFunc
-	// 	.withArgs(generateHttpRequest({}, { github_id: '1' }))
-	// 	.resolves([undefined, 'error message1'])
+	main = sinon.stub(main_modules, 'main')
 })
 
 test('The process ends normally.', async (t) => {
+	main.withArgs('conde1').resolves({
+		status: 200,
+		body: {
+			key: 'value'
+		}
+	})
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({}, { github_id: '0' })
+		generateHttpRequest({}, { code: 'conde1' })
 	)
-	t.is(res.body.reward, '100000000000000000')
-	t.is(res.body.claim_url, 'http://hogehoge')
+	t.is(res.body.key, 'value')
 	t.is(res.status, 200)
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
@@ -42,14 +33,14 @@ test('The process ends normally.', async (t) => {
 test('The process terminates abnormally.', async (t) => {
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({}, { github_id: '1' })
+		generateHttpRequest({}, {})
 	)
-	t.is(res.body.message, 'error message1')
+	t.is(res.body.message, 'parameters error')
 	t.is(res.status, 400)
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
 
 
 test.after(() => {
-	//mainFunc.restore()
+	main.restore()
 })

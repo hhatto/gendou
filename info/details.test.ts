@@ -4,16 +4,16 @@
 
 import test from 'ava'
 import sinon from 'sinon'
-import * as claim_url_modules from '../common/db/utils'
+import * as db_utils_info_modules from '../common/db/utils/info'
 import * as reward_modules from '../common/db/reward'
-import { getRewardInfo, getAlreadyClaimRewardInfo } from './detail'
-import { reward, claim_url } from '.prisma/client'
+import { getRewardInfo, getAlreadyClaimRewardInfo } from './details'
+import { reward } from '.prisma/client'
 import { UndefinedOr } from '@devprotocol/util-ts'
 
-let getClaimUrlInfo: sinon.SinonStub<[rewardRecord: reward], Promise<{ readonly reward: string; readonly isRankDown: boolean; readonly claimUrl: UndefinedOr<claim_url> }>>
+let getClaimUrlInfo: sinon.SinonStub<[rewardRecord: reward], Promise<UndefinedOr<ClaimUrlInfo>>>
 let getRewordRecordById: sinon.SinonStub<[id: number], Promise<UndefinedOr<reward>>>
 test.before(() => {
-	getClaimUrlInfo = sinon.stub(claim_url_modules, 'getClaimUrlInfo')
+	getClaimUrlInfo = sinon.stub(db_utils_info_modules, 'getClaimUrlInfo')
 	getRewordRecordById = sinon.stub(reward_modules, 'getRewordRecordById')
 })
 
@@ -56,11 +56,6 @@ test('The claim url was not assigned.', async (t) => {
 		reward: '20000000000000000000',
 		rank: 2,
 	}
-	getClaimUrlInfo.withArgs(dummyRewward).resolves({
-		reward: '40000000000000000000',
-		isRankDown: true,
-		claimUrl: undefined
-	})
 	const res = await getRewardInfo(
 		dummyRewward
 	)

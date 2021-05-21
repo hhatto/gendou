@@ -8,7 +8,7 @@ import { main } from './main'
 import * as reward_modules from '../common/db/reward'
 import * as claim_url_modules from '../common/db/claim-url'
 import * as graph_ql_modules from '../common/github/graphql'
-import * as detail_modules from './detail'
+import * as detail_modules from './details'
 import { UndefinedOr } from '@devprotocol/util-ts'
 import { claim_url, reward } from '.prisma/client'
 

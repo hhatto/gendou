@@ -9,7 +9,7 @@ import {
 	getRewordRecordByRank,
 } from './reward'
 
-import { getUnassignedClaimUrl, getClaimUrlInfo } from './utils'
+import { getClaimUrlInfo, createClaimUrlInfo } from './utils'
 
 export {
 	getClaimUrlRecordByGithubId,
@@ -18,6 +18,6 @@ export {
 	getRewordRecordByCommitCount,
 	getRewordRecordById,
 	getRewordRecordByRank,
-	getUnassignedClaimUrl,
 	getClaimUrlInfo,
+	createClaimUrlInfo,
 }

@@ -11,7 +11,7 @@ const httpTrigger: AzureFunction = async (
 	const result =
 		typeof params === 'undefined'
 			? generateErrorApiResponce('parameters error', 400)
-			: await main(params)
+			: await main(params.code)
 
 	return {
 		status: result.status,

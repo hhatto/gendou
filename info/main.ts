@@ -4,7 +4,7 @@ import {
 	getRewordRecordByCommitCount,
 } from '../common/db'
 import { getCommitCount } from '../common/github'
-import { getAlreadyClaimRewardInfo, getRewardInfo } from './detail'
+import { getAlreadyClaimRewardInfo, getRewardInfo } from './details'
 
 export const main = async function (githubId: string): Promise<ApiResponce> {
 	const commitCount = await getCommitCount(githubId)

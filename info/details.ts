@@ -7,7 +7,7 @@ export const getRewardInfo = async function (
 ): Promise<ApiResponce> {
 	const claimUrlInfo = await getClaimUrlInfo(rewardRecord)
 	const result =
-		typeof claimUrlInfo.claimUrl === 'undefined'
+		typeof claimUrlInfo === 'undefined'
 			? generateErrorApiResponce('there are no more rewards to distribute')
 			: {
 					status: 200,

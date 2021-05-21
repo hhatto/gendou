@@ -1,7 +1,7 @@
 import { UndefinedOr } from '@devprotocol/util-ts'
 import { claim_url, reward } from '@prisma/client'
-import { getClaimUrlRecordByRewardId } from './claim-url'
-import { getRewordRecordByRank, getRewordRecordById } from './reward'
+import { getClaimUrlRecordByRewardId } from '../claim-url'
+import { getRewordRecordByRank } from '../reward'
 
 export const getUnassignedClaimUrl = async function (
 	rewardRecord: reward
@@ -26,27 +26,4 @@ const getUnassignedClaimUrlRankDown = async function (
 	return typeof rewardRankDown === 'undefined'
 		? undefined
 		: await getUnassignedClaimUrl(rewardRankDown)
-}
-
-export const getClaimUrlInfo = async function (
-	rewardRecord: reward
-): Promise<ClaimUrlInfo> {
-	const claimUrl = await getUnassignedClaimUrl(rewardRecord)
-	const claimUrlRewardId =
-		typeof claimUrl === 'undefined' ? -1 : claimUrl.reward_id
-	const isRankDown = rewardRecord.id !== claimUrlRewardId
-	const claimUrlReward = await getRewordRecordById(claimUrlRewardId)
-	const reward =
-		typeof claimUrlReward === 'undefined' ? '-1' : claimUrlReward.reward
-	return {
-		reward,
-		isRankDown,
-		claimUrl,
-	}
-}
-
-type ClaimUrlInfo = {
-	readonly reward: string
-	readonly isRankDown: boolean
-	readonly claimUrl: UndefinedOr<claim_url>
 }

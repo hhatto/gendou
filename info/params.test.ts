@@ -22,7 +22,7 @@ test('All parameters are present.', async (t) => {
 	)
 	t.is(
 		equal(res, {
-			message: 'hoge',
+			githubId: 'hoge',
 		}),
 		true
 	)

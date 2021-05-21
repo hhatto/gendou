@@ -16,7 +16,7 @@ type ParamsOfFindClaimUrlApi = {
 }
 
 type ParamsOfInfoApi = {
-	readonly message: string
+	readonly githubId: string
 }
 
 type TargetDate = {
@@ -32,4 +32,10 @@ type TargetDateStr = {
 type GithubIdAndCommitCount = {
 	readonly githubId: string
 	readonly commitCount: number
+}
+
+type ClaimUrlInfo = {
+	readonly reward: string
+	readonly isRankDown: boolean
+	readonly claimUrl: claim_url
 }

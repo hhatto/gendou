@@ -15,7 +15,7 @@ test.before(() => {
 })
 
 test('get reward info ', async (t) => {
-	main.withArgs('test1').resolves({
+	main.withArgs('github-id1').resolves({
 		status: 200,
 		body: {
 			dummy_key: 'dummy_value'
@@ -23,7 +23,7 @@ test('get reward info ', async (t) => {
 	})
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({ github_id: 'test1' }, {})
+		generateHttpRequest({ github_id: 'github-id1' }, {})
 	)
 	t.is(res.body.dummy_key, 'dummy_value')
 	t.is(res.status, 200)
@@ -33,7 +33,7 @@ test('get reward info ', async (t) => {
 test('Incorrect parameters information.', async (t) => {
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({ hoge: 'test2' }, {})
+		generateHttpRequest({}, {})
 	)
 	t.is(res.body.message, 'parameters error')
 	t.is(res.status, 400)

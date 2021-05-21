@@ -12,10 +12,10 @@ export const getRewordRecordByCommitCount = async function (
 			AND: [
 				{
 					commit_lower_limit: {
-						gte: commitCount,
+						lte: commitCount,
 					},
 					commit_upper_limit: {
-						lte: commitCount,
+						gte: commitCount,
 					},
 				},
 			],
