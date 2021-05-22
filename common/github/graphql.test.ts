@@ -12,7 +12,7 @@ test('get commit count.', async (t) => {
 })
 
 // getCommitCountAndId
-test('If out of range, data cannot be acquired.', async (t) => {
+test('git commit count and id.', async (t) => {
 	process.env.BASE_DATE = '2020-04-01'
 	//public data only token
 	const token = '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'
