@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 export const generateErrorApiResponce = function (
 	errorMessage: string,
 	status = 200
