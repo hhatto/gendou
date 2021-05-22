@@ -2,9 +2,9 @@ import { graphql } from '@octokit/graphql'
 import { getSearchDate } from '../utils'
 
 const COMMIT_COUNT_QUERY = `
-{
+query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
   user(login: $githubid) {
-    login contributionsCollection(from: $from, to: $to) {
+    contributionsCollection(from: $from, to: $to) {
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -15,8 +15,8 @@ const COMMIT_COUNT_QUERY = `
 
 const getCommitCountFromGraphQL = async function (
 	githubId: string,
-	fromStr: string,
-	toStr: string
+	from: Date,
+	to: Date
 ): Promise<number> {
 	const graphqlWithAuth = graphql.defaults({
 		headers: {
@@ -26,12 +26,11 @@ const getCommitCountFromGraphQL = async function (
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result: any = await graphqlWithAuth(COMMIT_COUNT_QUERY, {
 		githubid: githubId,
-		from: fromStr,
-		to: toStr,
+		from: from,
+		to: to,
 	})
 	return Number(
-		result.data.user.contributionsCollection.contributionCalendar
-			.totalContributions
+		result.user.contributionsCollection.contributionCalendar.totalContributions
 	)
 }
 
@@ -49,7 +48,7 @@ export const getCommitCount = async function (
 }
 
 const COMMIT_COUNT_AND_ID_QUERY = `
-{
+query getUser($from: DateTime, $to: DateTime) {
 	viewer {
     login
 	contributionsCollection(from: $from, to: $to) {
@@ -63,8 +62,8 @@ const COMMIT_COUNT_AND_ID_QUERY = `
 
 const getCommitCountAndIdFromGraphQL = async function (
 	token: string,
-	fromStr: string,
-	toStr: string
+	from: Date,
+	to: Date
 ): Promise<GithubIdAndCommitCount> {
 	const graphqlWithAuth = graphql.defaults({
 		headers: {
@@ -73,13 +72,13 @@ const getCommitCountAndIdFromGraphQL = async function (
 	})
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result: any = await graphqlWithAuth(COMMIT_COUNT_AND_ID_QUERY, {
-		from: fromStr,
-		to: toStr,
+		from: from,
+		to: to,
 	})
 	return {
-		githubId: result.data.viewer.login,
+		githubId: result.viewer.login,
 		commitCount:
-			result.data.viewer.contributionsCollection.contributionCalendar
+			result.viewer.contributionsCollection.contributionCalendar
 				.totalContributions,
 	}
 }

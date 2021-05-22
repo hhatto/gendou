@@ -11,8 +11,11 @@ export const generateErrorApiResponce = function (
 }
 
 export const getSearchDate = function (baseDate: string): TargetDateStr {
+	const tmp = new Date(baseDate)
+	// eslint-disable-next-line functional/no-expression-statement
+	tmp.setFullYear(tmp.getFullYear() + 1)
 	return {
-		from: moment(baseDate).format('YYYY-MM-DDTHH:mm:ss'),
-		to: moment(baseDate).add(1, 'year').format('YYYY-MM-DDTHH:mm:ss'),
+		from: new Date(baseDate),
+		to: tmp,
 	}
 }

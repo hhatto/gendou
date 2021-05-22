@@ -25,8 +25,8 @@ type TargetDate = {
 }
 
 type TargetDateStr = {
-	readonly from: string
-	readonly to: string
+	readonly from: Date
+	readonly to: Date
 }
 
 type GithubIdAndCommitCount = {

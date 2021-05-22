@@ -16,6 +16,6 @@ test('get eror api responce(change status code).', async (t) => {
 
 test('Get the search date', async (t) => {
 	const result = await getSearchDate('2020-04-30')
-	t.is(result.from, '2020-04-30T00:00:00')
-	t.is(result.to, '2021-04-30T00:00:00')
+	t.true(result.from.getTime() === new Date('2020-04-30').getTime())
+	t.true(result.to.getTime() === new Date('2021-04-30').getTime())
 })
