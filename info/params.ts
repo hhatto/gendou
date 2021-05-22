@@ -3,12 +3,10 @@ import { UndefinedOr } from '@devprotocol/util-ts'
 
 export const getParams = function (
 	req: HttpRequest
-): UndefinedOr<ParamsOfRewardApi> {
-	const isMessageUndefined = typeof req.params.github_id === 'undefined'
-	const result = isMessageUndefined
+): UndefinedOr<ParamsOfInfoApi> {
+	return typeof req.params.github_id === 'undefined'
 		? undefined
-		: ({
-				message: req.params.github_id,
-		  } as ParamsOfRewardApi)
-	return result
+		: {
+				githubId: req.params.github_id,
+		  }
 }

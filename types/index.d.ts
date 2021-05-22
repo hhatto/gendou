@@ -1,22 +1,41 @@
 type ReturnTypeOfAzureFunctions = {
 	readonly status: number
-	readonly body: string | Record<string, unknown>
+	readonly body: Record<string, unknown>
 	readonly headers?: {
 		readonly [key: string]: string
 	}
 }
 
-type ParamsOfSendApi = {
-	readonly message: string
-	readonly signature: string
-	readonly address: string
+type ApiResponce = {
+	readonly status: number
+	readonly body: Record<string, unknown>
 }
 
-type ParamsOfRewardApi = {
-	readonly message: string
+type ParamsOfFindClaimUrlApi = {
+	readonly code: string
 }
 
-type GasOption = {
-	readonly gasLimit: string
-	readonly gasPrice?: string
+type ParamsOfInfoApi = {
+	readonly githubId: string
+}
+
+type TargetDate = {
+	readonly from: Date
+	readonly to: Date
+}
+
+type TargetDateStr = {
+	readonly from: Date
+	readonly to: Date
+}
+
+type GithubIdAndCommitCount = {
+	readonly githubId: string
+	readonly commitCount: number
+}
+
+type ClaimUrlInfo = {
+	readonly reward: string
+	readonly isRankDown: boolean
+	readonly claimUrl: claim_url
 }

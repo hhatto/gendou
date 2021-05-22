@@ -1,37 +1,20 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
-import { getSendInfoRecord } from '../common/send-info'
+import { generateErrorApiResponce } from '../common/utils'
 import { getParams } from './params'
-import { whenDefined } from '@devprotocol/util-ts'
+import { main } from './main'
 
 const httpTrigger: AzureFunction = async (
 	context: Context,
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
 	const params = getParams(req)
-	const record = await whenDefined(
-		params,
-		async (p) => await getSendInfoRecord(p.message)
-	)
-	const status = typeof params === 'undefined' ? 400 : 200
-	const errorMessage =
+	const result =
 		typeof params === 'undefined'
-			? 'parameters error'
-			: typeof record === 'undefined'
-			? 'not found'
-			: undefined
-	const isSuccess = typeof errorMessage === 'undefined' && status === 200
-	const value = whenDefined(record, (r) => r.reward)
-	const find_at = await whenDefined(record, (r) => r.find_at)
-	const body = isSuccess
-		? {
-				reward: value,
-				find_at: find_at,
-		  }
-		: { message: errorMessage }
-
+			? generateErrorApiResponce('parameters error', 400)
+			: await main(params.githubId)
 	return {
-		status: status,
-		body: body,
+		status: result.status,
+		body: result.body,
 		headers: {
 			'Cache-Control': 'no-store',
 		},

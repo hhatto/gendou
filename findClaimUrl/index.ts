@@ -1,27 +1,21 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
+import { getParams } from './params'
+import { generateErrorApiResponce } from './../common/utils'
 import { main } from './main'
 
 const httpTrigger: AzureFunction = async (
 	context: Context,
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
-	const [sendInfo, errorMessage] = await main(req)
-	const status = typeof errorMessage === 'undefined' ? 200 : 400
-	const reward = typeof sendInfo === 'undefined' ? 0 : sendInfo.reward
-	const claimUrl = typeof sendInfo === 'undefined' ? '' : sendInfo.claim_url
-	const body =
-		status === 200
-			? {
-					reward: reward,
-					claim_url: claimUrl,
-			  }
-			: {
-					message: errorMessage,
-			  }
+	const params = getParams(req)
+	const result =
+		typeof params === 'undefined'
+			? generateErrorApiResponce('parameters error', 400)
+			: await main(params.code)
 
 	return {
-		status: status,
-		body: body,
+		status: result.status,
+		body: result.body,
 		headers: {
 			'Cache-Control': 'no-store',
 		},

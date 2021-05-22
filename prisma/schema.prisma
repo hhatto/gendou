@@ -10,11 +10,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model send_info {
+model reward {
+  id      				   Int     @default(autoincrement()) @id
+	commit_lower_limit Int     @unique
+	commit_upper_limit Int     @unique
+  reward    			   String
+	rank               Int     @unique
+}
+
+model claim_url {
   id      				Int      @default(autoincrement()) @id
-  github_id   		String   @unique
-  reward    			String
-  uuid    				String   @unique
-  claim_url 	   	String
+	uuid            String
+	claim_url       String
+	reward_id       Int
+  github_id   		String?
   find_at 				DateTime?
 }

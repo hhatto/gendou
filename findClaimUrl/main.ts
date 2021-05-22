@@ -1,37 +1,17 @@
-import { HttpRequest } from '@azure/functions'
-import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
-import { getSendInfoRecord } from '../common/send-info'
-import { getParams } from './params'
-import { validate } from './validate'
-import { updateAt } from './db'
-import { send_info } from '@prisma/client'
+import { generateErrorApiResponce } from '../common/utils'
+import { getCommitCountAndId, getApiTokenFromCode } from '../common/github'
+import { getRewordRecordByCommitCount } from '../common/db'
+import { claimUrl } from './details'
 
-export const main = async function (
-	req: HttpRequest
-): Promise<readonly [UndefinedOr<send_info>, UndefinedOr<string>]> {
-	const params = getParams(req)
-	const record = await whenDefined(
-		params,
-		async (p) => await getSendInfoRecord(p.message)
+export const main = async function (code: string): Promise<ApiResponce> {
+	const token = await getApiTokenFromCode(code)
+	const githubInfo = await getCommitCountAndId(token)
+
+	const rewardRecord = await getRewordRecordByCommitCount(
+		githubInfo.commitCount
 	)
-	const isValidateOk = await whenDefined(params, async (p) => await validate(p))
-	const isUpdate =
-		isValidateOk === true
-			? await whenDefined(record, async (r) => await updateAt(r.id))
-			: undefined
-	const errorMessage =
-		typeof params === 'undefined'
-			? 'parameters error'
-			: typeof record === 'undefined'
-			? 'not found'
-			: typeof isValidateOk === 'undefined'
-			? 'validate error'
-			: isValidateOk === false
-			? 'illegal address'
-			: typeof isUpdate === 'undefined'
-			? 'unknown error'
-			: isUpdate === false
-			? 'db access error'
-			: undefined
-	return [record, errorMessage]
+
+	return typeof rewardRecord === 'undefined'
+		? generateErrorApiResponce('not applicable')
+		: await claimUrl(githubInfo.githubId, rewardRecord)
 }
