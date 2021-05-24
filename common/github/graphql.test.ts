@@ -102,7 +102,7 @@ test.after(() => {
 	graphql.restore()
 })
 
-// use toke test
+// use token test
 // getCommitCount
 // test('get commit count.', async (t) => {
 // 	process.env.BASE_DATE = '2020-04-01'
