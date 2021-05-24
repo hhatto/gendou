@@ -75,7 +75,7 @@ test.after(() => {
 // getCommitCount
 // test('get commit count.', async (t) => {
 // 	process.env.GITHUB_CLIENT_ID = '6d3ef2327afe876bd74e'
-// 	process.env.GITHUB_CLIENT_SECRETS = '2dc453360be21b3782045a966ac88985a62dfc54'
+// 	process.env.GITHUB_CLIENT_SECRETS = ''
 // 	const result = await getApiTokenFromCode('3047bcd560892aa96dd9')
 // 	t.is(result, '')
 // })
