@@ -18,16 +18,14 @@ const getCommitCountFromGraphQL = async function (
 	from: Date,
 	to: Date
 ): Promise<number> {
-	const graphqlWithAuth = graphql.defaults({
-		headers: {
-			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
-		},
-	})
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const result: any = await graphqlWithAuth(COMMIT_COUNT_QUERY, {
+	const result: any = await graphql(COMMIT_COUNT_QUERY, {
 		githubid: githubId,
 		from: from,
 		to: to,
+		headers: {
+			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+		},
 	})
 	return Number(
 		result.user.contributionsCollection.contributionCalendar.totalContributions
@@ -65,15 +63,13 @@ const getCommitCountAndIdFromGraphQL = async function (
 	from: Date,
 	to: Date
 ): Promise<GithubIdAndCommitCount> {
-	const graphqlWithAuth = graphql.defaults({
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const result: any = await graphql(COMMIT_COUNT_AND_ID_QUERY, {
+		from: from,
+		to: to,
 		headers: {
 			authorization: `token ${token}`,
 		},
-	})
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const result: any = await graphqlWithAuth(COMMIT_COUNT_AND_ID_QUERY, {
-		from: from,
-		to: to,
 	})
 	return {
 		githubId: result.viewer.login,
