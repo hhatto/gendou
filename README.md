@@ -32,7 +32,7 @@ docker-compose up -d
 
 ```
 psql postgresql://testuser@localhost:5432/testdb
-パスワード：testpassword
+パスワード:testpassword
 ```
 
 ## 環境変数
@@ -40,7 +40,11 @@ psql postgresql://testuser@localhost:5432/testdb
 設定するファイルは local.settings.json。下記の 4 つ以外はそのままで大丈夫。
 
 ```
-DATABASE_URL: DBのURL
+DATABASE_URL:DBのURL
+BASE_DATE:検索基準日、「YYYY-MM-DD」形式で指定する。検索基準日と検索基準日+1年が検索期間となる
+GITHUB_API_TOKEN:GitHubのGraphQLを実行するときに利用するトークン。公開情報しか取得しないので、何も権限を持たないPATで大丈夫
+GITHUB_CLIENT_ID:GitHub OAuthのクライアントID
+GITHUB_CLIENT_SECRETS:GitHub OAuthのクライアントシークレットID
 ```
 
 ## Azure Functions 起動
@@ -70,22 +74,35 @@ https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-types
 
 パラメータに指定した github id に該当する報酬情報を取得します。
 
-URL：https://{domain}/v1/info/{github_id}<br>
-method：get<br>
+URL:https://{domain}/v1/info/{github_id}<br>
+method:get<br>
 例）curl http://localhost:7071/v1/info/github-id1<br>
 
-レスポンス<br>
-reward：報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
-find_at：claim url を初めて返却した時の日時、未返却の場合は null が入っている
+### パラメータ
+
+github_id:GitHub のユーザ ID
+
+### レスポンス
+
+reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+is_rank_down:報酬額がランクダウンしている場合は true、そうでない場合は false。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
+find_at:claim url を初めて返却した時の日時、未返却の場合は null が入っている
 
 ## findClaimUrl
 
 パラメータに設定した github id に該当するクレーム用 URL を返却します。
 
-URL：http://{domain}/v1/findClaimUrl<br>
+URL:http://{domain}/v1/findClaimUrl<br>
 method:post<br>
-例）curl -X POST -d '{"github_id":"git-id1", "signature":"0x4224782729b91ce60933779327701beed6f5a60f5b3ef38bcfc4698aa693af4a5899fc1e6fc6b4066f90b155a9926b08c0b78498bfe61020e018a7d071a1d1e81c", "address":"0x3CbDbAfE2585F4991CEf5A5D2870F68D661b3943"}' http://localhost:7071/v1/findClaimUrl<br>
+例）curl -X POST -d '{"code":"abcde......"}' http://localhost:7071/v1/findClaimUrl<br>
 
-レスポンス<br>
-reward：報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
-claim_url：発行された claim url
+### パラメータ
+
+code:GitHub OAuth 認証後に発行されるコード
+
+### レスポンス
+
+reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+is_rank_down:報酬額がランクダウンしている場合は true、そうでない場合は false。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
+find_at:claim url を初めて返却した時の日時、未返却の場合は null が入っている<br>
+github_id:パラメータの code に紐づく GitHub のユーザ ID<br>
