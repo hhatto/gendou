@@ -5,11 +5,8 @@
 import test from 'ava'
 import sinon from 'sinon'
 import axios, { AxiosRequestConfig } from 'axios'
-import { getSearchDate } from '../utils'
-import * as octokit_modules from '@octokit/graphql'
 import { getApiTokenFromCode } from './token'
-import { GraphQlResponse } from '@octokit/graphql/dist-types/types'
-import { RequestParameters } from '@octokit/types'
+
 let post: sinon.SinonStub<
 	[url: string, data?: any, config?: AxiosRequestConfig | undefined],
 	Promise<unknown>
