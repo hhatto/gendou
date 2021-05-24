@@ -79,10 +79,13 @@ method:get<br>
 例）curl http://localhost:7071/v1/info/github-id1<br>
 
 ### パラメータ
-github_id:GitHubのユーザID
+
+github_id:GitHub のユーザ ID
+
 ### レスポンス
-reward:報酬額、整数のため、実際に付与される報酬額に 10*18 をかけた数字が帰ってくる<br>
-is_rank_down:報酬額がランクダウンしている場合はtrue、そうでない場合はfalse。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
+
+reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+is_rank_down:報酬額がランクダウンしている場合は true、そうでない場合は false。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
 find_at:claim url を初めて返却した時の日時、未返却の場合は null が入っている
 
 ## findClaimUrl
@@ -94,10 +97,12 @@ method:post<br>
 例）curl -X POST -d '{"code":"abcde......"}' http://localhost:7071/v1/findClaimUrl<br>
 
 ### パラメータ
-code:GitHub OAuth認証後に発行されるコード
+
+code:GitHub OAuth 認証後に発行されるコード
 
 ### レスポンス
-reward:報酬額、整数のため、実際に付与される報酬額に 10*18 をかけた数字が帰ってくる<br>
-is_rank_down:報酬額がランクダウンしている場合はtrue、そうでない場合はfalse。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
+
+reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
+is_rank_down:報酬額がランクダウンしている場合は true、そうでない場合は false。枠が埋まってしまったとき、ワンランク下の報酬が付与される時がある、そのステータス。<br>
 find_at:claim url を初めて返却した時の日時、未返却の場合は null が入っている<br>
-github_id:パラメータのcodeに紐づくGitHubのユーザID<br>
+github_id:パラメータの code に紐づく GitHub のユーザ ID<br>
