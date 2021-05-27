@@ -1,12 +1,11 @@
-/* eslint-disable functional/no-expression-statement */
 import { UndefinedOr } from '@devprotocol/util-ts'
-import { getDbClient, close } from './db'
 import { reward } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 export const getRewordRecordByCommitCount = async function (
+	client: PrismaClient,
 	commitCount: number
 ): Promise<UndefinedOr<reward>> {
-	const client = getDbClient()
 	const tmp = await client.reward.findFirst({
 		where: {
 			AND: [
@@ -21,35 +20,32 @@ export const getRewordRecordByCommitCount = async function (
 			],
 		},
 	})
-	const result = await close(client)
-	const record = tmp === null || result === false ? undefined : tmp
+	const record = tmp === null ? undefined : tmp
 	return record
 }
 
 export const getRewordRecordById = async function (
+	client: PrismaClient,
 	id: number
 ): Promise<UndefinedOr<reward>> {
-	const client = getDbClient()
 	const tmp = await client.reward.findFirst({
 		where: {
 			id: id,
 		},
 	})
-	const result = await close(client)
-	const record = tmp === null || result === false ? undefined : tmp
+	const record = tmp === null ? undefined : tmp
 	return record
 }
 
 export const getRewordRecordByRank = async function (
+	client: PrismaClient,
 	rank: number
 ): Promise<UndefinedOr<reward>> {
-	const client = getDbClient()
 	const tmp = await client.reward.findFirst({
 		where: {
 			rank: rank,
 		},
 	})
-	const result = await close(client)
-	const record = tmp === null || result === false ? undefined : tmp
+	const record = tmp === null ? undefined : tmp
 	return record
 }

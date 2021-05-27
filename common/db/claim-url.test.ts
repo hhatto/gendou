@@ -9,6 +9,7 @@ import {
 	getClaimUrlRecordByRewardId,
 	updateGitHubIdAndFindAt,
 } from './claim-url'
+import { getDbClient, close } from './db'
 
 test.before(() => {
 	setEnv()
@@ -16,8 +17,10 @@ test.before(() => {
 
 //getClaimUrlRecordByGithubId
 test.serial('get by github id.', async (t) => {
-	await createClaimUrlTestData()
-	const record = await getClaimUrlRecordByGithubId('github-id1')
+	const client = getDbClient()
+	await createClaimUrlTestData(client)
+	const record = await getClaimUrlRecordByGithubId(client, 'github-id1')
+	await close(client)
 	t.is(record?.uuid, 'xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx')
 	t.is(record?.claim_url, 'http://hogehoge/hurahura1')
 	t.is(record?.reward_id, 1)
@@ -26,15 +29,19 @@ test.serial('get by github id.', async (t) => {
 })
 
 test.serial('if data is no exist, return undefind.', async (t) => {
-	await createClaimUrlTestData()
-	const record = await getClaimUrlRecordByGithubId('github-id10')
+	const client = getDbClient()
+	await createClaimUrlTestData(client)
+	const record = await getClaimUrlRecordByGithubId(client, 'github-id10')
+	await close(client)
 	t.is(typeof record, 'undefined')
 })
 
 //getClaimUrlRecordByRewardId
 test.serial('get by reward id.', async (t) => {
-	await createClaimUrlTestData()
-	const record = await getClaimUrlRecordByRewardId(1)
+	const client = getDbClient()
+	await createClaimUrlTestData(client)
+	const record = await getClaimUrlRecordByRewardId(client, 1)
+	await close(client)
 	t.is(record?.uuid, 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx')
 	t.is(record?.claim_url, 'http://hogehoge/hurahura2')
 	t.is(record?.reward_id, 1)
@@ -43,18 +50,26 @@ test.serial('get by reward id.', async (t) => {
 })
 
 test.serial('get by reward id.(not found)', async (t) => {
-	await createClaimUrlTestData()
-	const record = await getClaimUrlRecordByRewardId(2)
+	const client = getDbClient()
+	await createClaimUrlTestData(client)
+	const record = await getClaimUrlRecordByRewardId(client, 2)
+	await close(client)
 	t.is(typeof record, 'undefined')
 })
 
 //updateGitHubIdAndFindAt
 test.serial('update reward set github id and find at.', async (t) => {
-	await createClaimUrlTestData()
-	const record = await getClaimUrlRecordByRewardId(1)
-	const result = await updateGitHubIdAndFindAt(record?.id!, 'github-id99')
+	const client = getDbClient()
+	await createClaimUrlTestData(client)
+	const record = await getClaimUrlRecordByRewardId(client, 1)
+	const result = await updateGitHubIdAndFindAt(
+		client,
+		record?.id!,
+		'github-id99'
+	)
 	t.is(result, true)
-	const afterRecord = await getClaimUrlRecordByGithubId('github-id99')
+	const afterRecord = await getClaimUrlRecordByGithubId(client, 'github-id99')
+	await close(client)
 	t.is(afterRecord?.uuid, 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx')
 	t.is(afterRecord?.claim_url, 'http://hogehoge/hurahura2')
 	t.is(afterRecord?.reward_id, 1)

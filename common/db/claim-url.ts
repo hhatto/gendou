@@ -1,25 +1,24 @@
 import { UndefinedOr } from '@devprotocol/util-ts'
-import { getDbClient, close } from './db'
 import { claim_url } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 export const getClaimUrlRecordByGithubId = async function (
+	client: PrismaClient,
 	githubId: string
 ): Promise<UndefinedOr<claim_url>> {
-	const client = getDbClient()
 	const tmp = await client.claim_url.findFirst({
 		where: {
 			github_id: githubId,
 		},
 	})
-	const result = await close(client)
-	const record = tmp === null || result === false ? undefined : tmp
+	const record = tmp === null ? undefined : tmp
 	return record
 }
 
 export const getClaimUrlRecordByRewardId = async function (
+	client: PrismaClient,
 	rewardId: number
 ): Promise<UndefinedOr<claim_url>> {
-	const client = getDbClient()
 	const tmp = await client.claim_url.findFirst({
 		where: {
 			AND: [
@@ -31,21 +30,19 @@ export const getClaimUrlRecordByRewardId = async function (
 			],
 		},
 	})
-	const result = await close(client)
-	const record = tmp === null || result === false ? undefined : tmp
+	const record = tmp === null ? undefined : tmp
 	return record
 }
 
 export const updateGitHubIdAndFindAt = async function (
+	client: PrismaClient,
 	claimUrlId: number,
 	githubId: string
 ): Promise<boolean> {
-	const client = getDbClient()
 	const afterData = await client.claim_url.update({
 		where: { id: claimUrlId },
 		data: { find_at: new Date(), github_id: githubId },
 	})
-	const result = await close(client)
 	const isUpdated = afterData.find_at !== null && afterData.github_id !== null
-	return result === false ? false : isUpdated
+	return isUpdated
 }

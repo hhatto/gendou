@@ -1,11 +1,12 @@
 import { getRewordRecordById, getClaimUrlInfo } from '../common/db'
 import { generateErrorApiResponce } from '../common/utils'
-import { claim_url, reward } from '@prisma/client'
+import { PrismaClient, claim_url, reward } from '@prisma/client'
 
 export const getRewardInfo = async function (
+	client: PrismaClient,
 	rewardRecord: reward
 ): Promise<ApiResponce> {
-	const claimUrlInfo = await getClaimUrlInfo(rewardRecord)
+	const claimUrlInfo = await getClaimUrlInfo(client, rewardRecord)
 	const result =
 		typeof claimUrlInfo === 'undefined'
 			? generateErrorApiResponce('there are no more rewards to distribute')
@@ -21,16 +22,18 @@ export const getRewardInfo = async function (
 }
 
 export const getAlreadyClaimRewardInfo = async function (
+	client: PrismaClient,
 	rewardRecord: reward,
 	findClaimUrlRecord: claim_url
 ): Promise<ApiResponce> {
 	const rewardRecordById = await getRewordRecordById(
+		client,
 		findClaimUrlRecord.reward_id
 	)
 	const result =
 		typeof rewardRecordById === 'undefined'
 			? generateErrorApiResponce('illegal reward id')
-			: await getAlreadyClaimRewardInfoInner(
+			: getAlreadyClaimRewardInfoInner(
 					rewardRecord,
 					findClaimUrlRecord,
 					rewardRecordById
@@ -38,11 +41,11 @@ export const getAlreadyClaimRewardInfo = async function (
 	return result
 }
 
-const getAlreadyClaimRewardInfoInner = async function (
+const getAlreadyClaimRewardInfoInner = function (
 	rewardRecord: reward,
 	findClaimUrlRecord: claim_url,
 	rewardRecordById: reward
-): Promise<ApiResponce> {
+): ApiResponce {
 	const isRankDown = rewardRecord.id !== findClaimUrlRecord.reward_id
 	const reward = isRankDown ? rewardRecordById.reward : rewardRecord.reward
 	const result = {

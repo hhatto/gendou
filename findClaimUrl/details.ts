@@ -7,26 +7,28 @@ import {
 	getRewordRecordById,
 } from '../common/db'
 import { updateGitHubIdAndFindAt, createClaimUrlInfo } from '../common/db'
-import { claim_url } from '@prisma/client'
+import { PrismaClient, claim_url } from '@prisma/client'
 
 export const claimUrl = async function (
+	client: PrismaClient,
 	githubId: string,
 	rewardRecord: reward
 ): Promise<ApiResponce> {
-	const claimUrl = await getClaimUrlRecordByGithubId(githubId)
+	const claimUrl = await getClaimUrlRecordByGithubId(client, githubId)
 
 	return typeof claimUrl === 'undefined'
-		? await generateClaimUrlResponceWithUpdate(githubId, rewardRecord)
-		: await generateClaimUrlResponce(githubId, claimUrl)
+		? await generateClaimUrlResponceWithUpdate(client, githubId, rewardRecord)
+		: await generateClaimUrlResponce(client, githubId, claimUrl)
 }
 
 const generateClaimUrlResponceWithUpdate = async function (
+	client: PrismaClient,
 	githubId: string,
 	rewardRecord: reward
 ): Promise<ApiResponce> {
-	const claimUrlInfo = await getClaimUrlInfo(rewardRecord)
+	const claimUrlInfo = await getClaimUrlInfo(client, rewardRecord)
 	const isUpdated = await whenDefined(claimUrlInfo, (c) =>
-		updateGitHubIdAndFindAt(c.claimUrl.id, githubId)
+		updateGitHubIdAndFindAt(client, c.claimUrl.id, githubId)
 	)
 
 	return typeof claimUrlInfo === 'undefined'
@@ -45,12 +47,13 @@ const generateClaimUrlResponceWithUpdate = async function (
 }
 
 const generateClaimUrlResponce = async function (
+	client: PrismaClient,
 	githubId: string,
 	claimUrl: claim_url
 ): Promise<ApiResponce> {
-	const reward = await getRewordRecordById(claimUrl.reward_id)
+	const reward = await getRewordRecordById(client, claimUrl.reward_id)
 	const claimUrlInfo = await whenDefined(reward, (r) =>
-		createClaimUrlInfo(r, claimUrl)
+		createClaimUrlInfo(client, r, claimUrl)
 	)
 	return typeof claimUrlInfo === 'undefined'
 		? generateErrorApiResponce('illegal reward id')
