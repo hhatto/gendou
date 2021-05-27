@@ -10,12 +10,15 @@ import * as claim_url_modules from '../common/db/claim-url'
 import * as rewaed_modules from '../common/db/reward'
 import { claim_url, reward } from '.prisma/client'
 import { UndefinedOr } from '@devprotocol/util-ts'
+import { PrismaClient } from '@prisma/client'
 
-let getClaimUrlInfo: sinon.SinonStub<[rewardRecord: reward], Promise<UndefinedOr<ClaimUrlInfo>>>
-let updateGitHubIdAndFindAt: sinon.SinonStub<[claimUrlId: number, githubId: string], Promise<boolean>>
-let getRewordRecordById: sinon.SinonStub<[id: number], Promise<UndefinedOr<reward>>>
-let createClaimUrlInfo: sinon.SinonStub<[rewardRecord: reward, claimUrlRecord: claim_url], Promise<UndefinedOr<ClaimUrlInfo>>>
-let getClaimUrlRecordByGithubId: sinon.SinonStub<[githubId: string], Promise<UndefinedOr<claim_url>>>
+let getClaimUrlInfo: sinon.SinonStub<[client: PrismaClient, rewardRecord: reward], Promise<UndefinedOr<ClaimUrlInfo>>>
+let updateGitHubIdAndFindAt: sinon.SinonStub<[client: PrismaClient, claimUrlId: number, githubId: string], Promise<boolean>>
+let getRewordRecordById: sinon.SinonStub<[client: PrismaClient, id: number], Promise<UndefinedOr<reward>>>
+let createClaimUrlInfo: sinon.SinonStub<[client: PrismaClient, rewardRecord: reward, claimUrlRecord: claim_url], Promise<UndefinedOr<ClaimUrlInfo>>>
+let getClaimUrlRecordByGithubId: sinon.SinonStub<[client: PrismaClient, githubId: string], Promise<UndefinedOr<claim_url>>>
+
+const client = {db: true}
 
 test.before(() => {
 	getClaimUrlInfo = sinon.stub(db_utils_info_modules, 'getClaimUrlInfo')
@@ -26,7 +29,7 @@ test.before(() => {
 })
 
 test('get claim url and update record.', async (t) => {
-	getClaimUrlInfo.withArgs({id: 1} as any).resolves({
+	getClaimUrlInfo.withArgs(client as any, {id: 1} as any).resolves({
 		claimUrl: {
 			id: 1,
 			claim_ul: 'http://hogehoge1'
@@ -34,8 +37,9 @@ test('get claim url and update record.', async (t) => {
 		reward: '5000000',
 		isRankDown: false
 	} as ClaimUrlInfo)
-	updateGitHubIdAndFindAt.withArgs(1, 'github-id1').resolves(true)
+	updateGitHubIdAndFindAt.withArgs(client as any, 1, 'github-id1').resolves(true)
 	const res = await claimUrl(
+		client as any,
 		'github-id1',
 		{id: 1} as any
 	)
@@ -48,6 +52,7 @@ test('get claim url and update record.', async (t) => {
 
 test('can not get claim url.', async (t) => {
 	const res = await claimUrl(
+		client as any,
 		'github-id2',
 		{id: 2} as any
 	)
@@ -56,7 +61,7 @@ test('can not get claim url.', async (t) => {
 })
 
 test('get claim url, but can not update record.', async (t) => {
-	getClaimUrlInfo.withArgs({id: 3} as any).resolves({
+	getClaimUrlInfo.withArgs(client as any, {id: 3} as any).resolves({
 		claimUrl: {
 			id: 3,
 			claim_ul: 'http://hogehoge1'
@@ -64,8 +69,9 @@ test('get claim url, but can not update record.', async (t) => {
 		reward: '3000000',
 		isRankDown: true
 	} as ClaimUrlInfo)
-	updateGitHubIdAndFindAt.withArgs(3, 'github-id3').resolves(false)
+	updateGitHubIdAndFindAt.withArgs(client as any, 3, 'github-id3').resolves(false)
 	const res = await claimUrl(
+		client as any,
 		'github-id3',
 		{id: 3} as any
 	)
@@ -74,13 +80,13 @@ test('get claim url, but can not update record.', async (t) => {
 })
 
 test('already claim', async (t) => {
-	getClaimUrlRecordByGithubId.withArgs('github-id4').resolves({
+	getClaimUrlRecordByGithubId.withArgs(client as any, 'github-id4').resolves({
 		reward_id: 4
 	} as any)
-	getRewordRecordById.withArgs(4).resolves({
+	getRewordRecordById.withArgs(client as any, 4).resolves({
 		id: 4
 	} as any)
-	createClaimUrlInfo.withArgs({id: 4} as any, {reward_id: 4} as any).resolves({
+	createClaimUrlInfo.withArgs(client as any, {id: 4} as any, {reward_id: 4} as any).resolves({
 		reward: '400000000000000000',
 		isRankDown: true,
 		claimUrl: {
@@ -88,6 +94,7 @@ test('already claim', async (t) => {
 		}
 	} as any)
 	const res = await claimUrl(
+		client as any,
 		'github-id4',
 		{id: 4} as any
 	)
@@ -99,10 +106,11 @@ test('already claim', async (t) => {
 })
 
 test('already claim(illegal reward id)', async (t) => {
-	getClaimUrlRecordByGithubId.withArgs('github-id5').resolves({
+	getClaimUrlRecordByGithubId.withArgs(client as any, 'github-id5').resolves({
 		reward_id: 5
 	} as any)
 	const res = await claimUrl(
+		client as any,
 		'github-id5',
 		{id: 5} as any
 	)

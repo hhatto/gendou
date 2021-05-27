@@ -17,16 +17,20 @@ test.before(() => {
 
 //getRewordRecordByCommitCount
 test.serial('If out of range, data cannot be acquired.', async (t) => {
-	await createRewardTestData()
-	const record = await getRewordRecordByCommitCount(499)
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const record = await getRewordRecordByCommitCount(client, 499)
+	await close(client)
 	t.is(typeof record, 'undefined')
 })
 
 test.serial(
 	'The lowest rank data can be obtained (lower limit).',
 	async (t) => {
-		await createRewardTestData()
-		const record = await getRewordRecordByCommitCount(500)
+		const client = getDbClient()
+		await createRewardTestData(client)
+		const record = await getRewordRecordByCommitCount(client, 500)
+		await close(client)
 		t.is(record!.commit_lower_limit, 500)
 		t.is(record!.commit_upper_limit, 2000)
 		t.is(record!.reward, '10000000000000000000')
@@ -37,8 +41,10 @@ test.serial(
 test.serial(
 	'The lowest rank data can be obtained (intermediate data).',
 	async (t) => {
-		await createRewardTestData()
-		const record = await getRewordRecordByCommitCount(1100)
+		const client = getDbClient()
+		await createRewardTestData(client)
+		const record = await getRewordRecordByCommitCount(client, 1100)
+		await close(client)
 		t.is(record!.commit_lower_limit, 500)
 		t.is(record!.commit_upper_limit, 2000)
 		t.is(record!.reward, '10000000000000000000')
@@ -49,8 +55,10 @@ test.serial(
 test.serial(
 	'The lowest rank data can be obtained (upper limit).',
 	async (t) => {
-		await createRewardTestData()
-		const record = await getRewordRecordByCommitCount(2000)
+		const client = getDbClient()
+		await createRewardTestData(client)
+		const record = await getRewordRecordByCommitCount(client, 2000)
+		await close(client)
 		t.is(record!.commit_lower_limit, 500)
 		t.is(record!.commit_upper_limit, 2000)
 		t.is(record!.reward, '10000000000000000000')
@@ -61,8 +69,10 @@ test.serial(
 test.serial(
 	'The middle rank data can be obtained (intermediate data).',
 	async (t) => {
-		await createRewardTestData()
-		const record = await getRewordRecordByCommitCount(4400)
+		const client = getDbClient()
+		await createRewardTestData(client)
+		const record = await getRewordRecordByCommitCount(client, 4400)
+		await close(client)
 		t.is(record!.commit_lower_limit, 2001)
 		t.is(record!.commit_upper_limit, 5000)
 		t.is(record!.reward, '40000000000000000000')
@@ -72,12 +82,12 @@ test.serial(
 
 //getRewordRecordById
 test.serial('get by id.', async (t) => {
-	await createRewardTestData()
 	const client = getDbClient()
+	await createRewardTestData(client)
 	const records = await client.reward.findMany()
-	await close(client)
 	const target = records[1]
-	const record = await getRewordRecordById(target.id)
+	const record = await getRewordRecordById(client, target.id)
+	await close(client)
 	t.is(record!.commit_lower_limit, target.commit_lower_limit)
 	t.is(record!.commit_upper_limit, target.commit_upper_limit)
 	t.is(record!.reward, target.reward)
@@ -86,15 +96,19 @@ test.serial('get by id.', async (t) => {
 })
 
 test.serial('get by id(However, there is no id).', async (t) => {
-	await createRewardTestData()
-	const record = await getRewordRecordById(-1)
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const record = await getRewordRecordById(client, -1)
+	await close(client)
 	t.is(typeof record, 'undefined')
 })
 
 //getRewordRecordByRank
 test.serial('get by rank.', async (t) => {
-	await createRewardTestData()
-	const record = await getRewordRecordByRank(2)
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const record = await getRewordRecordByRank(client, 2)
+	await close(client)
 	t.is(record!.commit_lower_limit, 5001)
 	t.is(record!.commit_upper_limit, 2147483647)
 	t.is(record!.reward, '40000000000000000000')
@@ -102,7 +116,9 @@ test.serial('get by rank.', async (t) => {
 })
 
 test.serial('get by rank(However, there is no rank).', async (t) => {
-	await createRewardTestData()
-	const record = await getRewordRecordByRank(-1)
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const record = await getRewordRecordByRank(client, -1)
+	await close(client)
 	t.is(typeof record, 'undefined')
 })

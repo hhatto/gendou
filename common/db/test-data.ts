@@ -1,11 +1,12 @@
 /* eslint-disable functional/no-expression-statement */
 /* eslint-disable functional/functional-parameters */
-import { getDbClient, close } from './db'
+import { PrismaClient } from '@prisma/client'
 
-export const createRewardTestData = async function (): Promise<void> {
-	const prisma = getDbClient()
-	await prisma.reward.deleteMany()
-	await prisma.reward.create({
+export const createRewardTestData = async function (
+	client: PrismaClient
+): Promise<void> {
+	await client.reward.deleteMany()
+	await client.reward.create({
 		data: {
 			id: 1,
 			commit_lower_limit: 500,
@@ -14,7 +15,7 @@ export const createRewardTestData = async function (): Promise<void> {
 			rank: 0,
 		},
 	})
-	await prisma.reward.create({
+	await client.reward.create({
 		data: {
 			id: 2,
 			commit_lower_limit: 2001,
@@ -23,7 +24,7 @@ export const createRewardTestData = async function (): Promise<void> {
 			rank: 1,
 		},
 	})
-	await prisma.reward.create({
+	await client.reward.create({
 		data: {
 			id: 3,
 			commit_lower_limit: 5001,
@@ -32,13 +33,13 @@ export const createRewardTestData = async function (): Promise<void> {
 			rank: 2,
 		},
 	})
-	await close(prisma)
 }
 
-export const createClaimUrlTestData = async function (): Promise<void> {
-	const prisma = getDbClient()
-	await prisma.claim_url.deleteMany()
-	await prisma.claim_url.create({
+export const createClaimUrlTestData = async function (
+	client: PrismaClient
+): Promise<void> {
+	await client.claim_url.deleteMany()
+	await client.claim_url.create({
 		data: {
 			uuid: 'xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
 			claim_url: 'http://hogehoge/hurahura1',
@@ -47,7 +48,7 @@ export const createClaimUrlTestData = async function (): Promise<void> {
 			find_at: new Date(),
 		},
 	})
-	await prisma.claim_url.create({
+	await client.claim_url.create({
 		data: {
 			uuid: 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
 			claim_url: 'http://hogehoge/hurahura2',
@@ -56,7 +57,7 @@ export const createClaimUrlTestData = async function (): Promise<void> {
 			find_at: null,
 		},
 	})
-	await prisma.claim_url.create({
+	await client.claim_url.create({
 		data: {
 			uuid: 'zzzzzzzz-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
 			claim_url: 'http://hogehoge/hurahura3',
@@ -65,7 +66,7 @@ export const createClaimUrlTestData = async function (): Promise<void> {
 			find_at: new Date(),
 		},
 	})
-	await prisma.claim_url.create({
+	await client.claim_url.create({
 		data: {
 			uuid: 'aaaaaaaaa-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
 			claim_url: 'http://hogehoge/hurahura4',
@@ -74,5 +75,4 @@ export const createClaimUrlTestData = async function (): Promise<void> {
 			find_at: null,
 		},
 	})
-	await close(prisma)
 }

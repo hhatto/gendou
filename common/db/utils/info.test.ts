@@ -6,23 +6,26 @@ import { getDbClient, close } from './../db'
 import { setEnv } from '../../test-utils'
 import { createClaimUrlInfo, getClaimUrlInfo } from './info'
 import { createRewardTestData, createClaimUrlTestData } from '../test-data'
+import { PrismaClient } from '@prisma/client'
 
 test.before(() => {
 	setEnv()
 })
 
-const createTestData = async function (): Promise<void> {
-	await createRewardTestData()
-	await createClaimUrlTestData()
+const createTestData = async function (client: PrismaClient): Promise<void> {
+	await createRewardTestData(client)
+	await createClaimUrlTestData(client)
 }
 
 // getClaimUrlInfo
 test.serial('get claim url info.', async (t) => {
-	await createTestData()
-	const result = await getClaimUrlInfo({
+	const client = getDbClient()
+	await createTestData(client)
+	const result = await getClaimUrlInfo(client, {
 		id: 1,
 		reward: '10000000000000000000',
 	} as any)
+	await close(client)
 	t.is(result!.reward, '10000000000000000000')
 	t.is(result!.isRankDown, false)
 	t.is(result!.claimUrl.uuid, 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx')
@@ -35,20 +38,24 @@ test.serial('get claim url info.', async (t) => {
 test.serial(
 	'not get claim url info(can not unassigned claim url).',
 	async (t) => {
-		await createTestData()
-		const result = await getClaimUrlInfo({
+		const client = getDbClient()
+		await createTestData(client)
+		const result = await getClaimUrlInfo(client, {
 			id: 0,
 			reward: '10000000000000000000',
 			rank: 0,
 		} as any)
+		await close(client)
 		t.is(result, undefined)
 	}
 )
 
 //getUnassignedClaimUrl
 test.serial('create claim url info(same rank).', async (t) => {
-	await createTestData()
+	const client = getDbClient()
+	await createTestData(client)
 	const result = await createClaimUrlInfo(
+		client,
 		{
 			id: 1,
 			reward: '100000000000',
@@ -58,6 +65,7 @@ test.serial('create claim url info(same rank).', async (t) => {
 			claim_url: 'http://hogehoge',
 		} as any
 	)
+	await close(client)
 	t.is(result!.reward, '100000000000')
 	t.is(result!.isRankDown, false)
 	t.is(result!.claimUrl.reward_id, 1)
@@ -65,8 +73,10 @@ test.serial('create claim url info(same rank).', async (t) => {
 })
 
 test.serial('create claim url info(different rank).', async (t) => {
-	await createTestData()
+	const client = getDbClient()
+	await createTestData(client)
 	const result = await createClaimUrlInfo(
+		client,
 		{
 			id: 2,
 			reward: '200000000000',
@@ -76,6 +86,7 @@ test.serial('create claim url info(different rank).', async (t) => {
 			claim_url: 'http://hogehoge2',
 		} as any
 	)
+	await close(client)
 	t.is(result!.reward, '10000000000000000000')
 	t.is(result!.isRankDown, true)
 	t.is(result!.claimUrl.reward_id, 1)
@@ -83,8 +94,10 @@ test.serial('create claim url info(different rank).', async (t) => {
 })
 
 test.serial('not create claim url info(rank data is not exist).', async (t) => {
-	await createTestData()
+	const client = getDbClient()
+	await createTestData(client)
 	const result = await createClaimUrlInfo(
+		client,
 		{
 			id: 10,
 			reward: '200000000000',
@@ -94,5 +107,6 @@ test.serial('not create claim url info(rank data is not exist).', async (t) => {
 			claim_url: 'http://hogehoge2',
 		} as any
 	)
+	await close(client)
 	t.is(typeof result, 'undefined')
 })

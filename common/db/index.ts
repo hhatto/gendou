@@ -11,7 +11,11 @@ import {
 
 import { getClaimUrlInfo, createClaimUrlInfo } from './utils'
 
+import { getDbClient, close } from './db'
+
 export {
+	getDbClient,
+	close,
 	getClaimUrlRecordByGithubId,
 	getClaimUrlRecordByRewardId,
 	updateGitHubIdAndFindAt,

@@ -9,13 +9,16 @@ import * as reward_modules from '../common/db/reward'
 import { getRewardInfo, getAlreadyClaimRewardInfo } from './details'
 import { reward } from '.prisma/client'
 import { UndefinedOr } from '@devprotocol/util-ts'
+import { PrismaClient } from '@prisma/client'
 
-let getClaimUrlInfo: sinon.SinonStub<[rewardRecord: reward], Promise<UndefinedOr<ClaimUrlInfo>>>
-let getRewordRecordById: sinon.SinonStub<[id: number], Promise<UndefinedOr<reward>>>
+let getClaimUrlInfo: sinon.SinonStub<[client: PrismaClient, rewardRecord: reward], Promise<UndefinedOr<ClaimUrlInfo>>>
+let getRewordRecordById: sinon.SinonStub<[client: PrismaClient, id: number], Promise<UndefinedOr<reward>>>
 test.before(() => {
 	getClaimUrlInfo = sinon.stub(db_utils_info_modules, 'getClaimUrlInfo')
 	getRewordRecordById = sinon.stub(reward_modules, 'getRewordRecordById')
 })
+
+const client = {db: true}
 
 //getRewardInfo
 test('Get the assigned claim url.', async (t) => {
@@ -34,12 +37,13 @@ test('Get the assigned claim url.', async (t) => {
 		github_id: null,
 		find_at: null,
 	}
-	getClaimUrlInfo.withArgs(dummyRewward).resolves({
+	getClaimUrlInfo.withArgs(client as any, dummyRewward).resolves({
 		reward: '30000000000000000000',
 		isRankDown: false,
 		claimUrl: dummyClaimUrl
 	})
 	const res = await getRewardInfo(
+		client as any,
 		dummyRewward
 	)
 	t.is(res.body.reward, '30000000000000000000')
@@ -57,6 +61,7 @@ test('The claim url was not assigned.', async (t) => {
 		rank: 2,
 	}
 	const res = await getRewardInfo(
+		client as any,
 		dummyRewward
 	)
 	t.is(res.body.message, 'there are no more rewards to distribute')
@@ -81,6 +86,7 @@ test('The reward id was incorrect.', async (t) => {
 		find_at: new Date(2020, 8, 21, 17, 10, 5),
 	}
 	const res = await getAlreadyClaimRewardInfo(
+		client as any,
 		dummyRewward,
 		dummyClaimUrl
 	)
@@ -104,7 +110,7 @@ test('After the claim url has already been distributed.(Distribution rewards hav
 		github_id: 'github-1',
 		find_at: new Date(2020, 8, 21, 17, 10, 6),
 	}
-	getRewordRecordById.withArgs(2).resolves({
+	getRewordRecordById.withArgs(client as any, 2).resolves({
 		id: 2,
 		commit_lower_limit: 20,
 		commit_upper_limit: 400,
@@ -112,6 +118,7 @@ test('After the claim url has already been distributed.(Distribution rewards hav
 		rank: 2,
 	})
 	const res = await getAlreadyClaimRewardInfo(
+		client as any,
 		dummyRewward,
 		dummyClaimUrl
 	)
@@ -136,7 +143,7 @@ test('After the claim url has already been distributed.(Distribution rewards hav
 		github_id: 'github-1',
 		find_at: new Date(2020, 8, 21, 17, 10, 7),
 	}
-	getRewordRecordById.withArgs(3).resolves({
+	getRewordRecordById.withArgs(client as any, 3).resolves({
 		id: 3,
 		commit_lower_limit: 20,
 		commit_upper_limit: 400,
@@ -144,6 +151,7 @@ test('After the claim url has already been distributed.(Distribution rewards hav
 		rank: 2,
 	})
 	const res = await getAlreadyClaimRewardInfo(
+		client as any,
 		dummyRewward,
 		dummyClaimUrl
 	)
