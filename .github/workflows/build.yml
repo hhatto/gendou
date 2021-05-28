@@ -4,6 +4,7 @@ on: [push]
 
 env:
   AZURE_FUNCTIONAPP_NAME: send-reward-ropsten
+  AZURE_FUNCTIONAPP_NAME_MAIN: air-drop-functions
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '12.x'
 
@@ -68,4 +69,37 @@ jobs:
         id: fa
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+
+  deploy-main:
+    needs: build
+    if: ${{ github.event_name != 'pull_request' && contains(github.ref, 'main') }}
+
+    runs-on: windows-latest
+
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: install deps
+        run: yarn
+
+      - name: build
+        run: yarn build
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MAIN }}
+
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME_MAIN }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
