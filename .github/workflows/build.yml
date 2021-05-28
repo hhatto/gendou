@@ -4,7 +4,7 @@ on: [push]
 
 env:
   AZURE_FUNCTIONAPP_NAME: send-reward-ropsten
-  AZURE_FUNCTIONAPP_NAME_MAIN: air-drop-functions
+  AZURE_FUNCTIONAPP_NAME_MAIN: air-drop-functions-linux
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '12.x'
 
@@ -75,7 +75,7 @@ jobs:
     needs: build
     if: ${{ github.event_name != 'pull_request' && contains(github.ref, 'main') }}
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: 'Checkout GitHub Action'
