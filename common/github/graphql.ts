@@ -32,11 +32,7 @@ const getCommitCountFromGraphQL = async function (
 		Number(
 			result.user.contributionsCollection.contributionCalendar
 				.totalContributions
-		) -
-		Number(
-			result.user.contributionsCollection.contributionCalendar
-				.restrictedContributionsCount
-		)
+		) - Number(result.user.contributionsCollection.restrictedContributionsCount)
 	)
 }
 
@@ -87,10 +83,7 @@ const getCommitCountAndIdFromGraphQL = async function (
 				result.user.contributionsCollection.contributionCalendar
 					.totalContributions
 			) -
-			Number(
-				result.user.contributionsCollection.contributionCalendar
-					.restrictedContributionsCount
-			),
+			Number(result.user.contributionsCollection.restrictedContributionsCount),
 	}
 }
 
