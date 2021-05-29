@@ -25,7 +25,7 @@ test('get commit count.', async (t) => {
 query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
   user(login: $githubid) {
     contributionsCollection(from: $from, to: $to) {
-      restrictedContributionsCount
+	  restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -67,7 +67,7 @@ query getUser($from: DateTime, $to: DateTime) {
 	viewer {
     login
 	contributionsCollection(from: $from, to: $to) {
-      restrictedContributionsCount
+	  restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }

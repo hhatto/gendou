@@ -5,7 +5,7 @@ const COMMIT_COUNT_QUERY = `
 query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
   user(login: $githubid) {
     contributionsCollection(from: $from, to: $to) {
-      restrictedContributionsCount
+	  restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -54,7 +54,7 @@ query getUser($from: DateTime, $to: DateTime) {
 	viewer {
     login
 	contributionsCollection(from: $from, to: $to) {
-      restrictedContributionsCount
+	  restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -80,10 +80,12 @@ const getCommitCountAndIdFromGraphQL = async function (
 		githubId: result.viewer.login,
 		commitCount:
 			Number(
-				result.user.contributionsCollection.contributionCalendar
+				result.viewer.contributionsCollection.contributionCalendar
 					.totalContributions
 			) -
-			Number(result.user.contributionsCollection.restrictedContributionsCount),
+			Number(
+				result.viewer.contributionsCollection.restrictedContributionsCount
+			),
 	}
 }
 
