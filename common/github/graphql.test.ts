@@ -25,6 +25,7 @@ test('get commit count.', async (t) => {
 query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
   user(login: $githubid) {
     contributionsCollection(from: $from, to: $to) {
+      restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -47,6 +48,7 @@ query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
 	graphql.withArgs(COMMIT_COUNT_QUERY, params).resolves({
 		user: {
 			contributionsCollection: {
+				restrictedContributionsCount: 29,
 				contributionCalendar: {
 					totalContributions: 2929,
 				},
@@ -55,7 +57,7 @@ query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
 	})
 
 	const result = await getCommitCount('hhatto')
-	t.is(result, 2929)
+	t.is(result, 2900)
 })
 
 // getCommitCountAndId
@@ -65,6 +67,7 @@ query getUser($from: DateTime, $to: DateTime) {
 	viewer {
     login
 	contributionsCollection(from: $from, to: $to) {
+      restrictedContributionsCount
 	  contributionCalendar {
 	    totalContributions
 	  }
@@ -87,6 +90,7 @@ query getUser($from: DateTime, $to: DateTime) {
 		viewer: {
 			login: 'dummy-user-id',
 			contributionsCollection: {
+				restrictedContributionsCount: 34,
 				contributionCalendar: {
 					totalContributions: 1234,
 				},
@@ -95,7 +99,7 @@ query getUser($from: DateTime, $to: DateTime) {
 	})
 	const result = await getCommitCountAndId(token)
 	t.is(result.githubId, 'dummy-user-id')
-	t.is(result.commitCount, 1234)
+	t.is(result.commitCount, 1200)
 })
 
 test.after(() => {
