@@ -76,3 +76,19 @@ export const createClaimUrlTestData = async function (
 		},
 	})
 }
+
+export const createAlreadyClaimedTestData = async function (
+	client: PrismaClient
+): Promise<void> {
+	await client.already_claimed.deleteMany()
+	await client.already_claimed.create({
+		data: {
+			github_id: 'github-id1',
+		},
+	})
+	await client.already_claimed.create({
+		data: {
+			github_id: 'github-id2',
+		},
+	})
+}
