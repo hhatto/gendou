@@ -4,7 +4,9 @@ import { generateErrorApiResponce } from '../common/utils'
 // import { main } from './main'
 
 const httpTrigger: AzureFunction = async (
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	context: Context,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
 	// const params = getParams(req)
