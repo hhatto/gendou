@@ -1,4 +1,3 @@
-import { already_claimed } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
 export const isAlreadyClaimed = async function (
