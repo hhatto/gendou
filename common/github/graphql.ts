@@ -117,30 +117,40 @@ query getCount(
   user(login: $githubid) {
 	createdAt
     key0: contributionsCollection(from: $from0, to: $to0) {
+		startedAt
+		endedAt
 	  	restrictedContributionsCount
 	  	contributionCalendar {
 	    	totalContributions
 	  	}
 	}
     key1: contributionsCollection(from: $from1, to: $to1) {
+		startedAt
+		endedAt
 		restrictedContributionsCount
 		contributionCalendar {
 		  totalContributions
 		}
 	}
     key2: contributionsCollection(from: $from2, to: $to2) {
+		startedAt
+		endedAt
 		restrictedContributionsCount
 		contributionCalendar {
 		  totalContributions
 		}
 	}
     key3: contributionsCollection(from: $from3, to: $to3) {
+		startedAt
+		endedAt
 		restrictedContributionsCount
 		contributionCalendar {
 		  totalContributions
 		}
 	}
     key4: contributionsCollection(from: $from4, to: $to4) {
+		startedAt
+		endedAt
 		restrictedContributionsCount
 		contributionCalendar {
 		  totalContributions
@@ -187,5 +197,5 @@ export const getContributionsCount5Year = async function (
 		githubId,
 		searchDates
 	)
-	return convertCrearedAtAndContributions(result, TARGET_PERIOD, searchDates)
+	return convertCrearedAtAndContributions(result, TARGET_PERIOD)
 }

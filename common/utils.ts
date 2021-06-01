@@ -54,8 +54,7 @@ export const getSearchDate5Year = function (
 export const convertCrearedAtAndContributions = function (
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 	result: any,
-	yearCount: number,
-	searchDates: readonly TargetDate[]
+	yearCount: number
 ): CrearedAtAndContributions {
 	const index = [...Array(yearCount).keys()]
 	const counts = index.map((i) => {
@@ -64,11 +63,16 @@ export const convertCrearedAtAndContributions = function (
 			result.user[`key${i}`].restrictedContributionsCount
 		)
 	})
-
+	const startedAtList = index.map((i) => {
+		return new Date(result.user[`key${i}`].startedAt)
+	})
+	const endedAtList = index.map((i) => {
+		return new Date(result.user[`key${i}`].endedAt)
+	})
 	const contributions = index.map((i) => {
 		return {
-			from: searchDates[i].from,
-			to: searchDates[i].to,
+			from: startedAtList[i],
+			to: endedAtList[i],
 			contribution: counts[i],
 		}
 	})
