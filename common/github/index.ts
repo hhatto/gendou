@@ -2,12 +2,12 @@ import { getApiTokenFromCode } from './token'
 import {
 	getCommitCount,
 	getCommitCountAndId,
-	getContributionsCount5Year,
+	getContributionsCount3Year,
 } from './graphql'
 
 export {
 	getCommitCount,
 	getCommitCountAndId,
 	getApiTokenFromCode,
-	getContributionsCount5Year,
+	getContributionsCount3Year,
 }

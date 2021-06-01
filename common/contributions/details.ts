@@ -1,13 +1,14 @@
-/* eslint-disable functional/no-expression-statement */
+import { BigNumber, bignumber } from 'mathjs'
+
 export const caluculateContriburionsCountDetail = function (
 	createdAt: Date,
 	contribution: Contribution
-): number {
+): BigNumber {
 	const isFullfil = createdAt.getTime() <= contribution.from.getTime()
 	const result = isFullfil
 		? contribution.contribution
 		: caluculateApportionment(createdAt, contribution)
-	return result === 0 ? 1 : result
+	return result === 0 ? bignumber(1) : bignumber(result)
 }
 
 const caluculateApportionment = function (

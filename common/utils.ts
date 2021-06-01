@@ -15,7 +15,7 @@ export const calculateGeometricMean = (
 ): BigNumber => {
 	const result = values.reduce((data1, data2) => {
 		return data1.mul(data2)
-	})
+	}, bignumber(0))
 	const tmp = bignumber(1).div(values.length)
 	const calculationResults = pow(result, tmp)
 	return bignumber(calculationResults.toString())
@@ -31,7 +31,7 @@ export const getSearchDate = function (baseDate: string): TargetDate {
 	}
 }
 
-export const getSearchDate5Year = function (
+export const getSearchDates = function (
 	_baseDate: string,
 	yearCount: number
 ): readonly TargetDate[] {

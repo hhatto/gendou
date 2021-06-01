@@ -5,7 +5,7 @@ import {
 	generateErrorApiResponce,
 	getSearchDate,
 	calculateGeometricMean,
-	getSearchDate5Year,
+	getSearchDates,
 	convertCrearedAtAndContributions,
 } from './utils'
 
@@ -29,7 +29,6 @@ test('get geometric mean', async (t) => {
 		bignumber(200),
 		bignumber(300),
 	])
-	console.log(result.toString())
 	t.true(
 		result.eq(
 			bignumber(
@@ -37,6 +36,11 @@ test('get geometric mean', async (t) => {
 			)
 		)
 	)
+})
+
+test.only('get geometric mean(0 length)', async (t) => {
+	const result = await calculateGeometricMean([])
+	t.true(result.eq(bignumber('0')))
 })
 
 //getSearchDate
@@ -48,35 +52,7 @@ test('Get the search date', async (t) => {
 
 // getSearchDate5Year
 test('Get the search date(5 years)', async (t) => {
-	const result = await getSearchDate5Year('2020-04-30', 5)
-	t.true(
-		equal(result, [
-			{
-				from: new Date('2019-04-30'),
-				to: new Date('2020-04-30'),
-			},
-			{
-				from: new Date('2018-04-30'),
-				to: new Date('2019-04-30'),
-			},
-			{
-				from: new Date('2017-04-30'),
-				to: new Date('2018-04-30'),
-			},
-			{
-				from: new Date('2016-04-30'),
-				to: new Date('2017-04-30'),
-			},
-			{
-				from: new Date('2015-04-30'),
-				to: new Date('2016-04-30'),
-			},
-		])
-	)
-})
-
-test('convert', async (t) => {
-	const result = await getSearchDate5Year('2020-04-30', 5)
+	const result = await getSearchDates('2020-04-30', 5)
 	t.true(
 		equal(result, [
 			{

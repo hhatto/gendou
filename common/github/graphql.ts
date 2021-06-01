@@ -1,7 +1,7 @@
 import { graphql } from '@octokit/graphql'
 import {
 	getSearchDate,
-	getSearchDate5Year,
+	getSearchDates,
 	convertCrearedAtAndContributions,
 } from '../utils'
 
@@ -106,14 +106,12 @@ export const getCommitCountAndId = async function (
 	return result
 }
 
-const FIVE_YEAR_CONTRIBUTION_COUNT_QUERY = `
+const THREE_YEAR_CONTRIBUTION_COUNT_QUERY = `
 query getCount(
 	$githubid: String!,
 	$from0: DateTime, $to0: DateTime,
 	$from1: DateTime, $to1: DateTime,
-	$from2: DateTime, $to2: DateTime,
-	$from3: DateTime, $to3: DateTime,
-	$from4: DateTime, $to4: DateTime) {
+	$from2: DateTime, $to2: DateTime) {
   user(login: $githubid) {
 	createdAt
     key0: contributionsCollection(from: $from0, to: $to0) {
@@ -140,22 +138,6 @@ query getCount(
 		  totalContributions
 		}
 	}
-    key3: contributionsCollection(from: $from3, to: $to3) {
-		startedAt
-		endedAt
-		restrictedContributionsCount
-		contributionCalendar {
-		  totalContributions
-		}
-	}
-    key4: contributionsCollection(from: $from4, to: $to4) {
-		startedAt
-		endedAt
-		restrictedContributionsCount
-		contributionCalendar {
-		  totalContributions
-		}
-	}
   }
 }
 `
@@ -174,23 +156,24 @@ const getContributionsCountFromGraphQL5Year = async function (
 	})
 	const convertedDataParams = Object.assign({}, ...dateParams)
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const result: any = await graphql(FIVE_YEAR_CONTRIBUTION_COUNT_QUERY, {
+	const result: any = await graphql(THREE_YEAR_CONTRIBUTION_COUNT_QUERY, {
 		githubid: githubId,
 		...convertedDataParams,
 		headers: {
 			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
 		},
 	})
+
 	return result
 }
 
-export const getContributionsCount5Year = async function (
+export const getContributionsCount3Year = async function (
 	githubId: string
 ): Promise<CrearedAtAndContributions> {
-	const TARGET_PERIOD = 5
-	const searchDates = getSearchDate5Year(
+	const TARGET_PERIOD = 3
+	const searchDates = getSearchDates(
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		process.env.BASE_DATE_5_YEAR!,
+		process.env.BASE_DATE_3_YEAR!,
 		TARGET_PERIOD
 	)
 	const result = await getContributionsCountFromGraphQL5Year(

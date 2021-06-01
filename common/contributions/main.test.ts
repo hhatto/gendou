@@ -6,24 +6,25 @@
 import test from 'ava'
 import sinon from 'sinon'
 import equal from 'deep-equal'
+import { bignumber } from 'mathjs'
 import { caluculateContriburionsCount } from './main'
 import * as graphql_modules from '../github/graphql'
 
-let getContributionsCount5Year: sinon.SinonStub<
+let getContributionsCount3Year: sinon.SinonStub<
 	[githubId: string],
 	Promise<CrearedAtAndContributions>
 >
 
 test.before(() => {
-	getContributionsCount5Year = sinon.stub(
+	getContributionsCount3Year = sinon.stub(
 		graphql_modules,
-		'getContributionsCount5Year'
+		'getContributionsCount3Year'
 	)
 })
 
 // caluculateContriburionsCount
 test('All tribute numbers will be covered..', async (t) => {
-	getContributionsCount5Year.withArgs('github_id1').resolves({
+	getContributionsCount3Year.withArgs('github_id1').resolves({
 		crearedAt: new Date('2015-04-01'),
 		contributions: [
 			{
@@ -54,11 +55,20 @@ test('All tribute numbers will be covered..', async (t) => {
 		],
 	})
 	const counts = await caluculateContriburionsCount('github_id1')
-	t.is(equal(counts, [100, 200, 300, 400, 500]), true)
+	t.is(
+		equal(counts, [
+			bignumber(100),
+			bignumber(200),
+			bignumber(300),
+			bignumber(400),
+			bignumber(500),
+		]),
+		true
+	)
 })
 
 test('If the end date is before the account creation date, the data will be excluded.', async (t) => {
-	getContributionsCount5Year.withArgs('github_id2').resolves({
+	getContributionsCount3Year.withArgs('github_id2').resolves({
 		crearedAt: new Date('2018-10-01'),
 		contributions: [
 			{
@@ -89,9 +99,9 @@ test('If the end date is before the account creation date, the data will be excl
 		],
 	})
 	const counts = await caluculateContriburionsCount('github_id2')
-	t.is(equal(counts, [601, 400, 500]), true)
+	t.is(equal(counts, [bignumber(601), bignumber(400), bignumber(500)]), true)
 })
 
 test.after(() => {
-	getContributionsCount5Year.restore()
+	getContributionsCount3Year.restore()
 })

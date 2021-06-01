@@ -4,9 +4,14 @@
 /* eslint-disable functional/prefer-readonly-type */
 import test from 'ava'
 import sinon from 'sinon'
-import { getSearchDate } from '../utils'
+import equal from 'deep-equal'
+import { getSearchDate, getSearchDates } from '../utils'
 import * as octokit_modules from '@octokit/graphql'
-import { getCommitCount, getCommitCountAndId } from './graphql'
+import {
+	getCommitCount,
+	getCommitCountAndId,
+	getContributionsCount3Year,
+} from './graphql'
 import { GraphQlResponse } from '@octokit/graphql/dist-types/types'
 import { RequestParameters } from '@octokit/types'
 
@@ -102,6 +107,114 @@ query getUser($from: DateTime, $to: DateTime) {
 	t.is(result.commitCount, 1200)
 })
 
+test('git contributions info.', async (t) => {
+	const THREE_YEAR_CONTRIBUTION_COUNT_QUERY = `
+query getCount(
+	$githubid: String!,
+	$from0: DateTime, $to0: DateTime,
+	$from1: DateTime, $to1: DateTime,
+	$from2: DateTime, $to2: DateTime) {
+  user(login: $githubid) {
+	createdAt
+    key0: contributionsCollection(from: $from0, to: $to0) {
+		startedAt
+		endedAt
+	  	restrictedContributionsCount
+	  	contributionCalendar {
+	    	totalContributions
+	  	}
+	}
+    key1: contributionsCollection(from: $from1, to: $to1) {
+		startedAt
+		endedAt
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+    key2: contributionsCollection(from: $from2, to: $to2) {
+		startedAt
+		endedAt
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+  }
+}
+`
+	process.env.BASE_DATE_3_YEAR = '2020-04-01'
+	const searchDates = getSearchDates(process.env.BASE_DATE_3_YEAR, 3)
+	process.env.GITHUB_API_TOKEN = 'dummy-token'
+	const index = [...Array(searchDates.length).keys()]
+	const dateParams = index.map((i) => {
+		return {
+			[`from${i}`]: searchDates[i].from,
+			[`to${i}`]: searchDates[i].to,
+		}
+	})
+	const convertedDataParams = Object.assign({}, ...dateParams)
+	const params = {
+		githubid: 'github-id-1',
+		...convertedDataParams,
+		headers: {
+			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+		},
+	}
+	graphql.withArgs(THREE_YEAR_CONTRIBUTION_COUNT_QUERY, params).resolves({
+		user: {
+			createdAt: '2016-04-30T10:00:00Z',
+			key0: {
+				endedAt: '2021-05-02T00:00:00Z',
+				startedAt: '2020-05-02T00:00:00Z',
+				restrictedContributionsCount: 43,
+				contributionCalendar: {
+					totalContributions: 100,
+				},
+			},
+			key1: {
+				endedAt: '2020-05-02T00:00:00Z',
+				startedAt: '2019-05-02T00:00:00Z',
+				restrictedContributionsCount: 3,
+				contributionCalendar: {
+					totalContributions: 180,
+				},
+			},
+			key2: {
+				endedAt: '2019-05-02T00:00:00Z',
+				startedAt: '2018-05-02T00:00:00Z',
+				restrictedContributionsCount: 3,
+				contributionCalendar: {
+					totalContributions: 10,
+				},
+			},
+		},
+	})
+	const result = await getContributionsCount3Year('github-id-1')
+	t.true(
+		equal(result, {
+			crearedAt: new Date('2016-04-30T10:00:00Z'),
+			contributions: [
+				{
+					from: new Date('2020-05-02T00:00:00Z'),
+					to: new Date('2021-05-02T00:00:00Z'),
+					contribution: 57,
+				},
+				{
+					from: new Date('2019-05-02T00:00:00Z'),
+					to: new Date('2020-05-02T00:00:00Z'),
+					contribution: 177,
+				},
+				{
+					from: new Date('2018-05-02T00:00:00Z'),
+					to: new Date('2019-05-02T00:00:00Z'),
+					contribution: 7,
+				},
+			],
+		})
+	)
+})
+
 test.after(() => {
 	graphql.restore()
 })
@@ -124,4 +237,11 @@ test.after(() => {
 // 	const result = await getCommitCountAndId(token)
 // 	t.is(result.githubId, 'Akira-Taniguchi')
 // 	t.is(result.commitCount, 1944)
+// })
+
+// test('git commit count and id.', async (t) => {
+// 	process.env.BASE_DATE_3_YEAR = '2020-04-01'
+// 	process.env.GITHUB_API_TOKEN = ''
+// 	const result = await getContributionsCount3Year('Akira-Taniguchi')
+// 	console.log(result)
 // })
