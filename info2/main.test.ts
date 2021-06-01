@@ -19,7 +19,7 @@ import { PrismaClient, reward, Prisma } from '.prisma/client'
 let getDbClient: sinon.SinonStub<[option?: {} | undefined], PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>>
 let isAlreadyClaimed: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>, githubId: string], Promise<boolean>>
 let close: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>], Promise<boolean>>
-let caluculateContriburionsCount: sinon.SinonStub<[githubId: string], Promise<readonly BigNumber[]>>
+let caluculateContriburionsCount: sinon.SinonStub<[githubId: string], Promise<readonly number[]>>
 let calculateGeometricMean: sinon.SinonStub<[readonly BigNumber[]], BigNumber>
 let getRewordRecordByCommitCount: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>, commitCount: number], Promise<UndefinedOr<reward>>>
 
@@ -56,7 +56,7 @@ test('reward is not found.', async (t) => {
 	getDbClient.returns({db: true} as any)
 	isAlreadyClaimed.withArgs({db: true} as any, 'github-3').resolves(false)
 	close.withArgs({db: true} as any).resolves(true)
-	caluculateContriburionsCount.withArgs('github-3').resolves([bignumber(0), bignumber(1)])
+	caluculateContriburionsCount.withArgs('github-3').resolves([0, 1])
 	calculateGeometricMean.withArgs([bignumber(0), bignumber(1)]).returns(bignumber('1.5'))
 	getRewordRecordByCommitCount.withArgs({db: true} as any, 1).resolves(undefined)
 	const res = await main('github-3')
@@ -76,7 +76,7 @@ test('get reward.', async (t) => {
 	getDbClient.returns({db: true} as any)
 	isAlreadyClaimed.withArgs({db: true} as any, 'github-4').resolves(false)
 	close.withArgs({db: true} as any).resolves(true)
-	caluculateContriburionsCount.withArgs('github-4').resolves([bignumber(1), bignumber(2)])
+	caluculateContriburionsCount.withArgs('github-4').resolves([1, 2])
 	calculateGeometricMean.withArgs([bignumber(1), bignumber(2)]).returns(bignumber('2.5'))
 	getRewordRecordByCommitCount.withArgs({db: true} as any, 2).resolves(dummyRewward)
 	const res = await main('github-4')

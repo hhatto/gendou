@@ -9,6 +9,7 @@ import {
 } from '../common/db'
 import { calculateGeometricMean } from '../common/utils'
 import { PrismaClient } from '@prisma/client'
+import { bignumber } from 'mathjs'
 
 export const main = async function (githubId: string): Promise<ApiResponce> {
 	const dbClient = getDbClient()
@@ -26,7 +27,8 @@ const innerMain = async function (
 	githubId: string
 ): Promise<ApiResponce> {
 	const contriburions = await caluculateContriburionsCount(githubId)
-	const calculateMean = calculateGeometricMean(contriburions)
+	const converted = contriburions.map(bignumber)
+	const calculateMean = calculateGeometricMean(converted)
 	const rewardRecord = await getRewordRecordByCommitCount(
 		dbClient,
 		Math.floor(calculateMean.toNumber())

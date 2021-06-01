@@ -1,17 +1,17 @@
-import { bignumber, BigNumber } from 'mathjs'
 import { caluculateContriburionsCountDetail } from './details'
 import { getContributionsCount5Year } from '../github'
 
 export const caluculateContriburionsCount = async function (
 	githubId: string
-): Promise<readonly BigNumber[]> {
+): Promise<readonly number[]> {
 	const contributionsInfo = await getContributionsCount5Year(githubId)
-	return contributionsInfo.contributions.map((contribution) => {
-		return bignumber(
-			caluculateContriburionsCountDetail(
-				contributionsInfo.crearedAt,
-				contribution
-			)
+	const targets = contributionsInfo.contributions.filter((contribution) => {
+		return contribution.to.getTime() >= contributionsInfo.crearedAt.getTime()
+	})
+	return targets.map((contribution) => {
+		return caluculateContriburionsCountDetail(
+			contributionsInfo.crearedAt,
+			contribution
 		)
 	})
 }
