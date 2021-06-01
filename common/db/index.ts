@@ -3,6 +3,8 @@ import {
 	getClaimUrlRecordByRewardId,
 	updateGitHubIdAndFindAt,
 } from './claim-url'
+import { isAlreadyClaimed } from './already_claimed'
+
 import {
 	getRewordRecordByCommitCount,
 	getRewordRecordById,
@@ -24,4 +26,5 @@ export {
 	getRewordRecordByRank,
 	getClaimUrlInfo,
 	createClaimUrlInfo,
+	isAlreadyClaimed,
 }

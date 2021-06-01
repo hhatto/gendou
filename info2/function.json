@@ -1,0 +1,18 @@
+{
+	"bindings": [
+		{
+			"authLevel": "anonymous",
+			"type": "httpTrigger",
+			"direction": "in",
+			"name": "req",
+			"methods": ["get"],
+			"route": "v2/info/{github_id}"
+		},
+		{
+			"type": "http",
+			"direction": "out",
+			"name": "$return"
+		}
+	],
+	"scriptFile": "../dist/info2/index.js"
+}

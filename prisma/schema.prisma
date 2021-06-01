@@ -26,3 +26,8 @@ model claim_url {
   github_id   		String?
   find_at 				DateTime?
 }
+
+model already_claimed {
+  id      				Int      @default(autoincrement()) @id
+	github_id       String
+}

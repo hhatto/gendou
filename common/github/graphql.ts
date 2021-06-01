@@ -1,5 +1,9 @@
 import { graphql } from '@octokit/graphql'
-import { getSearchDate } from '../utils'
+import {
+	getSearchDate,
+	getSearchDate5Year,
+	convertCrearedAtAndContributions,
+} from '../utils'
 
 const COMMIT_COUNT_QUERY = `
 query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
@@ -100,4 +104,88 @@ export const getCommitCountAndId = async function (
 		searchDate.to
 	)
 	return result
+}
+
+const FIVE_YEAR_CONTRIBUTION_COUNT_QUERY = `
+query getCount(
+	$githubid: String!,
+	$from0: DateTime, $to0: DateTime,
+	$from1: DateTime, $to1: DateTime,
+	$from2: DateTime, $to2: DateTime,
+	$from3: DateTime, $to3: DateTime,
+	$from4: DateTime, $to4: DateTime) {
+  user(login: $githubid) {
+	createdAt
+    key0: contributionsCollection(from: $from0, to: $to0) {
+	  	restrictedContributionsCount
+	  	contributionCalendar {
+	    	totalContributions
+	  	}
+	}
+    key1: contributionsCollection(from: $from1, to: $to1) {
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+    key2: contributionsCollection(from: $from2, to: $to2) {
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+    key3: contributionsCollection(from: $from3, to: $to3) {
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+    key4: contributionsCollection(from: $from4, to: $to4) {
+		restrictedContributionsCount
+		contributionCalendar {
+		  totalContributions
+		}
+	}
+  }
+}
+`
+
+const getContributionsCountFromGraphQL5Year = async function (
+	githubId: string,
+	targets: readonly TargetDate[]
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
+	const index = [...Array(targets.length).keys()]
+	const dateParams = index.map((i) => {
+		return {
+			[`from${i}`]: targets[i].from,
+			[`to${i}`]: targets[i].to,
+		}
+	})
+	const convertedDataParams = Object.assign({}, ...dateParams)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const result: any = await graphql(FIVE_YEAR_CONTRIBUTION_COUNT_QUERY, {
+		githubid: githubId,
+		...convertedDataParams,
+		headers: {
+			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+		},
+	})
+	return result
+}
+
+export const getContributionsCount5Year = async function (
+	githubId: string
+): Promise<CrearedAtAndContributions> {
+	const TARGET_PERIOD = 5
+	const searchDates = getSearchDate5Year(
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		process.env.BASE_DATE_5_YEAR!,
+		TARGET_PERIOD
+	)
+	const result = await getContributionsCountFromGraphQL5Year(
+		githubId,
+		searchDates
+	)
+	return convertCrearedAtAndContributions(result, TARGET_PERIOD, searchDates)
 }

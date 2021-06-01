@@ -21,8 +21,10 @@
 		"@octokit/graphql": "4.6.2",
 		"@prisma/client": "2.23.0",
 		"@types/bignumber.js": "5.0.0",
+		"@types/mathjs": "^9.3.2",
 		"bignumber.js": "9.0.1",
 		"ethereum-waffle": "3.3.0",
+		"mathjs": "^9.4.1",
 		"prisma": "2.23.0",
 		"ramda": "0.27.1"
 	},
