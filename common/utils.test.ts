@@ -37,8 +37,8 @@ test('get geometric mean', async (t) => {
 		)
 	)
 })
-
-test.only('get geometric mean(0 length)', async (t) => {
+// [ 1727, 1061, 13 ]
+test('get geometric mean(0 length)', async (t) => {
 	const result = await calculateGeometricMean([])
 	t.true(result.eq(bignumber('0')))
 })

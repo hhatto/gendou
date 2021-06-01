@@ -13,9 +13,17 @@ export const generateErrorApiResponce = function (
 export const calculateGeometricMean = (
 	values: readonly BigNumber[]
 ): BigNumber => {
+	return values.length === 0
+		? bignumber(0)
+		: innerCalculateGeometricMean(values)
+}
+
+const innerCalculateGeometricMean = (
+	values: readonly BigNumber[]
+): BigNumber => {
 	const result = values.reduce((data1, data2) => {
 		return data1.mul(data2)
-	}, bignumber(0))
+	})
 	const tmp = bignumber(1).div(values.length)
 	const calculationResults = pow(result, tmp)
 	return bignumber(calculationResults.toString())
