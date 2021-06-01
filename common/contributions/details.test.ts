@@ -12,7 +12,8 @@ test('All contributions will be covered.', async (t) => {
 		to: new Date('2013-01-05'),
 		contribution: 3650,
 	})
-	t.is(count, bignumber(3650))
+	console.log(count)
+	t.is(count.toString(), bignumber(3650).toString())
 })
 
 test('The number of contributions increases as a percentage of the total number of contributions.', async (t) => {
@@ -21,7 +22,7 @@ test('The number of contributions increases as a percentage of the total number 
 		to: new Date('2013-01-05'),
 		contribution: 3650,
 	})
-	t.is(count, bignumber(5437))
+	t.is(count.toString(), bignumber(5437).toString())
 })
 
 test('If the number of contributions is 0, 1 will be returned.', async (t) => {
@@ -30,5 +31,5 @@ test('If the number of contributions is 0, 1 will be returned.', async (t) => {
 		to: new Date('2013-01-05'),
 		contribution: 0,
 	})
-	t.is(count, bignumber(1))
+	t.is(count.toString(), bignumber(1).toString())
 })
