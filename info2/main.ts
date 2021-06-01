@@ -1,5 +1,6 @@
+/* eslint-disable functional/no-expression-statement */
 import { generateErrorApiResponce } from '../common/utils'
-import { caluculateContriburionsCount } from '../common/calucurate'
+import { caluculateContriburionsCount } from '../common/contributions'
 import {
 	getRewordRecordByCommitCount,
 	getDbClient,
@@ -8,29 +9,27 @@ import {
 } from '../common/db'
 import { calculateGeometricMean } from '../common/utils'
 import { PrismaClient } from '@prisma/client'
-import { getContributionsCount5Year } from '../common/github'
 
 export const main = async function (githubId: string): Promise<ApiResponce> {
 	const dbClient = getDbClient()
 	const isClaimed = await isAlreadyClaimed(dbClient, githubId)
 	const res = isClaimed
-		? generateErrorApiResponce('already claimed')
+		? generateErrorApiResponce('already claimed', 400)
 		: await innerMain(dbClient, githubId)
 
 	const isClosed = await close(dbClient)
-	return isClosed ? res : generateErrorApiResponce('db error')
+	return isClosed ? res : generateErrorApiResponce('db error', 400)
 }
 
-export const innerMain = async function (
+const innerMain = async function (
 	dbClient: PrismaClient,
 	githubId: string
 ): Promise<ApiResponce> {
-	const contributionsInfo = await getContributionsCount5Year(githubId)
-	const contriburions = caluculateContriburionsCount(contributionsInfo)
+	const contriburions = await caluculateContriburionsCount(githubId)
 	const calculateMean = calculateGeometricMean(contriburions)
 	const rewardRecord = await getRewordRecordByCommitCount(
 		dbClient,
-		calculateMean.toNumber()
+		Math.floor(calculateMean.toNumber())
 	)
 	return typeof rewardRecord === 'undefined'
 		? generateErrorApiResponce('not applicable')
@@ -38,8 +37,6 @@ export const innerMain = async function (
 				status: 200,
 				body: {
 					reward: rewardRecord.reward,
-					is_rank_down: false,
-					find_at: null,
 				},
 		  }
 }
