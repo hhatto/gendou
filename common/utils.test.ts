@@ -42,6 +42,10 @@ test('get geometric mean(0 length)', async (t) => {
 	const result = await calculateGeometricMean([])
 	t.true(result.eq(bignumber('0')))
 })
+test('get geometric mean(1 length)', async (t) => {
+	const result = calculateGeometricMean([bignumber(100)])
+	t.true(result.eq(bignumber('100')))
+})
 
 //getSearchDate
 test('Get the search date', async (t) => {

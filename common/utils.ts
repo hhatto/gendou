@@ -15,7 +15,9 @@ export const calculateGeometricMean = (
 ): BigNumber => {
 	return values.length === 0
 		? bignumber(0)
-		: innerCalculateGeometricMean(values)
+		: values.length > 1
+		? innerCalculateGeometricMean(values)
+		: values[0]
 }
 
 const innerCalculateGeometricMean = (
