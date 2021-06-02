@@ -94,7 +94,7 @@ test('get airdrop info', async (t) => {
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id1').resolves(false)
 	getRewardFromGithubId
 		.withArgs({ db: true } as any, 'git-id1')
-		.resolves({ id: 1 } as any)
+		.resolves([{ id: 1 }, 1] as any)
 	const res = await getAirdropIfo({ db: true } as any, {
 		accessToken: 'access_token1',
 		sign: sign,
@@ -150,7 +150,7 @@ test('get different address', async (t) => {
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id6').resolves(false)
 	getRewardFromGithubId
 		.withArgs({ db: true } as any, 'git-id6')
-		.resolves({ id: 6 } as any)
+		.resolves([{ id: 6 }, 1] as any)
 	const res = await getAirdropIfo({ db: true } as any, {
 		accessToken: 'access_token6',
 		sign: sign,
