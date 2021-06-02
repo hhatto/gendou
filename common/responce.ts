@@ -9,7 +9,9 @@ import {
 import { calculateGeometricMean } from '../common/utils'
 import { PrismaClient } from '@prisma/client'
 
-export const main = async function (githubId: string): Promise<ApiResponce> {
+export const getRewardApiResponce = async function (
+	githubId: string
+): Promise<ApiResponce> {
 	const dbClient = getDbClient()
 	const isClaimed = await isAlreadyClaimed(dbClient, githubId)
 	const res = isClaimed
@@ -29,7 +31,6 @@ const innerMain = async function (
 		dbClient,
 		Math.floor(calculateMean.toNumber())
 	)
-
 	return typeof rewardRecord === 'undefined'
 		? generateErrorApiResponce('not applicable')
 		: {

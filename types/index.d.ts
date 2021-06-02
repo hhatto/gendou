@@ -11,7 +11,7 @@ type ApiResponce = {
 	readonly body: Record<string, unknown>
 }
 
-type ParamsOfFindClaimUrlApi = {
+type ParamsOfInfoByCodeApi = {
 	readonly code: string
 }
 

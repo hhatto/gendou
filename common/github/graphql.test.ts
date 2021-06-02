@@ -11,6 +11,7 @@ import {
 	getCommitCount,
 	getCommitCountAndId,
 	getContributionsCount3Year,
+	getIdFromGraphQL,
 } from './graphql'
 import { GraphQlResponse } from '@octokit/graphql/dist-types/types'
 import { RequestParameters } from '@octokit/types'
@@ -215,6 +216,30 @@ query getCount(
 	)
 })
 
+// getIdFromGraphQL
+test('git id.', async (t) => {
+	const GITHUB_ID_QUERY = `
+{
+	viewer {
+		login
+	}
+}
+`
+	const token = 'dummy-token'
+	const params = {
+		headers: {
+			authorization: `token ${token}`,
+		},
+	}
+	graphql.withArgs(GITHUB_ID_QUERY, params).resolves({
+		viewer: {
+			login: 'dummy-user-id',
+		},
+	})
+	const result = await getIdFromGraphQL(token)
+	t.is(result, 'dummy-user-id')
+})
+
 test.after(() => {
 	graphql.restore()
 })
@@ -243,5 +268,4 @@ test.after(() => {
 // 	process.env.BASE_DATE_3_YEAR = '2020-04-01'
 // 	process.env.GITHUB_API_TOKEN = ''
 // 	const result = await getContributionsCount3Year('Akira-Taniguchi')
-// 	console.log(result)
 // })

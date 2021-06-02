@@ -182,3 +182,23 @@ export const getContributionsCount3Year = async function (
 	)
 	return convertCrearedAtAndContributions(result, TARGET_PERIOD)
 }
+
+const GITHUB_ID_QUERY = `
+{
+	viewer {
+		login
+	}
+}
+`
+
+export const getIdFromGraphQL = async function (
+	token: string
+): Promise<string> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const result: any = await graphql(GITHUB_ID_QUERY, {
+		headers: {
+			authorization: `token ${token}`,
+		},
+	})
+	return result.viewer.login
+}

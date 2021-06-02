@@ -6,12 +6,12 @@
 import test from 'ava'
 import sinon from 'sinon'
 import { bignumber, BigNumber } from 'mathjs'
-import { main } from './main'
-import * as reward_modules from '../common/db/reward'
-import * as db_common_modules from '../common/db/db'
-import * as already_claimed_modules from '../common/db/already_claimed'
-import * as contributions_modules from '../common/contributions/main'
-import * as utils_modules from '../common/utils'
+import { getRewardApiResponce } from './responce'
+import * as reward_modules from './db/reward'
+import * as db_common_modules from './db/db'
+import * as already_claimed_modules from './db/already_claimed'
+import * as contributions_modules from './contributions/main'
+import * as utils_modules from './utils'
 
 import { UndefinedOr } from '@devprotocol/util-ts'
 import { PrismaClient, reward, Prisma } from '.prisma/client'
@@ -38,7 +38,7 @@ test('reward is already claimed.', async (t) => {
 	getDbClient.returns({db: true} as any)
 	isAlreadyClaimed.withArgs({db: true} as any, 'github-1').resolves(true)
 	close.withArgs({db: true} as any).resolves(true)
-	const res = await main('github-1')
+	const res = await getRewardApiResponce('github-1')
 	t.is(res.body.message, 'already claimed')
 	t.is(res.status, 400)
 })
@@ -47,7 +47,7 @@ test('db close error.', async (t) => {
 	getDbClient.returns({db: false} as any)
 	isAlreadyClaimed.withArgs({db: false} as any, 'github-2').resolves(true)
 	close.withArgs({db: false} as any).resolves(false)
-	const res = await main('github-2')
+	const res = await getRewardApiResponce('github-2')
 	t.is(res.body.message, 'db error')
 	t.is(res.status, 400)
 })
@@ -59,7 +59,7 @@ test('reward is not found.', async (t) => {
 	caluculateContriburionsCount.withArgs('github-3').resolves([bignumber(0), bignumber(1)])
 	calculateGeometricMean.withArgs([bignumber(0), bignumber(1)]).returns(bignumber('1.5'))
 	getRewordRecordByCommitCount.withArgs({db: true} as any, 1).resolves(undefined)
-	const res = await main('github-3')
+	const res = await getRewardApiResponce('github-3')
 	t.is(res.body.message, 'not applicable')
 	t.is(res.status, 200)
 })
@@ -79,7 +79,7 @@ test('get reward.', async (t) => {
 	caluculateContriburionsCount.withArgs('github-4').resolves([bignumber(1), bignumber(2)])
 	calculateGeometricMean.withArgs([bignumber(1), bignumber(2)]).returns(bignumber('2.5'))
 	getRewordRecordByCommitCount.withArgs({db: true} as any, 2).resolves(dummyRewward)
-	const res = await main('github-4')
+	const res = await getRewardApiResponce('github-4')
 	t.is(res.body.reward, '10000000000000000000')
 	t.is(res.status, 200)
 })

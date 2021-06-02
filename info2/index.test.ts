@@ -6,16 +6,16 @@ import test from 'ava'
 import sinon from 'sinon'
 import func from './index'
 import { Context } from '@azure/functions'
-import * as main_modules from './main'
+import * as responce_modules from '../common/responce'
 import { generateHttpRequest } from '../common/test-utils'
 
-let main: sinon.SinonStub<[githubId: string], Promise<ApiResponce>>
+let getRewardApiResponce: sinon.SinonStub<[githubId: string], Promise<ApiResponce>>
 test.before(() => {
-	main = sinon.stub(main_modules, 'main')
+	getRewardApiResponce = sinon.stub(responce_modules, 'getRewardApiResponce')
 })
 
 test('get reward info ', async (t) => {
-	main.withArgs('github-id1').resolves({
+	getRewardApiResponce.withArgs('github-id1').resolves({
 		status: 200,
 		body: {
 			dummy_key: 'dummy_value'
@@ -41,5 +41,5 @@ test('Incorrect parameters information.', async (t) => {
 })
 
 test.after(() => {
-	main.restore()
+	getRewardApiResponce.restore()
 })
