@@ -26,7 +26,7 @@ const httpTrigger: AzureFunction = async (
 			: await getRewardApiResponce(githubId)
 	return {
 		status: result.status,
-		body: result.body,
+		body: { ...result.body, access_token: accessToken },
 		headers: {
 			'Cache-Control': 'no-store',
 		},

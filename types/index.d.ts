@@ -16,7 +16,7 @@ type ParamsOfInfoByCodeApi = {
 }
 
 type ParamsOfEntryApi = {
-	readonly code: string
+	readonly accessToken: string
 	readonly sign: string
 }
 

@@ -5,11 +5,12 @@ export const getParams = function (
 	req: HttpRequest
 ): UndefinedOr<ParamsOfEntryApi> {
 	const isIllegal =
-		typeof req.body.code === 'undefined' || typeof req.body.sign === 'undefined'
+		typeof req.body.access_token === 'undefined' ||
+		typeof req.body.sign === 'undefined'
 	return isIllegal
 		? undefined
 		: {
-				code: req.body.code,
+				accessToken: req.body.access_token,
 				sign: req.body.sign,
 		  }
 }

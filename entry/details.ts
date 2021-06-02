@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { PrismaClient } from '@prisma/client'
 import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
-import { getApiTokenFromCode, getIdFromGraphQL } from '../common/github'
+import { getIdFromGraphQL } from '../common/github'
 import { getRewardFromGithubId } from '../common/reward'
 import {
 	insertEntry,
@@ -14,7 +14,7 @@ export const getAirdropIfo = async function (
 	client: PrismaClient,
 	params: ParamsOfEntryApi
 ): Promise<UndefinedOr<AirdropInfo>> {
-	const accessToken = await getApiTokenFromCode(params.code)
+	const { accessToken } = params
 	const githubId =
 		typeof accessToken === 'undefined'
 			? undefined

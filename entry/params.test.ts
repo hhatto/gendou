@@ -17,8 +17,8 @@ test('Only the code parameter is present.', async (t) => {
 
 test('all parameter is present.', async (t) => {
 	const res = await getParams(
-		generateHttpRequest({}, { code: 'hoge-code', sign: 'hoge-sign' })
+		generateHttpRequest({}, { access_token: 'hoge-code', sign: 'hoge-sign' })
 	)
-	t.is(res?.code, 'hoge-code')
+	t.is(res?.accessToken, 'hoge-code')
 	t.is(res?.sign, 'hoge-sign')
 })
