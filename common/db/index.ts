@@ -15,7 +15,7 @@ import {
 
 import { getDbClient, close } from './db'
 
-import { insertEntry } from './entry'
+import { insertEntry, updateEntry, getEntry } from './entry'
 
 export {
 	getDbClient,
@@ -30,4 +30,6 @@ export {
 	// createClaimUrlInfo,
 	isAlreadyClaimed,
 	insertEntry,
+	updateEntry,
+	getEntry,
 }

@@ -24,6 +24,7 @@ type AirdropInfo = {
 	readonly githubId: string
 	readonly address: string
 	readonly sign: string
+	readonly rewardId: number
 }
 
 type ParamsOfInfoApi = {

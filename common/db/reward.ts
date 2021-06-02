@@ -1,6 +1,5 @@
 import { UndefinedOr } from '@devprotocol/util-ts'
-import { reward } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, reward } from '@prisma/client'
 
 export const getRewordRecordByCommitCount = async function (
 	client: PrismaClient,

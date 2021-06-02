@@ -3,7 +3,9 @@ CREATE TABLE "entry" (
     "github_id" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "sign" TEXT NOT NULL,
+    "reward_id" INTEGER NOT NULL,
     "create_at" TIMESTAMP(3) NOT NULL,
+    "update_at" TIMESTAMP(3) NOT NULL,
 
     PRIMARY KEY ("id")
 );

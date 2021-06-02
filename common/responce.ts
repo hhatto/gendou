@@ -1,12 +1,6 @@
 import { generateErrorApiResponce } from '../common/utils'
-import { caluculateContriburionsCount } from '../common/contributions'
-import {
-	getRewordRecordByCommitCount,
-	getDbClient,
-	close,
-	isAlreadyClaimed,
-} from '../common/db'
-import { calculateGeometricMean } from '../common/utils'
+import { getDbClient, close, isAlreadyClaimed } from '../common/db'
+import { getRewardFromGithubId } from './reward'
 import { PrismaClient } from '@prisma/client'
 
 export const getRewardApiResponce = async function (
@@ -25,12 +19,7 @@ const innerMain = async function (
 	dbClient: PrismaClient,
 	githubId: string
 ): Promise<ApiResponce> {
-	const contriburions = await caluculateContriburionsCount(githubId)
-	const calculateMean = calculateGeometricMean(contriburions)
-	const rewardRecord = await getRewordRecordByCommitCount(
-		dbClient,
-		Math.floor(calculateMean.toNumber())
-	)
+	const rewardRecord = await getRewardFromGithubId(dbClient, githubId)
 	return typeof rewardRecord === 'undefined'
 		? generateErrorApiResponce('not applicable')
 		: {

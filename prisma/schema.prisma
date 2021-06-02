@@ -37,5 +37,7 @@ model entry {
 	github_id       String   @unique
 	address         String   @unique
   sign            String
+	reward_id       Int
 	create_at 			DateTime
+	update_at 			DateTime
 }
