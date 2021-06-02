@@ -11,7 +11,6 @@ export const getAirdropIfo = async function (
 		typeof accessToken === 'undefined'
 			? undefined
 			: await getIdFromGraphQL(accessToken)
-
 	const address = whenDefinedAll([githubId, params], ([id, p]) =>
 		ethers.utils.verifyMessage(id, p.sign)
 	)

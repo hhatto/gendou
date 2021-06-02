@@ -8,13 +8,10 @@ const httpTrigger: AzureFunction = async (
 	req: HttpRequest
 ): Promise<ReturnTypeOfAzureFunctions> => {
 	const params = getParams(req)
-
 	const info =
 		typeof params === 'undefined' ? undefined : await getAirdropIfo(params)
-
 	const isInserted =
 		typeof info === 'undefined' ? undefined : await addEntryInfo(info)
-
 	const result =
 		typeof params === 'undefined'
 			? generateErrorApiResponce('parameters error', 400)
