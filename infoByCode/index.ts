@@ -13,10 +13,11 @@ const httpTrigger: AzureFunction = async (
 	const accessToken = await whenDefined(params, (p) =>
 		getApiTokenFromCode(p.code)
 	)
-	// const githubId = await whenDefined(accessToken, (t) =>
-	// 	getIdFromGraphQL(t)
-	// )
-	const githubId = ''
+	const githubId =
+		typeof accessToken === 'undefined'
+			? undefined
+			: await getIdFromGraphQL(accessToken)
+
 	const result =
 		typeof params === 'undefined'
 			? generateErrorApiResponce('parameters error', 400)
