@@ -22,7 +22,7 @@ const innerMain = async function (
 	dbClient: PrismaClient,
 	githubId: string
 ): Promise<ApiResponce> {
-	const [rewardRecord, contriburions] = await getRewardFromGithubId(
+	const [rewardRecord, contributions] = await getRewardFromGithubId(
 		dbClient,
 		githubId
 	)
@@ -32,7 +32,7 @@ const innerMain = async function (
 				status: 200,
 				body: {
 					reward: rewardRecord.reward,
-					contriburions,
+					contributions,
 				},
 		  }
 }

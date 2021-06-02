@@ -138,7 +138,7 @@ test('get reward.', async (t) => {
 		.resolves(dummyRewward)
 	const res = await getRewardApiResponce('github-4')
 	t.is(res.body.reward, '10000000000000000000')
-	t.is(res.body.contriburions, 2)
+	t.is(res.body.contributions, 2)
 	t.is(res.status, 200)
 })
 
