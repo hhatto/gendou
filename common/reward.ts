@@ -22,13 +22,17 @@ const innerMain = async function (
 	dbClient: PrismaClient,
 	githubId: string
 ): Promise<ApiResponce> {
-	const rewardRecord = await getRewardFromGithubId(dbClient, githubId)
+	const [rewardRecord, contriburions] = await getRewardFromGithubId(
+		dbClient,
+		githubId
+	)
 	return typeof rewardRecord === 'undefined'
 		? generateErrorApiResponce('not applicable')
 		: {
 				status: 200,
 				body: {
 					reward: rewardRecord.reward,
+					contriburions,
 				},
 		  }
 }
@@ -36,12 +40,13 @@ const innerMain = async function (
 export const getRewardFromGithubId = async function (
 	dbClient: PrismaClient,
 	githubId: string
-): Promise<UndefinedOr<reward>> {
+): Promise<readonly [UndefinedOr<reward>, number]> {
 	const contriburions = await caluculateContriburionsCount(githubId)
 	const calculateMean = calculateGeometricMean(contriburions)
+	const totalContributions = Math.floor(calculateMean.toNumber())
 	const rewardRecord = await getRewordRecordByCommitCount(
 		dbClient,
-		Math.floor(calculateMean.toNumber())
+		totalContributions
 	)
-	return rewardRecord
+	return [rewardRecord, totalContributions]
 }
