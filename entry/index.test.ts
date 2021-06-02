@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prettier/prettier */
 /* eslint-disable functional/no-let */
 /* eslint-disable functional/prefer-readonly-type */
@@ -7,30 +8,39 @@ import sinon from 'sinon'
 import func from './index'
 import { Context } from '@azure/functions'
 import * as details_modules from './details'
+import * as db_modules from '../common/db/db'
 import { generateHttpRequest } from '../common/test-utils'
 import { UndefinedOr } from '@devprotocol/util-ts'
+import { PrismaClient, Prisma } from '.prisma/client'
 
-let getAirdropIfo: sinon.SinonStub<[params: ParamsOfEntryApi], Promise<UndefinedOr<AirdropInfo>>>
-let addEntryInfo: sinon.SinonStub<[info: AirdropInfo], Promise<boolean>>
+let getAirdropIfo: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>, params: ParamsOfEntryApi], Promise<UndefinedOr<AirdropInfo>>>
+let addEntryInfo: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>, info: AirdropInfo], Promise<boolean>>
+let getDbClient: sinon.SinonStub<[option?: {} | undefined], PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>>
+let close: sinon.SinonStub<[client: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>], Promise<boolean>>
 
 test.before(() => {
 	getAirdropIfo = sinon.stub(details_modules, 'getAirdropIfo')
 	addEntryInfo = sinon.stub(details_modules, 'addEntryInfo')
+	getDbClient = sinon.stub(db_modules, 'getDbClient')
+	close = sinon.stub(db_modules, 'close')
+	getDbClient.returns({db: true} as any)
 })
 
 test('get reward info', async (t) => {
-	getAirdropIfo.withArgs({
+	getAirdropIfo.withArgs({db: true} as any, {
 		code: 'conde1',
 		sign: 'sign1',
 	}).resolves({
 		githubId: 'github1',
 		address: 'address1',
 		sign: 'sign1',
+		rewardId: 1
 	})
-	addEntryInfo.withArgs({
+	addEntryInfo.withArgs({db: true} as any, {
 		githubId: 'github1',
 		address: 'address1',
 		sign: 'sign1',
+		rewardId: 1
 	}).resolves(true)
 	const res = await func(
 		undefined as unknown as Context,
@@ -52,7 +62,7 @@ test('Incorrect parameters information.', async (t) => {
 	t.is(res.headers['Cache-Control'], 'no-store')
 })
 
-test('git info error', async (t) => {
+test('get info error', async (t) => {
 	const res = await func(
 		undefined as unknown as Context,
 		generateHttpRequest({}, { code: 'conde3', sign: 'sign3' })
@@ -63,18 +73,20 @@ test('git info error', async (t) => {
 })
 
 test('db error', async (t) => {
-	getAirdropIfo.withArgs({
+	getAirdropIfo.withArgs({db: true} as any, {
 		code: 'conde4',
 		sign: 'sign4',
 	}).resolves({
 		githubId: 'github4',
 		address: 'address4',
 		sign: 'sign4',
+		rewardId: 4
 	})
-	addEntryInfo.withArgs({
+	addEntryInfo.withArgs({db: true} as any, {
 		githubId: 'github4',
 		address: 'address4',
 		sign: 'sign4',
+		rewardId: 4
 	}).resolves(false)
 	const res = await func(
 		undefined as unknown as Context,
@@ -88,4 +100,7 @@ test('db error', async (t) => {
 test.after(() => {
 	getAirdropIfo.restore()
 	addEntryInfo.restore()
+	getDbClient.restore()
+	close.restore()
+
 })

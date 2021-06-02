@@ -41,14 +41,5 @@ const httpTrigger: AzureFunction = async (
 export default httpTrigger
 
 // TODO
-// entryをupdateにする
-// reward idを登録する
-
 // getRewardFromGithubIdのテスト
 // getRewardApiResponceのテスト
-// getAirdropIfoのテスト
-// insertEntryのテスト
-// addEntryInfo
-// entry.index
-// getEntry
-// updateEntry
