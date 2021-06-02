@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
-import { whenDefinedAll, UndefinedOr } from '@devprotocol/util-ts'
+import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
 import { getApiTokenFromCode, getIdFromGraphQL } from '../common/github'
-import { insertEntry, getDbClient, close } from '../common/db'
+import { insertEntry, getDbClient, close, isAlreadyClaimed } from '../common/db'
 
 export const getAirdropIfo = async function (
 	params: ParamsOfEntryApi
@@ -11,17 +11,30 @@ export const getAirdropIfo = async function (
 		typeof accessToken === 'undefined'
 			? undefined
 			: await getIdFromGraphQL(accessToken)
-	const address = whenDefinedAll([githubId, params], ([id, p]) =>
-		ethers.utils.verifyMessage(id, p.sign)
+	const dbClient = getDbClient()
+	const isClaimed = await whenDefined(githubId, (id) =>
+		isAlreadyClaimed(dbClient, id)
 	)
-	const result = whenDefinedAll([githubId, address], ([id, a]) => {
-		return {
-			githubId: id,
-			address: a,
-			sign: params.sign,
-		}
-	})
-	return result
+	// eslint-disable-next-line functional/no-expression-statement
+	await close(dbClient)
+
+	return typeof isClaimed === 'undefined' ||
+		isClaimed ||
+		typeof githubId === 'undefined'
+		? undefined
+		: createAirDropInfo(githubId, params.sign)
+}
+
+const createAirDropInfo = function (
+	githubId: string,
+	sign: string
+): AirdropInfo {
+	const address = ethers.utils.verifyMessage(githubId, sign)
+	return {
+		githubId: githubId,
+		address: address,
+		sign: sign,
+	}
 }
 
 export const addEntryInfo = async function (
