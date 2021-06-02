@@ -84,7 +84,7 @@ test('get reward info', async (t) => {
 		.resolves(true)
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({}, { code: 'conde1', sign: 'sign1' })
+		generateHttpRequest({}, { access_token: 'conde1', sign: 'sign1' })
 	)
 	t.is(res.body.github_id, 'github1')
 	t.is(res.body.address, 'address1')
@@ -105,7 +105,7 @@ test('Incorrect parameters information.', async (t) => {
 test('get info error', async (t) => {
 	const res = await func(
 		undefined as unknown as Context,
-		generateHttpRequest({}, { code: 'conde3', sign: 'sign3' })
+		generateHttpRequest({}, { access_token: 'conde3', sign: 'sign3' })
 	)
 	t.is(res.body.message, 'get info error')
 	t.is(res.status, 200)

@@ -136,6 +136,9 @@ test('not get reward record', async (t) => {
 		'0x4224782729b91ce60933779327701beed6f5a60f5b3ef38bcfc4698aa693af4a5899fc1e6fc6b4066f90b155a9926b08c0b78498bfe61020e018a7d071a1d1e81c'
 	getIdFromGraphQL.withArgs('access_token5').resolves('git-id5')
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id5').resolves(false)
+	getRewardFromGithubId
+		.withArgs({ db: true } as any, 'git-id5')
+		.resolves([undefined, 1] as any)
 	const res = await getAirdropIfo({ db: true } as any, {
 		accessToken: 'access_token5',
 		sign: sign,
