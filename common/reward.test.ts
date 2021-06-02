@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prettier/prettier */
 /* eslint-disable functional/no-let */
