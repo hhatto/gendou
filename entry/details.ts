@@ -37,7 +37,7 @@ const createAirDropInfo = async function (
 	sign: string
 ): Promise<UndefinedOr<AirdropInfo>> {
 	const address = ethers.utils.verifyMessage(githubId, sign)
-	const rewardRecord = await getRewardFromGithubId(client, githubId)
+	const [rewardRecord] = await getRewardFromGithubId(client, githubId)
 	return typeof rewardRecord === 'undefined'
 		? undefined
 		: {
