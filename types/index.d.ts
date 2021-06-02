@@ -15,6 +15,17 @@ type ParamsOfInfoByCodeApi = {
 	readonly code: string
 }
 
+type ParamsOfEntryApi = {
+	readonly code: string
+	readonly sign: string
+}
+
+type AirdropInfo = {
+	readonly githubId: string
+	readonly address: string
+	readonly sign: string
+}
+
 type ParamsOfInfoApi = {
 	readonly githubId: string
 }

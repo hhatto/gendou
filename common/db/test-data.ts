@@ -35,47 +35,47 @@ export const createRewardTestData = async function (
 	})
 }
 
-export const createClaimUrlTestData = async function (
-	client: PrismaClient
-): Promise<void> {
-	await client.claim_url.deleteMany()
-	await client.claim_url.create({
-		data: {
-			uuid: 'xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
-			claim_url: 'http://hogehoge/hurahura1',
-			reward_id: 1,
-			github_id: 'github-id1',
-			find_at: new Date(),
-		},
-	})
-	await client.claim_url.create({
-		data: {
-			uuid: 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
-			claim_url: 'http://hogehoge/hurahura2',
-			reward_id: 1,
-			github_id: null,
-			find_at: null,
-		},
-	})
-	await client.claim_url.create({
-		data: {
-			uuid: 'zzzzzzzz-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
-			claim_url: 'http://hogehoge/hurahura3',
-			reward_id: 2,
-			github_id: 'github-id2',
-			find_at: new Date(),
-		},
-	})
-	await client.claim_url.create({
-		data: {
-			uuid: 'aaaaaaaaa-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
-			claim_url: 'http://hogehoge/hurahura4',
-			reward_id: 3,
-			github_id: null,
-			find_at: null,
-		},
-	})
-}
+// export const createClaimUrlTestData = async function (
+// 	client: PrismaClient
+// ): Promise<void> {
+// 	await client.claim_url.deleteMany()
+// 	await client.claim_url.create({
+// 		data: {
+// 			uuid: 'xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+// 			claim_url: 'http://hogehoge/hurahura1',
+// 			reward_id: 1,
+// 			github_id: 'github-id1',
+// 			find_at: new Date(),
+// 		},
+// 	})
+// 	await client.claim_url.create({
+// 		data: {
+// 			uuid: 'yyyyyyyy-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+// 			claim_url: 'http://hogehoge/hurahura2',
+// 			reward_id: 1,
+// 			github_id: null,
+// 			find_at: null,
+// 		},
+// 	})
+// 	await client.claim_url.create({
+// 		data: {
+// 			uuid: 'zzzzzzzz-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+// 			claim_url: 'http://hogehoge/hurahura3',
+// 			reward_id: 2,
+// 			github_id: 'github-id2',
+// 			find_at: new Date(),
+// 		},
+// 	})
+// 	await client.claim_url.create({
+// 		data: {
+// 			uuid: 'aaaaaaaaa-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx',
+// 			claim_url: 'http://hogehoge/hurahura4',
+// 			reward_id: 3,
+// 			github_id: null,
+// 			find_at: null,
+// 		},
+// 	})
+// }
 
 export const createAlreadyClaimedTestData = async function (
 	client: PrismaClient

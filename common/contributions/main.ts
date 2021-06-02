@@ -1,6 +1,6 @@
 import { BigNumber } from 'mathjs'
 import { caluculateContriburionsCountDetail } from './details'
-import { getContributionsCount3Year } from '../github'
+import { getContributionsCount3Year } from '../github/graphql'
 
 export const caluculateContriburionsCount = async function (
 	githubId: string

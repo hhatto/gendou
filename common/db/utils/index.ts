@@ -1,3 +1,3 @@
-import { getClaimUrlInfo, createClaimUrlInfo } from './info'
+// import { getClaimUrlInfo, createClaimUrlInfo } from './info'
 
-export { getClaimUrlInfo, createClaimUrlInfo }
+// export { getClaimUrlInfo, createClaimUrlInfo }

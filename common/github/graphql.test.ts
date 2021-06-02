@@ -5,11 +5,14 @@
 import test from 'ava'
 import sinon from 'sinon'
 import equal from 'deep-equal'
-import { getSearchDate, getSearchDates } from '../utils'
+import {
+	//getSearchDate,
+	getSearchDates,
+} from '../utils'
 import * as octokit_modules from '@octokit/graphql'
 import {
-	getCommitCount,
-	getCommitCountAndId,
+	// getCommitCount,
+	// getCommitCountAndId,
 	getContributionsCount3Year,
 	getIdFromGraphQL,
 } from './graphql'
@@ -25,88 +28,88 @@ test.before(() => {
 	graphql = sinon.stub(octokit_modules, 'graphql')
 })
 
-// getCommitCount
-test('get commit count.', async (t) => {
-	const COMMIT_COUNT_QUERY = `
-query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
-  user(login: $githubid) {
-    contributionsCollection(from: $from, to: $to) {
-	  restrictedContributionsCount
-	  contributionCalendar {
-	    totalContributions
-	  }
-	}
-  }
-}
-`
-	process.env.BASE_DATE = '2020-04-01'
-	process.env.GITHUB_API_TOKEN = 'dummy-token'
-	const searchDate = getSearchDate(process.env.BASE_DATE)
-	const params = {
-		githubid: 'hhatto',
-		from: searchDate.from,
-		to: searchDate.to,
-		headers: {
-			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
-		},
-	}
+// // getCommitCount
+// test('get commit count.', async (t) => {
+// 	const COMMIT_COUNT_QUERY = `
+// query getCommitCount($githubid: String!, $from: DateTime, $to: DateTime) {
+//   user(login: $githubid) {
+//     contributionsCollection(from: $from, to: $to) {
+// 	  restrictedContributionsCount
+// 	  contributionCalendar {
+// 	    totalContributions
+// 	  }
+// 	}
+//   }
+// }
+// `
+// 	process.env.BASE_DATE = '2020-04-01'
+// 	process.env.GITHUB_API_TOKEN = 'dummy-token'
+// 	const searchDate = getSearchDate(process.env.BASE_DATE)
+// 	const params = {
+// 		githubid: 'hhatto',
+// 		from: searchDate.from,
+// 		to: searchDate.to,
+// 		headers: {
+// 			authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+// 		},
+// 	}
 
-	graphql.withArgs(COMMIT_COUNT_QUERY, params).resolves({
-		user: {
-			contributionsCollection: {
-				restrictedContributionsCount: 29,
-				contributionCalendar: {
-					totalContributions: 2929,
-				},
-			},
-		},
-	})
+// 	graphql.withArgs(COMMIT_COUNT_QUERY, params).resolves({
+// 		user: {
+// 			contributionsCollection: {
+// 				restrictedContributionsCount: 29,
+// 				contributionCalendar: {
+// 					totalContributions: 2929,
+// 				},
+// 			},
+// 		},
+// 	})
 
-	const result = await getCommitCount('hhatto')
-	t.is(result, 2900)
-})
+// 	const result = await getCommitCount('hhatto')
+// 	t.is(result, 2900)
+// })
 
-// getCommitCountAndId
-test('git commit count and id.', async (t) => {
-	const COMMIT_COUNT_AND_ID_QUERY = `
-query getUser($from: DateTime, $to: DateTime) {
-	viewer {
-    login
-	contributionsCollection(from: $from, to: $to) {
-	  restrictedContributionsCount
-	  contributionCalendar {
-	    totalContributions
-	  }
-	}
-  }
-}
-`
-	process.env.BASE_DATE = '2020-04-01'
-	const searchDate = getSearchDate(process.env.BASE_DATE)
-	//public data only token
-	const token = 'dummy-token'
-	const params = {
-		from: searchDate.from,
-		to: searchDate.to,
-		headers: {
-			authorization: `token ${token}`,
-		},
-	}
-	graphql.withArgs(COMMIT_COUNT_AND_ID_QUERY, params).resolves({
-		viewer: {
-			login: 'dummy-user-id',
-			contributionsCollection: {
-				restrictedContributionsCount: 34,
-				contributionCalendar: {
-					totalContributions: 1234,
-				},
-			},
-		},
-	})
-	const result = await getCommitCountAndId(token)
-	t.is(result.githubId, 'dummy-user-id')
-	t.is(result.commitCount, 1200)
-})
+// // getCommitCountAndId
+// test('git commit count and id.', async (t) => {
+// 	const COMMIT_COUNT_AND_ID_QUERY = `
+// query getUser($from: DateTime, $to: DateTime) {
+// 	viewer {
+//     login
+// 	contributionsCollection(from: $from, to: $to) {
+// 	  restrictedContributionsCount
+// 	  contributionCalendar {
+// 	    totalContributions
+// 	  }
+// 	}
+//   }
+// }
+// `
+// 	process.env.BASE_DATE = '2020-04-01'
+// 	const searchDate = getSearchDate(process.env.BASE_DATE)
+// 	//public data only token
+// 	const token = 'dummy-token'
+// 	const params = {
+// 		from: searchDate.from,
+// 		to: searchDate.to,
+// 		headers: {
+// 			authorization: `token ${token}`,
+// 		},
+// 	}
+// 	graphql.withArgs(COMMIT_COUNT_AND_ID_QUERY, params).resolves({
+// 		viewer: {
+// 			login: 'dummy-user-id',
+// 			contributionsCollection: {
+// 				restrictedContributionsCount: 34,
+// 				contributionCalendar: {
+// 					totalContributions: 1234,
+// 				},
+// 			},
+// 		},
+// 	})
+// 	const result = await getCommitCountAndId(token)
+// 	t.is(result.githubId, 'dummy-user-id')
+// 	t.is(result.commitCount, 1200)
+// })
 
 test('git contributions info.', async (t) => {
 	const THREE_YEAR_CONTRIBUTION_COUNT_QUERY = `
