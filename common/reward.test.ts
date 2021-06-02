@@ -6,7 +6,7 @@
 import test from 'ava'
 import sinon from 'sinon'
 import { bignumber, BigNumber } from 'mathjs'
-import { getRewardApiResponce } from './responce'
+import { getRewardApiResponce, getRewardFromGithubId } from './reward'
 import * as reward_modules from './db/reward'
 import * as db_common_modules from './db/db'
 import * as already_claimed_modules from './db/already_claimed'
@@ -82,6 +82,26 @@ test('get reward.', async (t) => {
 	const res = await getRewardApiResponce('github-4')
 	t.is(res.body.reward, '10000000000000000000')
 	t.is(res.status, 200)
+})
+
+// success
+test('get reward record.', async (t) => {
+	const dummyRewward = {
+		id: 5,
+		commit_lower_limit: 10,
+		commit_upper_limit: 200,
+		reward: '10000000000000000000',
+		rank: 5,
+	}
+	caluculateContriburionsCount.withArgs('github-5').resolves([bignumber(2), bignumber(3)])
+	calculateGeometricMean.withArgs([bignumber(2), bignumber(3)]).returns(bignumber('3.5'))
+	getRewordRecordByCommitCount.withArgs({db: true} as any, 3).resolves(dummyRewward)
+	const res = await getRewardFromGithubId({db: true} as any, 'github-5')
+	t.is(res!.id, 5)
+	t.is(res!.commit_lower_limit, 10)
+	t.is(res!.commit_upper_limit, 200)
+	t.is(res!.reward, '10000000000000000000')
+	t.is(res!.rank, 5)
 })
 
 test.after(() => {

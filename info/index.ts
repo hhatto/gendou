@@ -1,7 +1,7 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { generateErrorApiResponce } from '../common/utils'
 import { getParams } from './params'
-import { getRewardApiResponce } from '../common/responce'
+import { getRewardApiResponce } from '../common/reward'
 
 const httpTrigger: AzureFunction = async (
 	context: Context,

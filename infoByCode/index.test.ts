@@ -6,7 +6,7 @@ import test from 'ava'
 import sinon from 'sinon'
 import func from './index'
 import { Context } from '@azure/functions'
-import * as responce_modules from '../common/responce'
+import * as reward_modules from '../common/reward'
 import { generateHttpRequest } from '../common/test-utils'
 import * as github_token_modules from '../common/github/token'
 import * as github_graphql_modules from '../common/github/graphql'
@@ -17,7 +17,7 @@ let getApiTokenFromCode: sinon.SinonStub<[code: string], Promise<UndefinedOr<str
 let getIdFromGraphQL: sinon.SinonStub<[token: string], Promise<string>>
 
 test.before(() => {
-	getRewardApiResponce = sinon.stub(responce_modules, 'getRewardApiResponce')
+	getRewardApiResponce = sinon.stub(reward_modules, 'getRewardApiResponce')
 	getApiTokenFromCode = sinon.stub(github_token_modules, 'getApiTokenFromCode')
 	getIdFromGraphQL = sinon.stub(github_graphql_modules, 'getIdFromGraphQL')
 })

@@ -2,7 +2,7 @@ import { whenDefined } from '@devprotocol/util-ts'
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import { generateErrorApiResponce } from '../common/utils'
 import { getParams } from './params'
-import { getRewardApiResponce } from '../common/responce'
+import { getRewardApiResponce } from '../common/reward'
 import { getApiTokenFromCode, getIdFromGraphQL } from '../common/github'
 
 const httpTrigger: AzureFunction = async (

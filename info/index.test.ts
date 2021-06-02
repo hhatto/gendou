@@ -6,12 +6,12 @@ import test from 'ava'
 import sinon from 'sinon'
 import func from './index'
 import { Context } from '@azure/functions'
-import * as responce_modules from '../common/responce'
+import * as reward_modules from '../common/reward'
 import { generateHttpRequest } from '../common/test-utils'
 
 let getRewardApiResponce: sinon.SinonStub<[githubId: string], Promise<ApiResponce>>
 test.before(() => {
-	getRewardApiResponce = sinon.stub(responce_modules, 'getRewardApiResponce')
+	getRewardApiResponce = sinon.stub(reward_modules, 'getRewardApiResponce')
 })
 
 test('get reward info ', async (t) => {
