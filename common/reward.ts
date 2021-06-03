@@ -33,7 +33,7 @@ const innerMain = async function (
 				body: {
 					reward: rewardRecord.reward,
 					contributions,
-					github_id: githubId
+					github_id: githubId,
 				},
 		  }
 }
