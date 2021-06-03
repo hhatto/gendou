@@ -3,7 +3,7 @@ import { UndefinedOr } from '@devprotocol/util-ts'
 
 export const getParams = function (
 	req: HttpRequest
-): UndefinedOr<ParamsOfFindClaimUrlApi> {
+): UndefinedOr<ParamsOfInfoByCodeApi> {
 	return typeof req.body.code === 'undefined'
 		? undefined
 		: {

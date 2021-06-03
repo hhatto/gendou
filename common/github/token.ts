@@ -1,8 +1,9 @@
 import axios from 'axios'
+import { UndefinedOr } from '@devprotocol/util-ts'
 
 export const getApiTokenFromCode = async function (
 	code: string
-): Promise<string> {
+): Promise<UndefinedOr<string>> {
 	const res = await axios.post(
 		'https://github.com/login/oauth/access_token',
 		{
