@@ -11,8 +11,20 @@ type ApiResponce = {
 	readonly body: Record<string, unknown>
 }
 
-type ParamsOfFindClaimUrlApi = {
+type ParamsOfInfoByCodeApi = {
 	readonly code: string
+}
+
+type ParamsOfEntryApi = {
+	readonly accessToken: string
+	readonly sign: string
+}
+
+type AirdropInfo = {
+	readonly githubId: string
+	readonly address: string
+	readonly sign: string
+	readonly rewardId: number
 }
 
 type ParamsOfInfoApi = {

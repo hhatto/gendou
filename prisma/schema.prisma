@@ -31,3 +31,13 @@ model already_claimed {
   id      				Int      @default(autoincrement()) @id
 	github_id       String
 }
+
+model entry {
+  id      				Int      @default(autoincrement()) @id
+	github_id       String   @unique
+	address         String   @unique
+  sign            String
+	reward_id       Int
+	create_at 			DateTime
+	update_at 			DateTime
+}
