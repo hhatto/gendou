@@ -86,7 +86,7 @@ github_id:GitHub のユーザ ID
 
 reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
 contributions:貢献数<br>
-github_id:githubのid
+github_id:github の id
 
 ## infoByCode
 
@@ -104,14 +104,12 @@ code:GitHub OAuth 認証後に発行されるコード
 
 reward:報酬額、整数のため、実際に付与される報酬額に 10\*18 をかけた数字が帰ってくる<br>
 contributions:貢献数<br>
-github_id:githubのid<br>
-access_token:ユーザのPAT<br>
-
-
+github_id:github の id<br>
+access_token:ユーザの PAT<br>
 
 ## entry
 
-パラメータに設定したPATやsignを使ってエントリー情報を保存します。
+パラメータに設定した PAT や sign を使ってエントリー情報を保存します。
 
 URL:http://{domain}/v2/entry<br>
 method:post<br>
@@ -119,10 +117,10 @@ method:post<br>
 
 ### パラメータ
 
-access_token:ユーザのPAT
-sign:ユーザのアドレスをgithub idを使って署名した文字列
+access_token:ユーザの PAT<br>
+sign:ユーザのアドレスを github id を使って署名した文字列
 
 ### レスポンス
 
-github_id:githubのid<br>
+github_id:github の id<br>
 address:エントリーとして登録されたアドレス
