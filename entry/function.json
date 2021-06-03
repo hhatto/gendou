@@ -5,8 +5,8 @@
 			"type": "httpTrigger",
 			"direction": "in",
 			"name": "req",
-			"methods": ["get"],
-			"route": "v2/info/{github_id}"
+			"methods": ["post"],
+			"route": "v2/entry"
 		},
 		{
 			"type": "http",
@@ -14,5 +14,5 @@
 			"name": "$return"
 		}
 	],
-	"scriptFile": "../dist/info2/index.js"
+	"scriptFile": "../dist/entry/index.js"
 }

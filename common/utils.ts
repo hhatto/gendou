@@ -15,7 +15,9 @@ export const calculateGeometricMean = (
 ): BigNumber => {
 	return values.length === 0
 		? bignumber(0)
-		: innerCalculateGeometricMean(values)
+		: values.length > 1
+		? innerCalculateGeometricMean(values)
+		: values[0]
 }
 
 const innerCalculateGeometricMean = (
@@ -29,15 +31,15 @@ const innerCalculateGeometricMean = (
 	return bignumber(calculationResults.toString())
 }
 
-export const getSearchDate = function (baseDate: string): TargetDate {
-	const tmp = new Date(baseDate)
-	// eslint-disable-next-line functional/no-expression-statement
-	tmp.setFullYear(tmp.getFullYear() + 1)
-	return {
-		from: new Date(baseDate),
-		to: tmp,
-	}
-}
+// export const getSearchDate = function (baseDate: string): TargetDate {
+// 	const tmp = new Date(baseDate)
+// 	// eslint-disable-next-line functional/no-expression-statement
+// 	tmp.setFullYear(tmp.getFullYear() + 1)
+// 	return {
+// 		from: new Date(baseDate),
+// 		to: tmp,
+// 	}
+// }
 
 export const getSearchDates = function (
 	_baseDate: string,

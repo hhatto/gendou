@@ -12,7 +12,6 @@ test('All contributions will be covered.', async (t) => {
 		to: new Date('2013-01-05'),
 		contribution: 3650,
 	})
-	console.log(count)
 	t.is(count.toString(), bignumber(3650).toString())
 })
 
