@@ -105,22 +105,6 @@ test('get airdrop info', async (t) => {
 	t.is(res!.rewardId, 1)
 })
 
-test('not get access token', async (t) => {
-	const res = await getAirdropIfo({ db: true } as any, {
-		accessToken: 'conde2',
-		sign: 'sign2',
-	})
-	t.is(typeof res, 'undefined')
-})
-
-test('not get github id', async (t) => {
-	const res = await getAirdropIfo({ db: true } as any, {
-		accessToken: 'conde3',
-		sign: 'sign3',
-	})
-	t.is(typeof res, 'undefined')
-})
-
 test('already claimed', async (t) => {
 	getIdFromGraphQL.withArgs('access_token4').resolves('git-id4')
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id4').resolves(true)

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { PrismaClient } from '@prisma/client'
-import { whenDefined, UndefinedOr } from '@devprotocol/util-ts'
+import { UndefinedOr } from '@devprotocol/util-ts'
 import { getIdFromGraphQL } from '../common/github'
 import { getRewardFromGithubId } from '../common/reward'
 import {
@@ -15,19 +15,11 @@ export const getAirdropIfo = async function (
 	params: ParamsOfEntryApi
 ): Promise<UndefinedOr<AirdropInfo>> {
 	const { accessToken } = params
-	const githubId =
-		typeof accessToken === 'undefined'
-			? undefined
-			: await getIdFromGraphQL(accessToken)
-	const isClaimed = await whenDefined(githubId, (id) =>
-		isAlreadyClaimed(client, id)
-	)
-	const result =
-		typeof isClaimed === 'undefined' ||
-		isClaimed ||
-		typeof githubId === 'undefined'
-			? undefined
-			: await createAirDropInfo(client, githubId, params.sign)
+	const githubId = await getIdFromGraphQL(accessToken)
+	const isClaimed = await isAlreadyClaimed(client, githubId)
+	const result = isClaimed
+		? undefined
+		: await createAirDropInfo(client, githubId, params.sign)
 	return result
 }
 

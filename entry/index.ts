@@ -39,7 +39,3 @@ const httpTrigger: AzureFunction = async (
 }
 
 export default httpTrigger
-
-// TODO
-// getRewardFromGithubIdのテスト
-// getRewardApiResponceのテスト
