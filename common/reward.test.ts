@@ -139,6 +139,7 @@ test('get reward.', async (t) => {
 	const res = await getRewardApiResponce('github-4')
 	t.is(res.body.reward, '10000000000000000000')
 	t.is(res.body.contributions, 2)
+	t.is(res.body.github_id, 'github-4')
 	t.is(res.status, 200)
 })
 
