@@ -54,30 +54,30 @@ test('get geometric mean(1 length)', async (t) => {
 // 	t.true(result.to.getTime() === new Date('2021-04-30').getTime())
 // })
 
-// getSearchDate5Year
+// getSearchDates
 test('Get the search date(5 years)', async (t) => {
 	const result = await getSearchDates('2020-04-30', 5)
 	t.true(
 		equal(result, [
 			{
-				from: new Date('2019-04-30'),
-				to: new Date('2020-04-30'),
+				from: new Date('2019-04-30T00:00:00.000Z'),
+				to: new Date('2020-04-29T23:59:59.000Z'),
 			},
 			{
-				from: new Date('2018-04-30'),
-				to: new Date('2019-04-30'),
+				from: new Date('2018-04-30T00:00:00.000Z'),
+				to: new Date('2019-04-29T23:59:59.000Z'),
 			},
 			{
-				from: new Date('2017-04-30'),
-				to: new Date('2018-04-30'),
+				from: new Date('2017-04-30T00:00:00.000Z'),
+				to: new Date('2018-04-29T23:59:59.000Z'),
 			},
 			{
-				from: new Date('2016-04-30'),
-				to: new Date('2017-04-30'),
+				from: new Date('2016-04-30T00:00:00.000Z'),
+				to: new Date('2017-04-29T23:59:59.000Z'),
 			},
 			{
-				from: new Date('2015-04-30'),
-				to: new Date('2016-04-30'),
+				from: new Date('2015-04-30T00:00:00.000Z'),
+				to: new Date('2016-04-29T23:59:59.000Z'),
 			},
 		])
 	)

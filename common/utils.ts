@@ -52,6 +52,8 @@ export const getSearchDates = function (
 		// eslint-disable-next-line functional/no-expression-statement
 		toDate.setFullYear(toDate.getFullYear() - i)
 		// eslint-disable-next-line functional/no-expression-statement
+		toDate.setSeconds(toDate.getSeconds() - 1)
+		// eslint-disable-next-line functional/no-expression-statement
 		fromDate.setFullYear(fromDate.getFullYear() - i - 1)
 
 		return {
