@@ -25,7 +25,8 @@ let insertEntry: sinon.SinonStub<
 		githubId: string,
 		address: string,
 		sign: string,
-		rewardId: number
+		rewardId: number,
+		contributionCount: number
 	],
 	Promise<boolean>
 >
@@ -39,7 +40,8 @@ let updateEntry: sinon.SinonStub<
 		githubId: string,
 		address: string,
 		sign: string,
-		rewardId: number
+		rewardId: number,
+		contributionCount: number
 	],
 	Promise<boolean>
 >
@@ -94,7 +96,7 @@ test('get airdrop info', async (t) => {
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id1').resolves(false)
 	getRewardFromGithubId
 		.withArgs({ db: true } as any, 'git-id1')
-		.resolves([{ id: 1 }, 1] as any)
+		.resolves([{ id: 1 }, 100] as any)
 	const res = await getAirdropIfo({ db: true } as any, {
 		accessToken: 'access_token1',
 		sign: sign,
@@ -103,6 +105,7 @@ test('get airdrop info', async (t) => {
 	t.is(res!.address, '0x3CbDbAfE2585F4991CEf5A5D2870F68D661b3943')
 	t.is(res!.sign, sign)
 	t.is(res!.rewardId, 1)
+	t.is(res!.contributionCount, 100)
 })
 
 test('already claimed', async (t) => {
@@ -137,7 +140,7 @@ test('get different address', async (t) => {
 	isAlreadyClaimed.withArgs({ db: true } as any, 'git-id6').resolves(false)
 	getRewardFromGithubId
 		.withArgs({ db: true } as any, 'git-id6')
-		.resolves([{ id: 6 }, 1] as any)
+		.resolves([{ id: 6 }, 600] as any)
 	const res = await getAirdropIfo({ db: true } as any, {
 		accessToken: 'access_token6',
 		sign: sign,
@@ -146,19 +149,21 @@ test('get different address', async (t) => {
 	t.is(res!.address, '0x3068654E119C6DE06bdc0b9a1742ba3211feC7D0')
 	t.is(res!.sign, sign)
 	t.is(res!.rewardId, 6)
+	t.is(res!.contributionCount, 600)
 })
 
 // addEntryInfo
 test('insert entry data', async (t) => {
 	getEntry.withArgs({ db: true } as any, 'githubid5').resolves(undefined)
 	insertEntry
-		.withArgs({ db: true } as any, 'githubid5', 'address5', 'sign5', 5)
+		.withArgs({ db: true } as any, 'githubid5', 'address5', 'sign5', 5, 500)
 		.resolves(true)
 	const res = await addEntryInfo({ db: true } as any, {
 		githubId: 'githubid5',
 		address: 'address5',
 		sign: 'sign5',
 		rewardId: 5,
+		contributionCount: 500
 	})
 	t.is(res, true)
 })
@@ -166,13 +171,14 @@ test('insert entry data', async (t) => {
 test('failed insert entry data', async (t) => {
 	getEntry.withArgs({ db: true } as any, 'githubid6').resolves(undefined)
 	insertEntry
-		.withArgs({ db: true } as any, 'githubid6', 'address6', 'sign6', 6)
+		.withArgs({ db: true } as any, 'githubid6', 'address6', 'sign6', 6, 600)
 		.resolves(false)
 	const res = await addEntryInfo({ db: true } as any, {
 		githubId: 'githubid6',
 		address: 'address6',
 		sign: 'sign6',
 		rewardId: 6,
+		contributionCount: 600
 	})
 	t.is(res, false)
 })
@@ -180,13 +186,14 @@ test('failed insert entry data', async (t) => {
 test('update entry data', async (t) => {
 	getEntry.withArgs({ db: true } as any, 'githubid7').resolves({})
 	updateEntry
-		.withArgs({ db: true } as any, 'githubid7', 'address7', 'sign7', 7)
+		.withArgs({ db: true } as any, 'githubid7', 'address7', 'sign7', 7, 700)
 		.resolves(true)
 	const res = await addEntryInfo({ db: true } as any, {
 		githubId: 'githubid7',
 		address: 'address7',
 		sign: 'sign7',
 		rewardId: 7,
+		contributionCount: 700
 	})
 	t.is(res, true)
 })
@@ -194,13 +201,14 @@ test('update entry data', async (t) => {
 test('failed update entry data', async (t) => {
 	getEntry.withArgs({ db: true } as any, 'githubid8').resolves({})
 	updateEntry
-		.withArgs({ db: true } as any, 'githubid8', 'address8', 'sign8', 8)
+		.withArgs({ db: true } as any, 'githubid8', 'address8', 'sign8', 8, 800)
 		.resolves(false)
 	const res = await addEntryInfo({ db: true } as any, {
 		githubId: 'githubid8',
 		address: 'address8',
 		sign: 'sign8',
 		rewardId: 8,
+		contributionCount: 800
 	})
 	t.is(res, false)
 })

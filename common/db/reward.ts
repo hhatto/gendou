@@ -23,18 +23,18 @@ export const getRewordRecordByCommitCount = async function (
 	return record
 }
 
-// export const getRewordRecordById = async function (
-// 	client: PrismaClient,
-// 	id: number
-// ): Promise<UndefinedOr<reward>> {
-// 	const tmp = await client.reward.findFirst({
-// 		where: {
-// 			id: id,
-// 		},
-// 	})
-// 	const record = tmp === null ? undefined : tmp
-// 	return record
-// }
+export const getRewordRecordById = async function (
+	client: PrismaClient,
+	id: number
+): Promise<UndefinedOr<reward>> {
+	const tmp = await client.reward.findFirst({
+		where: {
+			id: id,
+		},
+	})
+	const record = tmp === null ? undefined : tmp
+	return record
+}
 
 // export const getRewordRecordByRank = async function (
 // 	client: PrismaClient,

@@ -4,6 +4,7 @@ CREATE TABLE "entry" (
     "address" TEXT NOT NULL,
     "sign" TEXT NOT NULL,
     "reward_id" INTEGER NOT NULL,
+    "contribution_count" INTEGER NOT NULL,
     "create_at" TIMESTAMP(3) NOT NULL,
     "update_at" TIMESTAMP(3) NOT NULL,
 
