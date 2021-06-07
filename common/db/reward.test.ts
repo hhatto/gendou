@@ -6,7 +6,7 @@ import { getDbClient, close } from './db'
 import { setEnv } from '../test-utils'
 import {
 	getRewordRecordByCommitCount,
-	// getRewordRecordById,
+	getRewordRecordById,
 	// getRewordRecordByRank,
 } from './reward'
 import { createRewardTestData } from './test-data'
@@ -80,28 +80,28 @@ test.serial(
 	}
 )
 
-// //getRewordRecordById
-// test.serial('get by id.', async (t) => {
-// 	const client = getDbClient()
-// 	await createRewardTestData(client)
-// 	const records = await client.reward.findMany()
-// 	const target = records[1]
-// 	const record = await getRewordRecordById(client, target.id)
-// 	await close(client)
-// 	t.is(record!.commit_lower_limit, target.commit_lower_limit)
-// 	t.is(record!.commit_upper_limit, target.commit_upper_limit)
-// 	t.is(record!.reward, target.reward)
-// 	t.is(record!.rank, target.rank)
-// 	t.is(record!.id, target.id)
-// })
+//getRewordRecordById
+test.serial('get by id.', async (t) => {
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const records = await client.reward.findMany()
+	const target = records[1]
+	const record = await getRewordRecordById(client, target.id)
+	await close(client)
+	t.is(record!.commit_lower_limit, target.commit_lower_limit)
+	t.is(record!.commit_upper_limit, target.commit_upper_limit)
+	t.is(record!.reward, target.reward)
+	t.is(record!.rank, target.rank)
+	t.is(record!.id, target.id)
+})
 
-// test.serial('get by id(However, there is no id).', async (t) => {
-// 	const client = getDbClient()
-// 	await createRewardTestData(client)
-// 	const record = await getRewordRecordById(client, -1)
-// 	await close(client)
-// 	t.is(typeof record, 'undefined')
-// })
+test.serial('get by id(However, there is no id).', async (t) => {
+	const client = getDbClient()
+	await createRewardTestData(client)
+	const record = await getRewordRecordById(client, -1)
+	await close(client)
+	t.is(typeof record, 'undefined')
+})
 
 // //getRewordRecordByRank
 // test.serial('get by rank.', async (t) => {

@@ -11,33 +11,34 @@ generator client {
 }
 
 model reward {
-  id      				   Int     @default(autoincrement()) @id
-	commit_lower_limit Int     @unique
-	commit_upper_limit Int     @unique
-  reward    			   String
-	rank               Int     @unique
+    id      			Int     @default(autoincrement()) @id
+    commit_lower_limit  Int     @unique
+	commit_upper_limit  Int     @unique
+    reward    			String
+	rank                Int     @unique
 }
 
 model claim_url {
-  id      				Int      @default(autoincrement()) @id
-	uuid            String
-	claim_url       String
-	reward_id       Int
-  github_id   		String?
-  find_at 				DateTime?
+    id      			Int      @default(autoincrement()) @id
+	uuid                String
+	claim_url           String
+	reward_id           Int
+    github_id   		String?
+    find_at 			DateTime?
 }
 
 model already_claimed {
-  id      				Int      @default(autoincrement()) @id
-	github_id       String
+    id      			Int      @default(autoincrement()) @id
+	github_id           String
 }
 
 model entry {
-  id      				Int      @default(autoincrement()) @id
-	github_id       String   @unique
-	address         String   @unique
-  sign            String
-	reward_id       Int
+    id      			Int      @default(autoincrement()) @id
+	github_id           String   @unique
+	address             String   @unique
+    sign                String
+	reward_id           Int
+	contribution_count  Int
 	create_at 			DateTime
 	update_at 			DateTime
 }

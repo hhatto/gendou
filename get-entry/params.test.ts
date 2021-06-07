@@ -10,17 +10,9 @@ test('The parameter does not exist.', async (t) => {
 	t.is(res, undefined)
 })
 
-test('Only the access token parameter is present.', async (t) => {
+test('access_token parameter is present.', async (t) => {
 	const res = await getParams(
 		generateHttpRequest({}, { access_token: 'hoge-token' })
 	)
-	t.is(res, undefined)
-})
-
-test('all parameter is present.', async (t) => {
-	const res = await getParams(
-		generateHttpRequest({}, { access_token: 'hoge-token', sign: 'hoge-sign' })
-	)
 	t.is(res?.accessToken, 'hoge-token')
-	t.is(res?.sign, 'hoge-sign')
 })

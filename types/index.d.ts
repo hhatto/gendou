@@ -20,11 +20,16 @@ type ParamsOfEntryApi = {
 	readonly sign: string
 }
 
+type ParamsOfGetEntryApi = {
+	readonly accessToken: string
+}
+
 type AirdropInfo = {
 	readonly githubId: string
 	readonly address: string
 	readonly sign: string
 	readonly rewardId: number
+	readonly contributionCount: number
 }
 
 type ParamsOfInfoApi = {

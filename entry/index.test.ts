@@ -73,6 +73,7 @@ test('get reward info', async (t) => {
 			address: 'address1',
 			sign: 'sign1',
 			rewardId: 1,
+			contributionCount: 100
 		})
 	addEntryInfo
 		.withArgs({ db: true } as any, {
@@ -80,6 +81,7 @@ test('get reward info', async (t) => {
 			address: 'address1',
 			sign: 'sign1',
 			rewardId: 1,
+			contributionCount: 100
 		})
 		.resolves(true)
 	const res = await func(
@@ -123,6 +125,7 @@ test('db error', async (t) => {
 			address: 'address4',
 			sign: 'sign4',
 			rewardId: 4,
+			contributionCount: 400
 		})
 	addEntryInfo
 		.withArgs({ db: true } as any, {
@@ -130,6 +133,7 @@ test('db error', async (t) => {
 			address: 'address4',
 			sign: 'sign4',
 			rewardId: 4,
+			contributionCount: 400
 		})
 		.resolves(false)
 	const res = await func(

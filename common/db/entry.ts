@@ -6,7 +6,8 @@ export const insertEntry = async function (
 	githubId: string,
 	address: string,
 	sign: string,
-	rewardId: number
+	rewardId: number,
+	contributionCount: number
 ): Promise<boolean> {
 	const time = new Date()
 	const createData = await client.entry.create({
@@ -15,6 +16,7 @@ export const insertEntry = async function (
 			address: address,
 			sign: sign,
 			reward_id: rewardId,
+			contribution_count: contributionCount,
 			create_at: time,
 			update_at: time,
 		},
@@ -25,6 +27,7 @@ export const insertEntry = async function (
 		createData.address === address &&
 		createData.sign === sign &&
 		createData.reward_id === rewardId &&
+		createData.contribution_count === contributionCount &&
 		createData.create_at.getTime() === time.getTime() &&
 		createData.update_at.getTime() === time.getTime()
 	)
@@ -47,7 +50,8 @@ export const updateEntry = async function (
 	githubId: string,
 	address: string,
 	sign: string,
-	rewardId: number
+	rewardId: number,
+	contributionCount: number
 ): Promise<boolean> {
 	const time = new Date()
 	const updatedData = await client.entry.update({
@@ -56,6 +60,7 @@ export const updateEntry = async function (
 			address: address,
 			sign: sign,
 			reward_id: rewardId,
+			contribution_count: contributionCount,
 			update_at: time,
 		},
 	})
@@ -64,6 +69,7 @@ export const updateEntry = async function (
 		updatedData.address === address &&
 		updatedData.sign === sign &&
 		updatedData.reward_id === rewardId &&
+		updatedData.contribution_count === contributionCount &&
 		updatedData.create_at.getTime() !== time.getTime() &&
 		updatedData.update_at.getTime() === time.getTime()
 	)

@@ -7,7 +7,7 @@ import { isAlreadyClaimed } from './already_claimed'
 
 import {
 	getRewordRecordByCommitCount,
-	// getRewordRecordById,
+	getRewordRecordById,
 	// getRewordRecordByRank,
 } from './reward'
 
@@ -24,7 +24,7 @@ export {
 	// getClaimUrlRecordByRewardId,
 	// updateGitHubIdAndFindAt,
 	getRewordRecordByCommitCount,
-	// getRewordRecordById,
+	getRewordRecordById,
 	// getRewordRecordByRank,
 	// getClaimUrlInfo,
 	// createClaimUrlInfo,
