@@ -11,6 +11,9 @@ import { getRewardFromGithubId } from '../common/reward'
 const main = async function (): Promise<void> {
 	console.log('start')
 	process.env.DATABASE_URL = 'set db url'
+	process.env.BASE_DATE_3_YEAR = 'set base date'
+	process.env.GITHUB_API_TOKEN = 'set api token'
+
 	const client = getDbClient()
 	const records = await client.entry.findMany({
 		orderBy: [
@@ -22,6 +25,7 @@ const main = async function (): Promise<void> {
 	for await (const record of records) {
 		const [rewardRecord, contirubutionCount] = await getRewardFromGithubId(client, record.github_id)
 		const tmp = typeof rewardRecord === 'undefined' ? 0: record.reward_id !== rewardRecord.id ? 0: contirubutionCount
+		console.log(`${record.github_id}:${contirubutionCount}`)
 		const time = new Date()
 		const updatedData = await client.entry.update({
 			where: { github_id: record.github_id },
@@ -32,6 +36,7 @@ const main = async function (): Promise<void> {
 		})
 	  }
 	await close(client)
+	console.log('end')
 }
 
 void main()
