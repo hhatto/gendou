@@ -124,3 +124,26 @@ sign:ユーザのアドレスを github id を使って署名した文字列
 
 github_id:github の id<br>
 address:エントリーとして登録されたアドレス
+
+## get-entry
+
+パラメータに設定した PAT や sign を使ってエントリー情報を保存します。
+
+URL:http://{domain}/v2/get_entry<br>
+method:post<br>
+例）curl -X POST -d '{"access_token":"gho_abcde...."}' http://localhost:7071/v2/get_entry<br>
+
+### パラメータ
+
+access_token:ユーザの PAT<br>
+
+### レスポンス
+
+id:エントリーID
+github_id:エントリーした人のgithub id
+address:エントリーした人のアドレス
+sign:エントリーした人のsign情報
+reward:報酬額
+contribution_count:貢献数
+create_at:作成日
+update_at:更新日

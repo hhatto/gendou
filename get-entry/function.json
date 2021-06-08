@@ -6,7 +6,7 @@
 			"direction": "in",
 			"name": "req",
 			"methods": ["post"],
-			"route": "v2/get-entry"
+			"route": "v2/get_entry"
 		},
 		{
 			"type": "http",
