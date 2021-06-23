@@ -24,7 +24,7 @@
 		"@types/mathjs": "9.4.1",
 		"bignumber.js": "9.0.1",
 		"ethereum-waffle": "3.4.0",
-		"mathjs": "9.4.2",
+		"mathjs": "9.4.3",
 		"prisma": "2.25.0",
 		"ramda": "0.27.1"
 	},
