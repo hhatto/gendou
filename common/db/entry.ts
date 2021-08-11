@@ -45,6 +45,18 @@ export const getEntry = async function (
 	return record === null ? undefined : record
 }
 
+export const getEntryByAddress = async function (
+	client: PrismaClient,
+	address: string
+): Promise<UndefinedOr<entry>> {
+	const record = await client.entry.findFirst({
+		where: {
+			address,
+		},
+	})
+	return record === null ? undefined : record
+}
+
 export const updateEntry = async function (
 	client: PrismaClient,
 	githubId: string,
