@@ -15,7 +15,8 @@ import {
 
 import { getDbClient, close } from './db'
 
-import { insertEntry, updateEntry, getEntry } from './entry'
+import { insertEntry, updateEntry, getEntry, getEntryByAddress } from './entry'
+import { getAirdrop } from './airdrop'
 
 export {
 	getDbClient,
@@ -32,4 +33,6 @@ export {
 	insertEntry,
 	updateEntry,
 	getEntry,
+	getEntryByAddress,
+	getAirdrop,
 }
