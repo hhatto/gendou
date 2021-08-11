@@ -42,3 +42,10 @@ model entry {
 	create_at 			DateTime
 	update_at 			DateTime
 }
+
+model airdrop {
+    id      			Int      @default(autoincrement()) @id
+	address             String   @unique
+	reward              Int
+	create_at 			DateTime
+}
