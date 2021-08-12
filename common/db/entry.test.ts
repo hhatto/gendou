@@ -4,7 +4,7 @@
 import test from 'ava'
 import { getDbClient, close } from './db'
 import { setEnv } from '../test-utils'
-import { insertEntry, getEntry, updateEntry } from './entry'
+import { insertEntry, getEntry, getEntryByAddress, updateEntry } from './entry'
 
 test.before(() => {
 	setEnv()
@@ -51,15 +51,25 @@ test.serial('insert.', async (t) => {
 test.serial('get.', async (t) => {
 	const client = getDbClient()
 	await client.entry.deleteMany()
-	const result = await insertEntry(
-		client,
-		'github-2',
-		'address-2',
-		'sign-2',
-		2,
-		200
-	)
+	await insertEntry(client, 'github-2', 'address-2', 'sign-2', 2, 200)
 	const record = await getEntry(client, 'github-2')
+	await close(client)
+	t.true(record!.id > 0)
+	t.is(record!.github_id, 'github-2')
+	t.is(record!.address, 'address-2')
+	t.is(record!.sign, 'sign-2')
+	t.is(record!.reward_id, 2)
+	t.is(record!.contribution_count, 200)
+	t.true(record!.create_at.getTime() > 0)
+	t.true(record!.update_at.getTime() > 0)
+})
+
+// getEntryByAddress
+test.serial('get by address.', async (t) => {
+	const client = getDbClient()
+	await client.entry.deleteMany()
+	await insertEntry(client, 'github-2', 'address-2', 'sign-2', 2, 200)
+	const record = await getEntryByAddress(client, 'address-')
 	await close(client)
 	t.true(record!.id > 0)
 	t.is(record!.github_id, 'github-2')

@@ -46,6 +46,6 @@ model entry {
 model airdrop {
     id      			Int      @default(autoincrement()) @id
 	address             String   @unique
-	reward              Int
+	reward              String
 	create_at 			DateTime
 }

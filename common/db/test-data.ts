@@ -92,3 +92,17 @@ export const createAlreadyClaimedTestData = async function (
 		},
 	})
 }
+
+export const createAirdropTestData = async function (
+	client: PrismaClient
+): Promise<void> {
+	const create_at = new Date()
+	await client.airdrop.deleteMany()
+	await client.airdrop.create({
+		data: {
+			address: '0xD3e5D9c622D536cC07d085a72A825c323d8BEDBa',
+			reward: '100',
+			create_at,
+		},
+	})
+}
