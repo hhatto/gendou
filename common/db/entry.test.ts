@@ -65,11 +65,11 @@ test.serial('get.', async (t) => {
 })
 
 // getEntryByAddress
-test.serial('get by address.', async (t) => {
+test.serial.only('get by address.', async (t) => {
 	const client = getDbClient()
 	await client.entry.deleteMany()
 	await insertEntry(client, 'github-2', 'address-2', 'sign-2', 2, 200)
-	const record = await getEntryByAddress(client, 'address-')
+	const record = await getEntryByAddress(client, 'address-2')
 	await close(client)
 	t.true(record!.id > 0)
 	t.is(record!.github_id, 'github-2')
