@@ -35,8 +35,10 @@ const httpTrigger: AzureFunction = async function (
 			? generateErrorApiResponce('invalid request', 400)
 			: verifyAddress !== address
 			? generateErrorApiResponce('invalid request', 400)
-			: entry === undefined || airdrop === undefined
-			? { status: 200, body: { reward: '0' } }
+			: entry === undefined
+			? { status: 200, body: { reward: '0', message: 'not entry' } }
+			: airdrop === undefined
+			? { status: 200, body: { reward: '0', message: 'entry but no reward' } }
 			: entry.address === airdrop.address && airdrop.address === verifyAddress
 			? { status: 200, body: { reward: airdrop.reward } }
 			: generateErrorApiResponce('invalid request', 400)
